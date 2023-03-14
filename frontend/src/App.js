@@ -1,23 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter as Router, Route, Link, Routes, useNavigate} from 'react-router-dom';
+
+import './App.scss';
+import './resources/fonts/Lato-Regular.ttf';
+import './resources/fonts/Lato-Light.ttf';
+import './resources/fonts/Lato-Bold.ttf';
+
+import AboutUs from './pages/aboutUs/AboutUs';
+import PrivacyPolicy from './pages/privacyPolicy/PrivacyPolicy';
+import TermsAndConditions from './pages/termsAndConditions/TermsAndConditions';
+import PageNotFound from './pages/pageNotFound/PageNotFound';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Routes>
+          <Route path='/about-us' exact element={<AboutUs />} />
+          <Route path='/privacy-policy' exact element={<PrivacyPolicy />} />
+          <Route path='/terms-and-conditions' exact element={<TermsAndConditions />} />
+          <Route path='*' exact element={<PageNotFound/>}/>
+        </Routes>
+      </Router>
     </div>
   );
 }

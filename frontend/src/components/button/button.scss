@@ -1,0 +1,62 @@
+@import 'src/styles/variables.scss';
+
+.primary{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $purple;
+    width: 114px;
+    height: 40px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    .btn-text{
+        font-family: Lato Bold;
+        font-size: 16px;
+    }
+    .btn-icon{
+        font-size: 16px;
+        padding: 0.5em;
+    }
+}
+.secondary{
+    cursor: pointer;
+    width: 114px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid $purple;
+    background-color: white;
+    color: $purple;
+    .btn-text{
+        font-family: Lato Bold;
+        font-size: 16px;
+    }
+    .btn-icon{
+        font-size: 16px;
+        padding: 0.5em;
+        filter: invert(49%) sepia(54%) saturate(3719%) hue-rotate(228deg) brightness(91%) contrast(85%);
+    }
+}
+
+.tertiary{
+    cursor: pointer;
+    width: 114px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #D8D8D8;
+    background-color: white;
+    color: $purple;
+    .btn-text{
+        font-family: Lato Bold;
+        font-size: 16px;
+    }
+    .btn-icon{
+        font-size: 16px;
+        padding: 0.5em;
+        filter: invert(49%) sepia(54%) saturate(3719%) hue-rotate(228deg) brightness(91%) contrast(85%);
+    }
+}
