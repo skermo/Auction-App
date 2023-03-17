@@ -1,31 +1,19 @@
-import Button from "../components/button/Button";
-import arrowRight from "../resources/images/arrowRight.svg";
-
+import Button from "../components/Button/Button";
+import { ArrowRight } from "../resources/icons";
 
 export default {
-    title: "Button",
-    component: Button,
-}
+  title: "Button",
+  component: Button,
+};
 
-const Template = args => <Button {...args} />
+export const Primary = () => (
+  <Button type="primary" text="LOGIN" Icon={ArrowRight} />
+);
 
-export const Primary = Template.bind({})
-Primary.args = {
-    type: "primary",
-    text: "LOGIN",
-    icon: arrowRight,
-}
+export const Secondary = () => (
+  <Button type="secondary" text="LOGIN" Icon={ArrowRight} />
+);
 
-export const Secondary = Template.bind({})
-Secondary.args = {
-    type: "secondary",
-    text: "LOGIN",
-    icon: arrowRight,
-}
-
-export const Tertiary = Template.bind({})
-Tertiary.args = {
-    type: "tertiary",
-    text: "LOGIN",
-    icon: arrowRight,
-}
+export const Tertiary = () => (
+  <Button type="tertiary" text="LOGIN" Icon={ArrowRight} />
+);

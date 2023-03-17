@@ -6,12 +6,14 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "classnames": "^2.3.2",
     "file-loader": "^6.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
     "resolve-url-loader": "^5.0.0",
+    "storybook-addon-react-router-v6": "^0.3.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -20,7 +22,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public",
     "start-storybook": "start-storybook -s ./public -p 9001"
   },
   "eslintConfig": {
@@ -64,8 +65,11 @@
     "@storybook/testing-library": "^0.0.13",
     "@testing-library/dom": "^9.0.1",
     "babel-plugin-named-exports-order": "^0.0.2",
+    "css-loader": "^6.7.3",
     "prop-types": "^15.8.1",
     "sass": "^1.59.2",
+    "sass-loader": "^13.2.0",
+    "style-loader": "^3.3.2",
     "webpack": "^5.76.0"
   }
 }

@@ -1,0 +1,20 @@
+@import "src/styles/variables.scss";
+
+.nav-black {
+  background-color: $darkGrey;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  .icons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 15em;
+  }
+  .welcome-text {
+    color: white;
+    margin-right: 15em;
+  }
+}

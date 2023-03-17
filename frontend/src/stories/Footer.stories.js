@@ -1,10 +1,17 @@
-import Footer from "../components/footer/Footer";
+import { withRouter } from "storybook-addon-react-router-v6";
+import Footer from "../components/Footer/Footer";
 
 export default {
-    title: "Footer",
-    component: Footer,
-}
+  title: "Footer",
+  component: Footer,
+  decorators: [withRouter],
+};
 
-const Template = args => <Footer {...args} />
-
-export const Primary = Template.bind({});
+export const Example = () => <Footer />;
+Example.story = {
+  parameters: {
+    reactRouter: {
+      routePath: "/about-us",
+    },
+  },
+};

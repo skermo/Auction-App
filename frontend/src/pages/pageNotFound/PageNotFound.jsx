@@ -1,29 +1,30 @@
-import React from 'react'
-import {useNavigate} from 'react-router-dom';
-import "./pageNotFound.scss";
-import appLogo from "../../resources/images/appLogo.svg";
-import BlackNavbar from '../../components/blackNavbar/BlackNavbar';
-import Footer from "../../components/footer/Footer";
-import Button from '../../components/button/Button';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import Button from "../../components/Button/Button";
+import { AppLogo } from "../../resources/icons";
+import "./page-not-found.scss";
 
 function PageNotFound() {
   let navigate = useNavigate();
   const onBtnClick = () => {
     navigate(-1);
-  }
+  };
 
   return (
-    <div className='page-not-found'>
-        <BlackNavbar username={"John Doe"}/>
-        <img className='logo' src={appLogo}/>
-        <div className='error'>404</div>
-        <div className='text'>Oops! Looks like the page is Not Found.</div>
-        <div className='btn-go-back'>
-          <Button type="secondary" text="GO BACK" onBtnClick={onBtnClick}/>
-        </div>
-        <Footer/>
+    <div className="page-not-found">
+      <AppLogo className="logo" />
+      <div className="error">404</div>
+      <div className="text">Oops! Looks like the page is Not Found.</div>
+      <div>
+        <Button
+          type="secondary"
+          text="GO BACK"
+          onClick={onBtnClick}
+          className="btn-go-back"
+        />
+      </div>
     </div>
-  )
+  );
 }
 
-export default PageNotFound
+export default PageNotFound;

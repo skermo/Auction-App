@@ -1,34 +1,58 @@
-import React from 'react'
-import {useNavigate} from 'react-router-dom';
-import "./footer.scss"
-import fbIcon from "../../resources/images/fbIcon.svg";
-import igIcon from "../../resources/images/igIcon.svg";
-import twIcon from "../../resources/images/twIcon.svg";
-import IconButton from '../iconButton/IconButton';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  FacebookIcon,
+  InstagramIcon,
+  TwitterIcon,
+} from "../../resources/icons";
+import { ABOUT_US, PRIVACY_POLICY, TERMS_AND_CONDITIONS } from "../../routes";
+import Icon from "../Icon/Icon";
+import "./footer.scss";
 
 const Footer = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
-    <div className='footer'>
-        <div className='inner-footer'>
-                <ul title='AUCTION'>
-                    <li className='clicked' onClick={ () => {navigate(`/about-us`)}}>About Us</li>
-                    <li className='clicked' onClick={ () => {navigate(`/terms-and-conditions`)}}>Terms and Conditions</li>
-                    <li className='clicked' onClick={ () => {navigate(`/privacy-policy`)}}>Privacy and Policy</li>
-                </ul>
-                <ul title='GET IN TOUCH'>
-                    <li>Call us at +123 797-567-2535</li>
-                    <li>support@auction.com</li>
-                    <li>
-                        <IconButton imageUrl={fbIcon} websiteUrl={"https://www.facebook.com/"}/>
-                        <IconButton imageUrl={igIcon} websiteUrl={"https://www.instagram.com/"}/>
-                        <IconButton imageUrl={twIcon} websiteUrl={"https://www.twitter.com/"}/>
-                    </li>
-                </ul>
-        </div>
+    <div className="footer">
+      <div className="inner-footer">
+        <ul title="AUCTION">
+          <li
+            className="text-select"
+            onClick={() => {
+              navigate(ABOUT_US);
+            }}
+          >
+            About Us
+          </li>
+          <li
+            className="text-select"
+            onClick={() => {
+              navigate(TERMS_AND_CONDITIONS);
+            }}
+          >
+            Terms and Conditions
+          </li>
+          <li
+            className="text-select"
+            onClick={() => {
+              navigate(PRIVACY_POLICY);
+            }}
+          >
+            Privacy and Policy
+          </li>
+        </ul>
+        <ul title="GET IN TOUCH">
+          <li>Call us at +123 797-567-2535</li>
+          <li>support@auction.com</li>
+          <li>
+            <Icon Icon={FacebookIcon} url={"https://www.facebook.com/"} />
+            <Icon Icon={InstagramIcon} url={"https://www.instagram.com/"} />
+            <Icon Icon={TwitterIcon} url={"https://www.twitter.com/"} />
+          </li>
+        </ul>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

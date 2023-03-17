@@ -1,0 +1,28 @@
+@import "src/styles/variables.scss";
+
+.nav-white {
+  height: 80px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 16px;
+  .logged-app-logo {
+    margin-left: 0em;
+  }
+  .nav-list {
+    list-style-type: none;
+  }
+  ul li {
+    display: inline;
+  }
+  li {
+    padding: 15px;
+    cursor: pointer;
+    font-weight: $Lato-Light;
+  }
+  li:hover {
+    color: $purple;
+    font-weight: $Lato-Bold;
+  }
+}
