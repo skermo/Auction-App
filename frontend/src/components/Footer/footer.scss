@@ -1,0 +1,32 @@
+@import "src/styles/variables.scss";
+
+.footer {
+  color: white;
+  background-color: $darkGrey;
+  height: 360px;
+  letter-spacing: 0.56px;
+  font-size: 16px;
+  .inner-footer {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    text-align: left;
+    margin-bottom: 0;
+    ul {
+      list-style-type: none;
+      margin-top: 3em;
+    }
+    ul[title]::before {
+      content: attr(title);
+      opacity: 0.5;
+      display: block;
+      padding-bottom: 1.5em;
+    }
+    li {
+      padding-bottom: 1em;
+    }
+    .icon {
+      padding-right: 15px;
+    }
+  }
+}

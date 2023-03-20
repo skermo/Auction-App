@@ -1,0 +1,25 @@
+@import "src/styles/variables.scss";
+
+.page-not-found {
+  text-align: center;
+  .logo {
+    margin: 80px 0px;
+  }
+  .error {
+    color: $purple;
+    text-shadow: 8px 10px 0 #dadada;
+    font-size: 192px;
+    margin-bottom: 50px;
+  }
+  .text {
+    font-size: 36px;
+    color: $darkGrey;
+    margin-bottom: 50px;
+  }
+  .btn-go-back {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 100px;
+  }
+}
