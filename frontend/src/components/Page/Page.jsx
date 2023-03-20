@@ -3,11 +3,11 @@ import BottomNavbar from "../BottomNavbar/BottomNavbar";
 import Footer from "../Footer/Footer";
 import TopNavbar from "../TopNavbar/TopNavbar";
 
-const Page = ({ children, hideTopNavbar = false }) => {
+const Page = ({ children, hideBottomNavbar = false }) => {
   return (
     <>
       <TopNavbar />
-      {!hideTopNavbar && <BottomNavbar />}
+      {!hideBottomNavbar && <BottomNavbar />}
       {children}
       <Footer />
     </>

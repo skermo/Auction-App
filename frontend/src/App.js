@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.scss";
 import Page from "./components/Page/Page";
 
-import AboutUs from "./pages/aboutUs/AboutUs";
-import PageNotFound from "./pages/pageNotFound/PageNotFound";
-import PrivacyPolicy from "./pages/privacyPolicy/PrivacyPolicy";
-import TermsAndConditions from "./pages/termsAndConditions/TermsAndConditions";
+import AboutUs from "./pages/AboutUs/AboutUs";
+import PageNotFound from "./pages/PageNotFound/PageNotFound";
+import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions/TermsAndConditions";
 import * as routes from "./routes";
 
 function App() {
@@ -45,7 +45,7 @@ function App() {
             path="*"
             exact
             element={
-              <Page hideTopNavbar>
+              <Page hideBottomNavbar>
                 <PageNotFound />
               </Page>
             }

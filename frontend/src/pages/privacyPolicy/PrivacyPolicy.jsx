@@ -1,7 +1,7 @@
 import React from "react";
 import "./privacy-policy.scss";
 
-function PrivacyPolicy() {
+const PrivacyPolicy = () => {
   return (
     <div>
       <div className="privacy-policy">
@@ -458,6 +458,6 @@ function PrivacyPolicy() {
       </div>
     </div>
   );
-}
+};
 
 export default PrivacyPolicy;

@@ -1,7 +1,7 @@
 import React from "react";
 import "./terms-and-conditions.scss";
 
-function TermsAndConditions() {
+const TermsAndConditions = () => {
   return (
     <div>
       <div className="terms-and-conditions">
@@ -172,6 +172,6 @@ function TermsAndConditions() {
       </div>
     </div>
   );
-}
+};
 
 export default TermsAndConditions;

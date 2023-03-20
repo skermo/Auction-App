@@ -4,7 +4,7 @@ import AboutUs2 from "../../resources/images/aboutUs2.jpg";
 import AboutUs3 from "../../resources/images/aboutUs3.jpg";
 import "./about-us.scss";
 
-function AboutUs() {
+const AboutUs = () => {
   return (
     <div>
       <div className="about-us">
@@ -61,6 +61,6 @@ function AboutUs() {
       </div>
     </div>
   );
-}
+};
 
 export default AboutUs;

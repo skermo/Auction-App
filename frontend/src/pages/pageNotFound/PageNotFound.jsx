@@ -4,8 +4,8 @@ import Button from "../../components/Button/Button";
 import { AppLogo } from "../../resources/icons";
 import "./page-not-found.scss";
 
-function PageNotFound() {
-  let navigate = useNavigate();
+const PageNotFound = () => {
+  const navigate = useNavigate();
   const onBtnClick = () => {
     navigate(-1);
   };
@@ -25,6 +25,6 @@ function PageNotFound() {
       </div>
     </div>
   );
-}
+};
 
 export default PageNotFound;

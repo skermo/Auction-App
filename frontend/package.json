@@ -13,7 +13,6 @@
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
     "resolve-url-loader": "^5.0.0",
-    "storybook-addon-react-router-v6": "^0.3.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -21,8 +20,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 6006 -s public",
-    "start-storybook": "start-storybook -s ./public -p 9001"
+    "storybook": "start-storybook -p 6006 -s public"
   },
   "eslintConfig": {
     "extends": [
@@ -70,6 +68,7 @@
     "sass": "^1.59.2",
     "sass-loader": "^13.2.0",
     "style-loader": "^3.3.2",
-    "webpack": "^5.76.0"
+    "webpack": "^5.76.0",
+    "storybook-addon-react-router-v6": "^0.3.1"
   }
 }
