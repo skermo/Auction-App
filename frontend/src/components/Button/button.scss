@@ -1,0 +1,49 @@
+@import "src/styles/variables.scss";
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 114px;
+  height: 40px;
+  .btn-text {
+    font-weight: $Lato-Bold;
+    font-size: 16px;
+  }
+  .btn-icon {
+    font-size: 16px;
+    padding: 0.5em;
+  }
+}
+
+.btn-primary {
+  background-color: $purple;
+  border: none;
+  color: white;
+}
+.btn-secondary {
+  border: 3px solid $purple;
+  background-color: white;
+  color: $purple;
+  .btn-icon {
+    filter: invert(49%) sepia(54%) saturate(3719%) hue-rotate(228deg)
+      brightness(91%) contrast(85%);
+  }
+}
+
+.btn-tertiary {
+  border: 3px solid #d8d8d8;
+  background-color: white;
+  color: $purple;
+  .btn-icon {
+    filter: invert(49%) sepia(54%) saturate(3719%) hue-rotate(228deg)
+      brightness(91%) contrast(85%);
+  }
+}
+
+.btn-go-back {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 100px;
+}
