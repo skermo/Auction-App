@@ -1,0 +1,49 @@
+@import "../../styles/variables";
+
+.landing-page {
+  .top-part {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fafafa;
+    .categories-list {
+      font-size: 16px;
+      text-align: left;
+      margin-left: 10em;
+      li {
+        cursor: pointer;
+        color: $darkGrey;
+        border-bottom: 1px solid #d8d8d8;
+        width: 261px;
+        height: 56px;
+        line-height: 56px;
+        padding: 0px 20px;
+      }
+    }
+    ul[title]::before {
+      content: attr(title);
+      display: block;
+      font-weight: $Lato-Bold;
+      color: $purple;
+      margin-bottom: 10px;
+      margin-top: 10px;
+      padding: 0px 20px;
+    }
+    ul {
+      list-style-type: none;
+      background-color: white;
+    }
+  }
+  .new-arrivals {
+    font-weight: $Lato-Bold;
+  }
+}
+.infinite-scroll-component {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-left: 10em;
+  padding-right: 10em;
+  padding-bottom: 50px;
+  padding-top: 30px;
+}

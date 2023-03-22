@@ -1,0 +1,18 @@
+@import "../../styles/variables";
+
+.tab-list-item {
+  display: inline-block;
+  list-style: none;
+  margin-bottom: -3px;
+  padding: 0.5rem 1rem;
+  font-size: 18px;
+  color: $darkGrey;
+  cursor: pointer;
+}
+
+.tab-list-active {
+  background-color: white;
+  border: solid $purple;
+  border-width: 0 0 3px 0;
+  font-weight: $Lato-Bold;
+}

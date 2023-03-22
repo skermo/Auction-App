@@ -4,6 +4,7 @@ import "./App.scss";
 import Page from "./components/Page/Page";
 
 import AboutUs from "./pages/AboutUs/AboutUs";
+import LandingPage from "./pages/LandingPage/LandingPage";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions/TermsAndConditions";
@@ -38,6 +39,15 @@ function App() {
             element={
               <Page>
                 <TermsAndConditions />
+              </Page>
+            }
+          />
+          <Route
+            path="/"
+            exact
+            element={
+              <Page>
+                <LandingPage />
               </Page>
             }
           />

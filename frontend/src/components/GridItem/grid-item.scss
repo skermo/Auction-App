@@ -1,0 +1,27 @@
+@import "../../styles/variables";
+
+.grid-item {
+  flex-grow: 1;
+  flex-basis: 25%;
+  letter-spacing: 0.84px;
+  text-align: left;
+  img {
+    width: 262px;
+    height: 262px;
+  }
+  h4 {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    font-size: 24px;
+    color: $darkGrey;
+  }
+  p {
+    margin-top: 10px;
+    color: $lightGrey;
+    font-size: 16px;
+  }
+  span {
+    color: $purple;
+    font-weight: $Lato-Bold;
+  }
+}

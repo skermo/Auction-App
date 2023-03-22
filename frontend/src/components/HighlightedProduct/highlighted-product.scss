@@ -1,0 +1,25 @@
+@import "src/styles/variables.scss";
+
+.highlighted-product {
+  margin-right: 10em;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  h2 {
+    letter-spacing: 1.61px;
+    font-size: 46px;
+  }
+  h3 {
+    color: $purple;
+    letter-spacing: 0.84px;
+  }
+  p {
+    color: $lightGrey;
+    width: 25em;
+    margin-bottom: 30px;
+  }
+  img {
+    height: 20em;
+  }
+}
