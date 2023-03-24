@@ -17,14 +17,7 @@ public class ImageController {
         this.imageService = imageService;
     }
 
-    // get all images rest api
-    @GetMapping
-    public List<ImageDto> getAllImages() {
-        return imageService.getAllImages();
-    }
-
-    // get images by itemId
-    @GetMapping("/{itemId}")
+    @GetMapping("/item/{itemId}")
     public List<ImageDto> getImagesByItemId(@PathVariable(name = "itemId") UUID itemId) {
         return imageService.getImagesByItemId(itemId);
     }

@@ -18,9 +18,11 @@ import java.util.UUID;
 @Entity
 @Table
 public class Subcategory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
     @NotNull
     private String name;
 

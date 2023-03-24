@@ -17,7 +17,6 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    //get all items rest api
     @GetMapping
     public List<ItemDto> getAllItems(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
@@ -28,11 +27,19 @@ public class ItemController {
         return itemService.getAllItems(pageNo, pageSize, sortBy, sortDir);
     }
 
-    //get first product by availability
-    @GetMapping("/first-by-availability")
-    public ItemDto getFirstByAvailability() {
-        ItemDto itemDto = itemService.getFirstItemByAvailability(java.time.LocalDateTime.now());
-        return itemDto;
+    @GetMapping("/first-available")
+    public ItemDto getFirstAvailableItem() {
+        return itemService.getFirstAvailableItem();
+    }
+
+    @GetMapping("/available")
+    public List<ItemDto> getAllAvailableItems(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    ) {
+        return itemService.getAllAvailableItems(pageNo, pageSize, sortBy, sortDir);
     }
 
 }

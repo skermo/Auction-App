@@ -20,7 +20,6 @@ public class SubcategoryController {
         this.subcategoryService = subcategoryService;
     }
 
-    //get all subcategories rest api
     @GetMapping
     public List<SubcategoryDto> getAllSubcategories() {
         return subcategoryService.getAllSubcategories();

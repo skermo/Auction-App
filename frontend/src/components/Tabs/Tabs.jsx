@@ -1,57 +1,38 @@
-import PropTypes from "prop-types";
-import React, { Component } from "react";
-import Tab from "../Tab/Tab";
-import "./tabs.scss";
+import React, { useRef, useState } from "react";
+import "./tab.scss";
 
-class Tabs extends Component {
-  static propTypes = {
-    children: PropTypes.instanceOf(Array).isRequired,
+const TabComponent = ({ children, labels }) => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const handleClick = (index) => {
+    setSelectedIndex(index);
   };
 
-  constructor(props) {
-    super(props);
+  const tabRefs = useRef({});
 
-    this.state = {
-      activeTab: this.props.children[0].props.label,
-    };
-  }
-
-  onClickTabItem = (tab) => {
-    this.setState({ activeTab: tab });
-  };
-
-  render() {
-    const {
-      onClickTabItem,
-      props: { children },
-      state: { activeTab },
-    } = this;
-
-    return (
-      <div>
-        <ol className="tab-list">
-          {children.map((child) => {
-            const { label } = child.props;
-
-            return (
-              <Tab
-                activeTab={activeTab}
-                key={label}
-                label={label}
-                onClick={onClickTabItem}
-              />
-            );
-          })}
-        </ol>
-        <div>
-          {children.map((child) => {
-            if (child.props.label !== activeTab) return undefined;
-            return child.props.children;
-          })}
-        </div>
+  return (
+    <div>
+      <div className="tabs">
+        {labels.map((value, key) => (
+          <button
+            key={`tab-${key}`}
+            onClick={() => handleClick(key)}
+            ref={(element) => (tabRefs.current[key] = element)}
+            onFocus={() => {
+              setSelectedIndex(key);
+            }}
+            className={
+              selectedIndex === key
+                ? "tab-list-item tab-list-active"
+                : "tab-list-item"
+            }
+          >
+            {value}
+          </button>
+        ))}
       </div>
-    );
-  }
-}
+      <div>{children[selectedIndex]}</div>
+    </div>
+  );
+};
 
-export default Tabs;
+export default TabComponent;

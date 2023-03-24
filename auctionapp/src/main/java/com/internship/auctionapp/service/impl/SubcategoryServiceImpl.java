@@ -28,7 +28,9 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     @Override
     public List<SubcategoryDto> getAllSubcategories() {
         List<Subcategory> subcategories = subcategoryRepository.findAll();
-        return subcategories.stream().map(this::mapToDto).collect(Collectors.toList());
+        return subcategories.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
     private SubcategoryDto mapToDto(Subcategory subcategory) {

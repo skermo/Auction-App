@@ -3,50 +3,46 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import GridItem from "../../components/GridItem/GridItem";
 import HighlightedProduct from "../../components/HighlightedProduct/HighlightedProduct";
 import Loader from "../../components/Loader/Loader";
-import Tabs from "../../components/Tabs/Tabs";
-import { CategoryService } from "../../services/CategoryService";
-import { ItemService } from "../../services/ItemService";
+import Tab from "../../components/Tabs/Tabs";
+import { categoryService } from "../../services/categoryService";
+import { itemService } from "../../services/itemService";
 import "./landing-page.scss";
 
 const LandingPage = () => {
   const [categories, setCategories] = useState([]);
   const [item, setItem] = useState([]);
   const [newArrivals, setNewArrivals] = useState([]);
-  const [hasMore, sethasMore] = useState(true);
-  const [page, setpage] = useState(0);
+  const [lastChance, setLastChance] = useState([]);
+  const [hasMoreNewArrivals, setHasMoreNewArrivals] = useState(true);
+  const [hasMoreLastChance, setHasMoreLastChance] = useState(true);
+  const [pageNewArrivals, setPageNewArrivals] = useState(1);
+  const [pageLastChance, setPageLastChance] = useState(1);
 
   useEffect(() => {
-    CategoryService.getAll().then((res) => setCategories(res));
-    ItemService.getFirstItem().then((res) => setItem(res));
-    const getNewArrivals = async () => {
-      /*const res = await fetch(
-        `http://localhost:8080/api/items?pageNo=0&pageSize=4&sortBy=startDate&sortDir=desc`
-      );
-      const data = await res.json();
-      setNewArrivals(data);*/
-      ItemService.getNewArrivals(0).then((res) => setNewArrivals(res));
-    };
-
-    getNewArrivals();
+    categoryService.getAllCategories().then((res) => setCategories(res));
+    itemService.getFirstItem().then((res) => setItem(res));
+    itemService.getNewArrivals(0).then((res) => setNewArrivals(res));
+    itemService.getLastChance(0).then((res) => setLastChance(res));
   }, []);
 
-  const fetchNewArrivals = async () => {
-    /*const res = await fetch(
-      `http://localhost:8080/api/items?pageNo=${page}&pageSize=4&sortBy=startDate&sortDir=desc`
-    );
-    const data = await res.json();
-    return data;*/
-    return ItemService.getNewArrivals(page);
+  const fetchNewArrivalsData = () => {
+    itemService.getNewArrivals(pageNewArrivals).then((res) => {
+      setNewArrivals([...newArrivals, ...res]);
+      if (res.length === 0) {
+        setHasMoreNewArrivals(false);
+      }
+      setPageNewArrivals(pageNewArrivals + 1);
+    });
   };
 
-  const fetchNewArrivalsData = async () => {
-    const newArrivalsFromServer = await fetchNewArrivals();
-
-    setNewArrivals([...newArrivals, ...newArrivalsFromServer]);
-    if (newArrivalsFromServer.length === 0) {
-      sethasMore(false);
-    }
-    setpage(page + 1);
+  const fetchLastChanceData = () => {
+    itemService.getLastChance(pageLastChance).then((res) => {
+      setLastChance([...lastChance, ...res]);
+      if (res.length === 0) {
+        setHasMoreLastChance(false);
+      }
+      setPageLastChance(pageLastChance + 1);
+    });
   };
 
   return (
@@ -57,17 +53,15 @@ const LandingPage = () => {
             <li key={value.id}>{value.name}</li>
           ))}
         </ul>
-        {item != null && (
-          <HighlightedProduct item={JSON.parse(JSON.stringify(item))} />
-        )}
+        {item && <HighlightedProduct item={item} />}
       </div>
       <div>
-        <Tabs className="new-arrivals">
-          <div label="New Arrivals">
+        <Tab labels={["New Arrivals", "Last Chance"]}>
+          <div>
             <InfiniteScroll
               dataLength={newArrivals.length}
               next={fetchNewArrivalsData}
-              hasMore={hasMore}
+              hasMore={hasMoreNewArrivals}
               loader={<Loader />}
             >
               {newArrivals.map((value, key) => {
@@ -75,8 +69,19 @@ const LandingPage = () => {
               })}
             </InfiniteScroll>
           </div>
-          <div label="Last chance"></div>
-        </Tabs>
+          <div>
+            <InfiniteScroll
+              dataLength={lastChance.length}
+              next={fetchLastChanceData}
+              hasMore={hasMoreLastChance}
+              loader={<Loader />}
+            >
+              {lastChance.map((value, key) => {
+                return <GridItem key={value.id} item={value} />;
+              })}
+            </InfiniteScroll>
+          </div>
+        </Tab>
       </div>
     </div>
   );

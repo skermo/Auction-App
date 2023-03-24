@@ -37,13 +37,30 @@ public class ItemServiceImpl implements ItemService {
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Item> items = itemRepository.findAll(pageable);
         List<Item> itemList = items.getContent();
-        return itemList.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
+        return itemList.stream()
+                .map(item -> mapToDto(item))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public ItemDto getFirstItemByAvailability(LocalDateTime endDate) {
-        Item item = itemRepository.findFirstByEndDateGreaterThanEqual(endDate);
+    public ItemDto getFirstAvailableItem() {
+        LocalDateTime localDateTime = java.time.LocalDateTime.now();
+        Item item = itemRepository.findFirstByEndDateGreaterThanEqualAndStartDateLessThanEqual(localDateTime, localDateTime);
         return mapToDto(item);
+    }
+
+    @Override
+    public List<ItemDto> getAllAvailableItems(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        LocalDateTime localDateTime = java.time.LocalDateTime.now();
+        Page<Item> items = itemRepository.findByEndDateGreaterThanEqualAndStartDateLessThanEqual(localDateTime, localDateTime, pageable);
+        List<Item> itemList = items.getContent();
+        return itemList.stream()
+                .map(item -> mapToDto(item))
+                .collect(Collectors.toList());
     }
 
     private ItemDto mapToDto(Item item) {

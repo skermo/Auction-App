@@ -16,10 +16,13 @@ import java.util.UUID;
 @Entity
 @Table
 public class Image {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
     private String url;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "`itemId`")
     private Item item;

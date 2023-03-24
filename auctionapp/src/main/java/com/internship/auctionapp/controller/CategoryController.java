@@ -20,7 +20,6 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    //get all categories rest api
     @GetMapping
     public List<CategoryDto> getAllCategories() {
         return categoryService.getAllCategories();

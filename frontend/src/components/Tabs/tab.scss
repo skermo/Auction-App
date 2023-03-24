@@ -1,0 +1,28 @@
+@import "../../styles/variables";
+
+.tabs {
+  border-bottom: 3px solid #d8d8d8;
+  padding-left: 0;
+  margin-left: 10em;
+  margin-right: 10em;
+  text-align: left;
+  margin-top: 30px;
+  button {
+    background: none;
+    border: none;
+  }
+  .tab-list-active {
+    border: solid $purple;
+    border-width: 0 0 3px 0;
+    font-weight: $Lato-Bold;
+  }
+  .tab-list-item {
+    display: inline-block;
+    list-style: none;
+    margin-bottom: -3px;
+    padding: 0.5rem 1rem;
+    font-size: 18px;
+    color: $darkGrey;
+    cursor: pointer;
+  }
+}

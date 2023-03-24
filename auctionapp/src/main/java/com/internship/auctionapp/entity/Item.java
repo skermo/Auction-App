@@ -19,17 +19,23 @@ import java.util.UUID;
 @Entity
 @Table
 public class Item {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
     @NotNull
     private String name;
+
     @NotNull
     private double startPrice;
+
     @NotNull
     private LocalDateTime startDate;
+
     @NotNull
     private LocalDateTime endDate;
+
     @NotNull
     private String description;
 

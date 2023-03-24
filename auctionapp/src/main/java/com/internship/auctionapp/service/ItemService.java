@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface ItemService {
     List<ItemDto> getAllItems(int pageNo, int pageSize, String sortBy, String sortDir);
-    ItemDto getFirstItemByAvailability(LocalDateTime endDate);
+    ItemDto getFirstAvailableItem();
+    List<ItemDto> getAllAvailableItems(int pageNo, int pageSize, String sortBy, String sortDir);
 }
