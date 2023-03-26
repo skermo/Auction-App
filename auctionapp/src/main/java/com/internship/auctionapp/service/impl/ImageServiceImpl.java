@@ -24,13 +24,6 @@ public class ImageServiceImpl implements ImageService {
         typeMapToDto = mapper.createTypeMap(Image.class, ImageDto.class);
     }
 
-    @Override
-    public List<ImageDto> getAllImages() {
-        List<Image> images = imageRepository.findAll();
-        return images.stream()
-                .map(image -> mapToDto(image))
-                .collect(Collectors.toList());
-    }
 
     @Override
     public List<ImageDto> getImagesByItemId(UUID itemId) {

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import "./tab.scss";
 
-const TabComponent = ({ children, labels }) => {
+const Tabs = ({ children, labels }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const handleClick = (index) => {
     setSelectedIndex(index);
@@ -35,4 +35,4 @@ const TabComponent = ({ children, labels }) => {
   );
 };
 
-export default TabComponent;
+export default Tabs;

@@ -3,7 +3,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import GridItem from "../../components/GridItem/GridItem";
 import HighlightedProduct from "../../components/HighlightedProduct/HighlightedProduct";
 import Loader from "../../components/Loader/Loader";
-import Tab from "../../components/Tabs/Tabs";
+import Tabs from "../../components/Tabs/Tabs";
 import { categoryService } from "../../services/categoryService";
 import { itemService } from "../../services/itemService";
 import "./landing-page.scss";
@@ -56,7 +56,7 @@ const LandingPage = () => {
         {item && <HighlightedProduct item={item} />}
       </div>
       <div>
-        <Tab labels={["New Arrivals", "Last Chance"]}>
+        <Tabs labels={["New Arrivals", "Last Chance"]}>
           <div>
             <InfiniteScroll
               dataLength={newArrivals.length}
@@ -81,7 +81,7 @@ const LandingPage = () => {
               })}
             </InfiniteScroll>
           </div>
-        </Tab>
+        </Tabs>
       </div>
     </div>
   );

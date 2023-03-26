@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { imageService } from "../../services/imageService";
+import { utils } from "../../utils/utils";
 import "./grid-item.scss";
 
 const GridItem = ({ item }) => {
-  item.startPrice = parseFloat(item.startPrice).toFixed(2);
-
   const [images, setImages] = useState([]);
+
+  const price = utils.parseNum(item.startPrice);
 
   useEffect(() => {
     imageService.getImagesByItemId(item.id).then((res) => setImages(res));
@@ -16,7 +17,7 @@ const GridItem = ({ item }) => {
       <img src={images[0]?.url} />
       <h4>{item.name}</h4>
       <p>
-        Starts from <span>${item.startPrice}</span>
+        Starts from <span>${price}</span>
       </p>
     </div>
   );
