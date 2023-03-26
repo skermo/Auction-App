@@ -16,6 +16,8 @@ CREATE TABLE public.item (
                              name character varying(255) NOT NULL,
                              startdate timestamp(6) without time zone NOT NULL,
                              startprice double precision NOT NULL,
+                             highestbid double precision,
+                             "NoBids" integer,
                              "categoryId" uuid,
                              "subcategoryId" uuid
 );
@@ -23,8 +25,7 @@ CREATE TABLE public.item (
 CREATE TABLE public.subcategory (
                                     id uuid NOT NULL,
                                     name character varying(255) NOT NULL,
-                                    "categoryId" uuid,
-                                    category_id uuid
+                                    "categoryId" uuid
 );
 
 ALTER TABLE ONLY public.category
@@ -48,8 +49,6 @@ ALTER TABLE ONLY public.item
 ALTER TABLE ONLY public.item
     ADD CONSTRAINT fk5fpnq5hcxchphbw6r1i4qxunb FOREIGN KEY ("categoryId") REFERENCES public.category(id);
 
-ALTER TABLE ONLY public.subcategory
-    ADD CONSTRAINT fk8qyleg49qomcoj9rfmjf2m17u FOREIGN KEY (category_id) REFERENCES public.category(id);
 
 ALTER TABLE ONLY public.subcategory
     ADD CONSTRAINT fkmksucdwjhvtvx1ee4eeb3mmyw FOREIGN KEY ("categoryId") REFERENCES public.category(id);

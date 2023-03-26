@@ -1,0 +1,19 @@
+.gallery {
+  text-align: center;
+  .selected-image {
+    height: 400px;
+    padding-bottom: 30px;
+  }
+  .slideshow {
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img {
+      width: 100px;
+      height: 100px;
+      padding: 0 5px;
+      padding-bottom: 30px;
+    }
+  }
+}

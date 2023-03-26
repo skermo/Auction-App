@@ -7,6 +7,7 @@ import AboutUs from "./pages/AboutUs/AboutUs";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
+import ProductOverview from "./pages/ProductOverview/ProductOverview";
 import TermsAndConditions from "./pages/TermsAndConditions/TermsAndConditions";
 import * as routes from "./routes";
 
@@ -48,6 +49,15 @@ function App() {
             element={
               <Page>
                 <LandingPage />
+              </Page>
+            }
+          />
+          <Route
+            path={routes.PAGE_OVERVIEW}
+            exact
+            element={
+              <Page>
+                <ProductOverview />
               </Page>
             }
           />
