@@ -2,7 +2,7 @@ import classNames from "classnames/bind";
 import React, { useRef, useState } from "react";
 import "./tab.scss";
 
-const Tabs = ({ children, labels }) => {
+const Tabs = ({ children, labels, className }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const handleClick = (index) => {
     setSelectedIndex(index);
@@ -11,7 +11,7 @@ const Tabs = ({ children, labels }) => {
   const tabRefs = useRef({});
 
   return (
-    <div>
+    <div className={className}>
       <div className="tabs">
         {labels.map((value, key) => (
           <button
@@ -29,7 +29,7 @@ const Tabs = ({ children, labels }) => {
           </button>
         ))}
       </div>
-      <div>{children[selectedIndex]}</div>
+      <div className="children">{children[selectedIndex]}</div>
     </div>
   );
 };

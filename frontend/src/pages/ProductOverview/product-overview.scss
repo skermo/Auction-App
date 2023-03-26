@@ -1,0 +1,56 @@
+@import "../../styles/variables";
+
+.overview-page {
+  color: $darkGrey;
+  .header {
+    letter-spacing: 0.56px;
+    height: 64px;
+    font-size: 16px;
+    background-color: $offWhite;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .item-name {
+      font-size: 18px;
+    }
+    div {
+      margin: 0 10em;
+      span {
+        color: $lightGrey;
+        padding-right: 1em;
+      }
+    }
+  }
+  .product-information {
+    text-align: left;
+    margin: 0 10em;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    margin-top: 30px;
+    .content {
+      width: calc(100% / 2);
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    span {
+      font-weight: $Lato-Bold;
+      color: $purple;
+    }
+    p {
+      color: $darkGrey;
+    }
+    .starts-from {
+      color: $purple;
+      font-weight: $Lato-Light;
+    }
+    .information-block {
+      margin-top: 20px;
+      margin-bottom: 30px;
+      display: inline-block;
+      border: 1px solid $lightestGrey;
+      padding: 0 1.5em;
+    }
+  }
+}

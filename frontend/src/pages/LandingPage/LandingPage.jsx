@@ -19,6 +19,7 @@ const LandingPage = () => {
   const [pageLastChance, setPageLastChance] = useState(1);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     categoryService.getAllCategories().then((res) => setCategories(res));
     itemService.getFirstItem().then((res) => setItem(res));
     itemService.getNewArrivals(0).then((res) => setNewArrivals(res));

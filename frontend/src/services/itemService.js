@@ -8,15 +8,20 @@ async function getFirstItem() {
 
 async function getNewArrivals(pageNo) {
   const result = await axios.get(
-    `${BASE_URL}/items/available?pageNo=${pageNo}&pageSize=4&sortBy=startDate&sortDir=desc`
+    `${BASE_URL}/items/available?pageNo=${pageNo}&pageSize=8&sortBy=startDate&sortDir=desc`
   );
   return result.data || [];
 }
 
 async function getLastChance(pageNo) {
   const result = await axios.get(
-    `${BASE_URL}/items/available?pageNo=${pageNo}&pageSize=4&sortBy=endDate&sortDir=asc`
+    `${BASE_URL}/items/available?pageNo=${pageNo}&pageSize=8&sortBy=endDate&sortDir=asc`
   );
+  return result.data || [];
+}
+
+async function getItemById(id) {
+  const result = await axios.get(`${BASE_URL}/items/${id}`);
   return result.data || [];
 }
 
@@ -24,4 +29,5 @@ export const itemService = {
   getFirstItem,
   getNewArrivals,
   getLastChance,
+  getItemById,
 };

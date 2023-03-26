@@ -5,6 +5,7 @@ import com.internship.auctionapp.service.ItemService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -42,4 +43,8 @@ public class ItemController {
         return itemService.getAllAvailableItems(pageNo, pageSize, sortBy, sortDir);
     }
 
+    @GetMapping("/{id}")
+    public ItemDto getItemById (@PathVariable(name = "id") UUID id){
+        return itemService.getItemById(id);
+    }
 }

@@ -42,6 +42,11 @@ public class Item {
     @NotNull
     private String description;
 
+    private double highestBid;
+
+    @Column(name = "`NoBids`")
+    private int NoBids;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;

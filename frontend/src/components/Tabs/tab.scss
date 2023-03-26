@@ -26,3 +26,21 @@
     cursor: pointer;
   }
 }
+
+.light {
+  .tabs {
+    margin: 0;
+    border-bottom: 1px solid #d8d8d8;
+    .tab-list-active {
+      border-width: 0 0 1px 0;
+    }
+    .tab-list-item {
+      margin-bottom: -1px;
+      color: $purple;
+    }
+  }
+  .children {
+    color: $lightGrey;
+    margin-top: 25px;
+  }
+}
