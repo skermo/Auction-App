@@ -1,88 +1,44 @@
-CREATE TABLE public.category (
-                                 id uuid NOT NULL,
+CREATE TABLE public.category
+(
+    id   uuid                   NOT NULL,
+    name character varying(255) NOT NULL,
 
-
-
-                                 name character varying(255) NOT NULL,
-
-                                 CONSTRAINT PK_category PRIMARY KEY (id),
-                                 CONSTRAINT UQ_name UNIQUE (name)
-
+    CONSTRAINT PK_category PRIMARY KEY (id),
+    CONSTRAINT UQ_name UNIQUE (name)
 );
 
-CREATE TABLE public.image (
-                              id uuid NOT NULL,
-                              url character varying(255),
+CREATE TABLE public.image
+(
+    id      uuid NOT NULL,
+    url     character varying(255),
+    item_id uuid,
 
-
-
-                              item_id uuid,
-
-                              CONSTRAINT PK_image PRIMARY KEY (id)
-
+    CONSTRAINT PK_image PRIMARY KEY (id)
 );
 
-CREATE TABLE public.item (
-                             id uuid NOT NULL,
-                             description character varying(255) NOT NULL,
+CREATE TABLE public.item
+(
+    id             uuid                   NOT NULL,
+    description    character varying(255) NOT NULL,
+    end_date       timestamp(6) without time zone NOT NULL,
+    name           character varying(255) NOT NULL,
+    start_date     timestamp(6) without time zone NOT NULL,
+    start_price    double precision       NOT NULL,
+    category_id    uuid,
+    subcategory_id uuid,
+    highest_bid    double precision,
+    no_bids        integer,
 
-
-
-
-
-                             highestbid double precision,
-                             "NoBids" integer,
-
-
-
-                            end_date timestamp(6) without time zone NOT NULL,
-                             name character varying(255) NOT NULL,
-                             start_date timestamp(6) without time zone NOT NULL,
-                             start_price double precision NOT NULL,
-                             category_id uuid,
-                             subcategory_id uuid,
-
-                             CONSTRAINT PK_item PRIMARY KEY (id)
-
+    CONSTRAINT PK_item PRIMARY KEY (id)
 );
 
-CREATE TABLE public.subcategory (
-                                    id uuid NOT NULL,
-                                    name character varying(255) NOT NULL,
+CREATE TABLE public.subcategory
+(
+    id          uuid                   NOT NULL,
+    name        character varying(255) NOT NULL,
+    category_id uuid,
 
-
-);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                    category_id uuid,
-                                    CONSTRAINT PK_subcategory PRIMARY KEY (id)
+    CONSTRAINT PK_subcategory PRIMARY KEY (id)
 );
 
 
@@ -97,4 +53,3 @@ ALTER TABLE ONLY public.subcategory
 
 ALTER TABLE ONLY public.image
     ADD CONSTRAINT FK_image_item FOREIGN KEY (item_id) REFERENCES public.item(id);
-

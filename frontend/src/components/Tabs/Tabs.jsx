@@ -1,15 +1,8 @@
-
+import classNames from "classnames";
 import React, { useRef, useState } from "react";
 import "./tab.scss";
 
 const Tabs = ({ children, labels, className }) => {
-
-import classNames from "classnames/bind";
-import React, { useRef, useState } from "react";
-import "./tab.scss";
-
-
-
   const [selectedIndex, setSelectedIndex] = useState(0);
   const handleClick = (index) => {
     setSelectedIndex(index);
@@ -18,11 +11,7 @@ import "./tab.scss";
   const tabRefs = useRef({});
 
   return (
-
     <div className={className}>
-
-
-
       <div className="tabs">
         {labels.map((value, key) => (
           <button
@@ -32,27 +21,15 @@ import "./tab.scss";
             onFocus={() => {
               setSelectedIndex(key);
             }}
-
-
-
-
-
-
-
             className={classNames("tab-list-item", {
               "tab-list-active": selectedIndex === key,
             })}
-
           >
             {value}
           </button>
         ))}
       </div>
-
       <div className="children">{children[selectedIndex]}</div>
-
-
-
     </div>
   );
 };

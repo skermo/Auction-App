@@ -53,7 +53,6 @@ function App() {
             }
           />
           <Route
-
             path={routes.PAGE_OVERVIEW}
             exact
             element={
@@ -63,8 +62,6 @@ function App() {
             }
           />
           <Route
-
-
             path="*"
             exact
             element={

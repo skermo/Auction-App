@@ -24,10 +24,7 @@ public class Image {
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
-
-
-
-   @JoinColumn(name = "item_id")
+    @JoinColumn(name = "item_id")
 
     private Item item;
 }

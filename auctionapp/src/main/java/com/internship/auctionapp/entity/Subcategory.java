@@ -27,9 +27,6 @@ public class Subcategory {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-
-
-
     @JoinColumn(name = "category_id")
 
     private Category category;
