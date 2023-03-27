@@ -1,4 +1,4 @@
-import classNames from "classnames/bind";
+import classNames from "classnames";
 import React, { useRef, useState } from "react";
 import "./tab.scss";
 

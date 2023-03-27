@@ -42,9 +42,10 @@ public class Item {
     @NotNull
     private String description;
 
+    @Column(name = "highest_bid")
     private double highestBid;
 
-    @Column(name = "`NoBids`")
+    @Column(name = "no_bids")
     private int NoBids;
 
     @ManyToOne(fetch = FetchType.LAZY)
