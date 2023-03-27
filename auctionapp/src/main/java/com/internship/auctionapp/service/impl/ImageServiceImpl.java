@@ -28,7 +28,9 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public List<ImageDto> getImagesByItemId(UUID itemId) {
         List<Image> images = imageRepository.findByItemId(itemId);
-        return images.stream().map(image -> mapToDto(image)).collect(Collectors.toList());
+        return images.stream()
+                .map(image -> mapToDto(image))
+                .collect(Collectors.toList());
     }
 
     private ImageDto mapToDto(Image image) {

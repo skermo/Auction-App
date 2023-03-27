@@ -1,3 +1,4 @@
+import classNames from "classnames/bind";
 import React, { useRef, useState } from "react";
 import "./tab.scss";
 
@@ -20,11 +21,9 @@ const Tabs = ({ children, labels }) => {
             onFocus={() => {
               setSelectedIndex(key);
             }}
-            className={
-              selectedIndex === key
-                ? "tab-list-item tab-list-active"
-                : "tab-list-item"
-            }
+            className={classNames("tab-list-item", {
+              "tab-list-active": selectedIndex === key,
+            })}
           >
             {value}
           </button>
