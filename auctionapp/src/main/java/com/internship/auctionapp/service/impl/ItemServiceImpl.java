@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 import java.util.UUID;
+
+
 import java.util.stream.Collectors;
 
 @Service
@@ -64,10 +67,13 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
     }
 
+
     @Override
     public ItemDto getItemById(UUID id) {
        return mapToDto(itemRepository.findById(id).get());
     }
+
+
 
     private ItemDto mapToDto(Item item) {
         if (typeMapToDto == null) {

@@ -28,30 +28,51 @@ public class Item {
     private String name;
 
     @NotNull
+
+
+
+
+
+
+
+
+    @Column(name = "start_price")
     private double startPrice;
 
     @NotNull
+    @Column(name = "start_date")
     private LocalDateTime startDate;
 
     @NotNull
+    @Column(name = "end_date")
+
     private LocalDateTime endDate;
 
     @NotNull
     private String description;
+
 
     private double highestBid;
 
     @Column(name = "`NoBids`")
     private int NoBids;
 
+
+
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "`categoryId`")
+    @JoinColumn(name = "category_id")
+
     private Category category;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "`subcategoryId`")
+
+
+
+    @JoinColumn(name = "subcategory_id")
+
     private Subcategory subcategory;
 }
