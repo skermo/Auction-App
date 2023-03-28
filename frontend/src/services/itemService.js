@@ -25,9 +25,17 @@ async function getItemById(id) {
   return result.data || [];
 }
 
+async function getSearchedItems(query, pageNo) {
+  const result = await axios.get(
+    `${BASE_URL}/items/search?name=${query}&pageNo=${pageNo}&pageSize=2`
+  );
+  return result.data || [];
+}
+
 export const itemService = {
   getFirstItem,
   getNewArrivals,
   getLastChance,
   getItemById,
+  getSearchedItems,
 };

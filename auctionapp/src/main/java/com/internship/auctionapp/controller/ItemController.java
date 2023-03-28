@@ -46,11 +46,17 @@ public class ItemController {
         return itemService.getAllAvailableItems(pageNo, pageSize, sortBy, sortDir);
     }
 
-
     @GetMapping("/{id}")
     public ItemDto getItemById (@PathVariable(name = "id") UUID id){
         return itemService.getItemById(id);
     }
 
+    @GetMapping("/search")
+    public List<ItemDto> searchItems(
+            @RequestParam("name") String name,
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "2", required = false) int pageSize){
+        return itemService.searchItems(name, pageNo, pageSize);
+    }
 
 }

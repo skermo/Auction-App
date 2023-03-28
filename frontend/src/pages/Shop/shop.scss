@@ -1,0 +1,15 @@
+.shop-page {
+  margin: 0 10em;
+  .content {
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .button {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}

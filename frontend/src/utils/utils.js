@@ -2,7 +2,6 @@ function parseNum(num) {
   return parseFloat(num).toFixed(2);
 }
 
-
 function convertDate(firstDate, secondDate) {
   const date1 = new Date(firstDate).getTime();
   const date2 = new Date(secondDate).getTime();
@@ -15,8 +14,4 @@ function convertDate(firstDate, secondDate) {
 export const utils = {
   parseNum,
   convertDate,
-
-
-
-
 };

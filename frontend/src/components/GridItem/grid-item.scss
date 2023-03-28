@@ -1,16 +1,50 @@
 @import "../../styles/variables";
 
 .grid-item {
+  display: inline-block;
+  width: 262px;
   flex-grow: 1;
   flex-basis: 25%;
   letter-spacing: 0.84px;
   text-align: left;
-  img {
+  .image-container {
+    position: relative;
     width: 262px;
     height: 262px;
-    cursor: pointer;
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .overlay {
+      cursor: pointer;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      width: 100%;
+      opacity: 0;
+      transition: 0.5s ease;
+      background-color: $purple;
+    }
   }
+
+  .image-container:hover .overlay {
+    opacity: 0.5;
+  }
+
+  .portrait {
+    width: 262px;
+    height: 350px;
+    img {
+      height: 100%;
+    }
+  }
+
   h4 {
+    display: inline-block;
     margin-top: 10px;
     margin-bottom: 0px;
     font-size: 24px;
@@ -25,4 +59,8 @@
     color: $purple;
     font-weight: $Lato-Bold;
   }
+}
+
+.portrait {
+  flex-basis: 33.3333333%;
 }

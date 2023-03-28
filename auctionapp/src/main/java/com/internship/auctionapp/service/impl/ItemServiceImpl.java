@@ -73,6 +73,15 @@ public class ItemServiceImpl implements ItemService {
        return mapToDto(itemRepository.findById(id).get());
     }
 
+    @Override
+    public List<ItemDto> searchItems(String name, int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Item> items = itemRepository.searchItems(name, pageable);
+        List<Item> itemList = items.getContent();
+        return itemList.stream()
+                .map(item -> mapToDto(item))
+                .collect(Collectors.toList());
+    }
 
 
     private ItemDto mapToDto(Item item) {
