@@ -18,7 +18,7 @@ public class ItemDto {
     private LocalDateTime endDate;
     private String description;
     private double highestBid;
-    private int NoBids;
+    private int noBids;
     private UUID categoryId;
     private UUID subcategoryId;
 }

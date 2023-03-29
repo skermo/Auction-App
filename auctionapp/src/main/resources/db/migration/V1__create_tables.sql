@@ -50,7 +50,7 @@ ALTER TABLE ONLY public.item
 
 
 ALTER TABLE ONLY public.subcategory
-    ADD CONSTRAINT fkmksucdwjhvtvx1ee4eeb3mmyw FOREIGN KEY ("categoryId") REFERENCES public.category(id);
+    ADD CONSTRAINT FK_subcategory_category FOREIGN KEY (category_id) REFERENCES public.category(id);
 
 ALTER TABLE ONLY public.image
     ADD CONSTRAINT FK_image_item FOREIGN KEY (item_id) REFERENCES public.item(id);

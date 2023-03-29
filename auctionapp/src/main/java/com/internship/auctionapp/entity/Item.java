@@ -46,7 +46,7 @@ public class Item {
     private double highestBid;
 
     @Column(name = "no_bids")
-    private int NoBids;
+    private int noBids;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")

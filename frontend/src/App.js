@@ -53,7 +53,7 @@ function App() {
             }
           />
           <Route
-            path={routes.PAGE_OVERVIEW}
+            path={routes.PRODUCT_OVERVIEW}
             exact
             element={
               <Page>

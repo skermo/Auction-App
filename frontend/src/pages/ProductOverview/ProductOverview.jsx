@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
 import Gallery from "../../components/Gallery/Gallery";
 import Tabs from "../../components/Tabs/Tabs";
 import { itemService } from "../../services/itemService";
@@ -22,9 +23,14 @@ const ProductOverview = () => {
   return (
     <div className="overview-page">
       <div className="header">
-        <div className="item-name">{item.name}</div>
-        <div>
-          <span>SHOP / </span> SINGLE PRODUCT
+        <Breadcrumbs text={item.name} className="header-item-name" />
+        <div className="header-navigate">
+          <Breadcrumbs text="SHOP" className="header-navigate-breadcrumb" />
+          /
+          <Breadcrumbs
+            text="SINGLE PRODUCT"
+            className="header-navigate-breadcrumb"
+          />
         </div>
       </div>
       <div className="product-information">
@@ -43,14 +49,12 @@ const ProductOverview = () => {
             </p>
             <p>
               Time left:
-              <span>
-                {timeLeft[0]} weeks and {timeLeft[1]} days
-              </span>
+              <span> {timeLeft}</span>
             </p>
           </div>
-          <Tabs labels={["Details"]} className="light">
+          <Tabs labels={["Details"]} className="secondary">
             <div>{item.description}</div>
-            <div></div>
+            <div />
           </Tabs>
         </div>
       </div>

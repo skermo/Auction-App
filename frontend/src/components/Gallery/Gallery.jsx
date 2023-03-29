@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { imageService } from "../../services/imageService";
 import "./gallery.scss";
 
@@ -9,8 +9,6 @@ const Gallery = ({ id }) => {
   const handleClick = (index) => {
     setSelectedIndex(index);
   };
-
-  const imgRefs = useRef({});
 
   useEffect(() => {
     imageService.getImagesByItemId(id).then((res) => setImages(res));
@@ -25,11 +23,10 @@ const Gallery = ({ id }) => {
             src={value.url}
             key={`img-${key}`}
             onClick={() => handleClick(key)}
-            ref={(element) => (imgRefs.current[key] = element)}
             onFocus={() => {
               setSelectedIndex(key);
             }}
-          ></img>
+          />
         ))}
       </div>
     </div>
