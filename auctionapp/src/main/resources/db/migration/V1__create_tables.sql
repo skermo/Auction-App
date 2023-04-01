@@ -48,6 +48,7 @@ ALTER TABLE ONLY public.item
 ALTER TABLE ONLY public.item
     ADD CONSTRAINT FK_item_category FOREIGN KEY (category_id) REFERENCES public.category(id);
 
+
 ALTER TABLE ONLY public.subcategory
     ADD CONSTRAINT FK_subcategory_category FOREIGN KEY (category_id) REFERENCES public.category(id);
 
