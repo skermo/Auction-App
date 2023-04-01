@@ -3,10 +3,9 @@
 .grid-item {
   display: inline-block;
   width: 262px;
-  flex-grow: 1;
-  flex-basis: 25%;
   letter-spacing: 0.84px;
   text-align: left;
+  align-self: start;
   .image-container {
     position: relative;
     width: 262px;

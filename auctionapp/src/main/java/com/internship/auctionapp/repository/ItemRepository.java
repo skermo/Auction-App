@@ -14,6 +14,10 @@ public interface ItemRepository extends JpaRepository<Item, UUID> {
     Item findFirstByEndDateGreaterThanEqualAndStartDateLessThanEqual (LocalDateTime endDate, LocalDateTime startDate);
     Page<Item> findByEndDateGreaterThanEqualAndStartDateLessThanEqual (LocalDateTime endDate, LocalDateTime startDate, Pageable pageable);
     @Query ("SELECT i FROM Item i " +
-            "WHERE LOWER(i.name) LIKE LOWER(CONCAT('%', :name, '%'))")
-    Page<Item> searchItems (String name, Pageable pageable);
+            "WHERE i.endDate >= NOW() AND i.startDate <= NOW() " +
+            "AND (LOWER(i.name) LIKE LOWER(CONCAT('%', :name, '%') ) " +
+            "OR LOWER(i.category.name) LIKE LOWER(CONCAT('%', :name, '%') ) )" +
+            "AND i.category.name LIKE CONCAT('%', :category, '%') ")
+    Page<Item> searchItems (String name, String category, Pageable pageable);
+
 }

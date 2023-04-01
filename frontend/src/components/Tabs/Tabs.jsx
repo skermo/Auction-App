@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import "./tab.scss";
 
 const Tabs = ({ children, labels, className }) => {
@@ -8,8 +8,6 @@ const Tabs = ({ children, labels, className }) => {
     setSelectedIndex(index);
   };
 
-  const tabRefs = useRef({});
-
   return (
     <div className={className}>
       <div className="tabs">
@@ -17,7 +15,6 @@ const Tabs = ({ children, labels, className }) => {
           <button
             key={`tab-${key}`}
             onClick={() => handleClick(key)}
-            ref={(element) => (tabRefs.current[key] = element)}
             onFocus={() => {
               setSelectedIndex(key);
             }}
@@ -29,7 +26,7 @@ const Tabs = ({ children, labels, className }) => {
           </button>
         ))}
       </div>
-      <div className="children">{children[selectedIndex]}</div>
+      <div className="content">{children[selectedIndex]}</div>
     </div>
   );
 };

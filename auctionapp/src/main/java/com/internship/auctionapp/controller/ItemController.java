@@ -1,6 +1,7 @@
 package com.internship.auctionapp.controller;
 
 import com.internship.auctionapp.dto.ItemDto;
+import com.internship.auctionapp.dto.ItemResponse;
 import com.internship.auctionapp.service.ItemService;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,7 @@ public class ItemController {
     }
 
     @GetMapping("/available")
-    public List<ItemDto> getAllAvailableItems(
+    public ItemResponse getAllAvailableItems(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
@@ -52,11 +53,12 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchItems(
+    public ItemResponse searchItems(
             @RequestParam("name") String name,
+            @RequestParam("category") String category,
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "2", required = false) int pageSize){
-        return itemService.searchItems(name, pageNo, pageSize);
+        return itemService.searchItems(name, category, pageNo, pageSize);
     }
 
 }

@@ -2,6 +2,13 @@
 
 .privacy-policy {
   text-align: left;
-  margin: 0px 200px 100px 200px;
+  margin: auto;
+  padding: 50px 0;
+  width: 50%;
   display: block;
+  p,
+  li,
+  a {
+    color: $lightGrey;
+  }
 }

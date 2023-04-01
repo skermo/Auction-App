@@ -1,14 +1,16 @@
 @import "src/styles/variables.scss";
 
 .nav-white {
+  margin: 0 10em;
   height: 80px;
   background-color: white;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   font-size: 16px;
   .logged-app-logo {
-    margin-left: 0em;
+    height: 25px;
+    cursor: pointer;
   }
   .nav-list {
     list-style-type: none;
@@ -17,12 +19,14 @@
     display: inline;
   }
   li {
-    padding: 15px;
+    padding: 1em;
     cursor: pointer;
     font-weight: $Lato-Light;
+    letter-spacing: 0.235px;
   }
   li:hover {
     color: $purple;
     font-weight: $Lato-Bold;
+    letter-spacing: 0;
   }
 }

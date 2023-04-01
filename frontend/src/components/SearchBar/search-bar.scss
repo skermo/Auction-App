@@ -1,0 +1,25 @@
+@import "src/styles/variables.scss";
+
+.search-bar {
+  width: 528px;
+  height: 30px;
+  border: 1px solid $lightestGrey;
+  box-sizing: content-box;
+  padding: 10px;
+  background-repeat: no-repeat;
+  background-size: 1.5em;
+  background-position: right 10px top 15px;
+  box-shadow: 2px 2px 0 0 $lightestGrey;
+  color: $darkGrey;
+  letter-spacing: 0.2px;
+}
+
+.search-bar::placeholder {
+  color: $lightGrey;
+  letter-spacing: 0.2px;
+}
+
+.search-bar:focus {
+  box-shadow: 0 0 0 0;
+  outline-color: $darkGrey;
+}

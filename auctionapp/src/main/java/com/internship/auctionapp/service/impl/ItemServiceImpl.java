@@ -1,6 +1,7 @@
 package com.internship.auctionapp.service.impl;
 
 import com.internship.auctionapp.dto.ItemDto;
+import com.internship.auctionapp.dto.ItemResponse;
 import com.internship.auctionapp.entity.Item;
 import com.internship.auctionapp.repository.ItemRepository;
 import com.internship.auctionapp.service.ItemService;
@@ -54,17 +55,14 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getAllAvailableItems(int pageNo, int pageSize, String sortBy, String sortDir) {
+    public ItemResponse getAllAvailableItems(int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         LocalDateTime localDateTime = java.time.LocalDateTime.now();
         Page<Item> items = itemRepository.findByEndDateGreaterThanEqualAndStartDateLessThanEqual(localDateTime, localDateTime, pageable);
-        List<Item> itemList = items.getContent();
-        return itemList.stream()
-                .map(item -> mapToDto(item))
-                .collect(Collectors.toList());
+        return getItemResponse(items);
     }
 
 
@@ -74,13 +72,25 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> searchItems(String name, int pageNo, int pageSize) {
+    public ItemResponse searchItems(String name, String category, int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Item> items = itemRepository.searchItems(name, pageable);
+        Page<Item> items = itemRepository.searchItems(name, category, pageable);
+        return getItemResponse(items);
+    }
+
+    private ItemResponse getItemResponse(Page<Item> items) {
         List<Item> itemList = items.getContent();
-        return itemList.stream()
+        List<ItemDto> content = itemList.stream()
                 .map(item -> mapToDto(item))
                 .collect(Collectors.toList());
+        ItemResponse itemResponse = new ItemResponse();
+        itemResponse.setContent(content);
+        itemResponse.setPageNo(items.getNumber());
+        itemResponse.setPageSize(items.getSize());
+        itemResponse.setTotalElements(items.getTotalElements());
+        itemResponse.setLast(items.isLast());
+
+        return itemResponse;
     }
 
 
