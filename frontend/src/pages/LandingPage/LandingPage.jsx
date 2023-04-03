@@ -61,6 +61,7 @@ const LandingPage = () => {
               {value.name}
             </li>
           ))}
+          <li onClick={() => searchByCategory("")}>All Categories</li>
         </ul>
         {item && <HighlightedProduct item={item} />}
       </div>
