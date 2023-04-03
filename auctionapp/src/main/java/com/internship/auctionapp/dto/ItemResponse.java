@@ -18,4 +18,5 @@ public class ItemResponse {
     private long totalElements;
     private int totalPages;
     private boolean last;
+    private String didYouMean;
 }

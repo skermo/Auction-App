@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Button from "../../components/Button/Button";
 import GridItem from "../../components/GridItem/GridItem";
 import { categoryService } from "../../services/categoryService";
@@ -17,11 +17,18 @@ const Shop = () => {
   const [checkedCategory, setCheckedCategory] = useState(category);
   const [lastPage, setLastPage] = useState(false);
   const [page, setPage] = useState(1);
+  const [didYouMean, setDidYouMean] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     itemService.getSearchedItems(name, category, 0).then((res) => {
       setItems(res.content);
       setLastPage(res.last);
+      setDidYouMean(res.didYouMean);
+      if (didYouMean !== "") {
+        name = didYouMean;
+      }
     });
     categoryService.getAllCategories().then((res) => setCategories(res));
   }, [name, category]);
@@ -44,42 +51,76 @@ const Shop = () => {
     });
   };
 
+  const fetchSuggestedData = () => {
+    console.log("clicked");
+    itemService.getSearchedItems(didYouMean, category, 0).then((res) => {
+      setItems(res.content);
+      setLastPage(res.last);
+    });
+  };
+
   return (
     <div className="shop-page">
-      <div className="content">
-        <div className="forms">
-          <form>
-            <ul title="PRODUCT CATEGORIES">
-              {categories.map((value, key) => {
-                return (
-                  <li key={value.id}>
-                    <input
-                      type="checkbox"
-                      value={value.name}
-                      name="categories"
-                      checked={checkedCategory === value.name}
-                      onChange={handleClick}
-                    />
-                    {value.name}
-                  </li>
-                );
-              })}
-            </ul>
-          </form>
+      {didYouMean !== "" && items.length === 0 && (
+        <div className="did-you-mean">
+          Did you mean?
+          <span onClick={fetchSuggestedData}>{didYouMean}</span>
         </div>
-        <div className="products">
-          {items.map((value, key) => {
-            return (
-              <GridItem key={value.id} item={value} className="portrait" />
-            );
-          })}
-          <div className="button">
-            {!lastPage && (
-              <Button type="primary" text="EXPLORE MORE" onClick={fetchData} />
-            )}
+      )}
+      {items.length === 0 ? (
+        <div className="item-not-found">
+          <h1>No results found.</h1>
+          <div>
+            <Button
+              type="secondary"
+              text="GO BACK"
+              onClick={() => {
+                navigate(-1);
+              }}
+              className="btn-go-back"
+            />
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="content">
+          <div className="forms">
+            <form>
+              <ul title="PRODUCT CATEGORIES">
+                {categories.map((value, key) => {
+                  return (
+                    <li key={value.id}>
+                      <input
+                        type="checkbox"
+                        value={value.name}
+                        name="categories"
+                        checked={checkedCategory === value.name}
+                        onChange={handleClick}
+                      />
+                      {value.name}
+                    </li>
+                  );
+                })}
+              </ul>
+            </form>
+          </div>
+          <div className="products">
+            {items.map((value, key) => {
+              return (
+                <GridItem key={value.id} item={value} className="portrait" />
+              );
+            })}
+            <div className="button">
+              {!lastPage && (
+                <Button
+                  type="primary"
+                  text="EXPLORE MORE"
+                  onClick={fetchData}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

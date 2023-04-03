@@ -1,13 +1,23 @@
 import React, { useState } from "react";
-import { createSearchParams, useNavigate } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import searchIcon from "../../resources/icons/searchIcon.svg";
 import { SHOP } from "../../routes";
 import "./search-bar.scss";
 
 const SearchBar = () => {
   const [updated, setUpdated] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const params = { name: updated, category: "" };
+  var category = searchParams.get("category");
+  if (category === null) {
+    category = "";
+  }
+
+  const params = { name: updated, category: category };
   const navigate = useNavigate();
 
   const handleChange = (event) => {
@@ -16,7 +26,6 @@ const SearchBar = () => {
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      console.log(updated);
       navigate({
         pathname: SHOP,
         search: `?${createSearchParams(params)}`,

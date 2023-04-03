@@ -5,6 +5,7 @@ import com.internship.auctionapp.dto.ItemResponse;
 import com.internship.auctionapp.entity.Item;
 import com.internship.auctionapp.repository.ItemRepository;
 import com.internship.auctionapp.service.ItemService;
+import com.internship.auctionapp.util.StringComparison;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.data.domain.Page;
@@ -40,7 +41,7 @@ public class ItemServiceImpl implements ItemService {
         Page<Item> items = itemRepository.findAll(pageable);
         List<Item> itemList = items.getContent();
         return itemList.stream()
-                .map(item -> mapToDto(item))
+                .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
 
@@ -59,7 +60,7 @@ public class ItemServiceImpl implements ItemService {
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         LocalDateTime localDateTime = java.time.LocalDateTime.now();
         Page<Item> items = itemRepository.findByEndDateGreaterThanEqualAndStartDateLessThanEqual(localDateTime, localDateTime, pageable);
-        return getItemResponse(items);
+        return getItemResponse(items, "");
     }
 
 
@@ -72,13 +73,32 @@ public class ItemServiceImpl implements ItemService {
     public ItemResponse searchItems(String name, String category, int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Item> items = itemRepository.searchItems(name, category, pageable);
-        return getItemResponse(items);
+        String didYouMean = "";
+        if(items.isEmpty() && name != ""){
+            LocalDateTime localDateTime = java.time.LocalDateTime.now();
+            List<Item> itemList = itemRepository.findByEndDateGreaterThanEqualAndStartDateLessThanEqual(localDateTime, localDateTime);
+            int distance = Integer.MAX_VALUE;
+            for (Item item : itemList) {
+                int newDistance;
+                String[] parts = item.getName().split(" ");
+                for (String part : parts) {
+                    newDistance = StringComparison.calculate(part, name);
+                    if (newDistance < distance) {
+                        distance = newDistance;
+                        didYouMean = part;
+                    }
+                }
+            }
+            if(distance <= 10 && distance > 0){
+                return  getItemResponse(items, didYouMean);
+            }
+        }return getItemResponse(items, "");
     }
 
-    private ItemResponse getItemResponse(Page<Item> items) {
+    private ItemResponse getItemResponse(Page<Item> items, String didYouMean) {
         List<Item> itemList = items.getContent();
         List<ItemDto> content = itemList.stream()
-                .map(item -> mapToDto(item))
+                .map(this::mapToDto)
                 .collect(Collectors.toList());
         ItemResponse itemResponse = new ItemResponse();
         itemResponse.setContent(content);
@@ -86,6 +106,7 @@ public class ItemServiceImpl implements ItemService {
         itemResponse.setPageSize(items.getSize());
         itemResponse.setTotalElements(items.getTotalElements());
         itemResponse.setLast(items.isLast());
+        itemResponse.setDidYouMean(didYouMean);
 
         return itemResponse;
     }

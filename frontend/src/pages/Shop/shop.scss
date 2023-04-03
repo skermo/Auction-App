@@ -1,15 +1,31 @@
 @import "src/styles/variables.scss";
 
 .shop-page {
-  margin: 0 10em;
+  .did-you-mean {
+    text-align: left;
+    padding: 15px 10em 15px calc(17em + 250px);
+    background-color: $offWhite;
+    color: $lightGrey;
+    span {
+      padding: 0 10px;
+      color: $purple;
+      cursor: pointer;
+    }
+  }
+  .item-not-found {
+    padding: 5em 0 1em;
+  }
   .content {
+    margin: 0 10em;
     padding-top: 30px;
     .forms {
+      width: 200px;
       float: left;
-      border: 1px solid $lightGrey;
+      border: 1px solid $lightestGrey;
       letter-spacing: 0.49px;
       font-size: 16px;
       padding: 10px 25px;
+      box-shadow: 2px 2px 0 0 $lightestGrey;
       ul {
         width: 200px;
         padding: 0;
