@@ -52,10 +52,12 @@ const ProductOverview = () => {
               <span> {timeLeft}</span>
             </p>
           </div>
-          <Tabs labels={["Details"]} className="secondary">
-            <div>{item.description}</div>
-            <div />
-          </Tabs>
+          <div className="tab">
+            <Tabs labels={["Details"]} className="secondary">
+              <div>{item.description}</div>
+              <div />
+            </Tabs>
+          </div>
         </div>
       </div>
     </div>

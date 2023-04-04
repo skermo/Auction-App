@@ -83,7 +83,7 @@ public class ItemServiceImpl implements ItemService {
                 String[] parts = item.getName().split(" ");
                 for (String part : parts) {
                     newDistance = StringComparison.calculate(part, name);
-                    if (newDistance < distance) {
+                    if (newDistance < distance && newDistance < name.length()) {
                         distance = newDistance;
                         didYouMean = part;
                     }

@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import Button from "../../components/Button/Button";
 import GridItem from "../../components/GridItem/GridItem";
+import { SHOP } from "../../routes";
 import { categoryService } from "../../services/categoryService";
 import { itemService } from "../../services/itemService";
 import "./shop.scss";
@@ -52,11 +57,11 @@ const Shop = () => {
   };
 
   const fetchSuggestedData = () => {
-    console.log("clicked");
     itemService.getSearchedItems(didYouMean, category, 0).then((res) => {
       setItems(res.content);
       setLastPage(res.last);
     });
+    setSearchParams({ name: didYouMean, category: category });
   };
 
   return (
@@ -75,7 +80,14 @@ const Shop = () => {
               type="secondary"
               text="GO BACK"
               onClick={() => {
-                navigate(-1);
+                setCheckedCategory("");
+                navigate({
+                  pathname: SHOP,
+                  search: `?${createSearchParams({
+                    name: "",
+                    category: "",
+                  })}`,
+                });
               }}
               className="btn-go-back"
             />
