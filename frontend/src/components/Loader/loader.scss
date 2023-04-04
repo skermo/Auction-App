@@ -1,13 +1,16 @@
 @import "src/styles/variables.scss";
 
 .loader {
-  margin: auto;
-  border: 16px solid #f3f3f3;
-  border-top: 16px solid $purple;
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  animation: spin 2s linear infinite;
+  width: 100%;
+  .spinner {
+    margin: auto;
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid $purple;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+  }
 }
 
 @keyframes spin {

@@ -1,9 +1,9 @@
 package com.internship.auctionapp.service.impl;
 
 import com.internship.auctionapp.dto.ItemDto;
-import com.internship.auctionapp.dto.ItemResponse;
 import com.internship.auctionapp.entity.Item;
 import com.internship.auctionapp.repository.ItemRepository;
+import com.internship.auctionapp.response.ItemResponse;
 import com.internship.auctionapp.service.ItemService;
 import com.internship.auctionapp.util.StringComparison;
 import org.modelmapper.ModelMapper;
@@ -53,14 +53,14 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemResponse getAllAvailableItems(int pageNo, int pageSize, String sortBy, String sortDir) {
+    public Page<ItemDto> getAllAvailableItems(int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         LocalDateTime localDateTime = java.time.LocalDateTime.now();
         Page<Item> items = itemRepository.findByEndDateGreaterThanEqualAndStartDateLessThanEqual(localDateTime, localDateTime, pageable);
-        return getItemResponse(items, "");
+        return items.map(this::mapToDto);
     }
 
 
@@ -74,7 +74,7 @@ public class ItemServiceImpl implements ItemService {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Item> items = itemRepository.searchItems(name, category, pageable);
         String didYouMean = "";
-        if(items.isEmpty() && name != ""){
+        if (items.isEmpty() && name != "") {
             LocalDateTime localDateTime = java.time.LocalDateTime.now();
             List<Item> itemList = itemRepository.findByEndDateGreaterThanEqualAndStartDateLessThanEqual(localDateTime, localDateTime);
             int distance = Integer.MAX_VALUE;
@@ -83,33 +83,22 @@ public class ItemServiceImpl implements ItemService {
                 String[] parts = item.getName().split(" ");
                 for (String part : parts) {
                     newDistance = StringComparison.calculate(part, name);
-                    if (newDistance < distance && newDistance < name.length()) {
-                        distance = newDistance;
-                        didYouMean = part;
+                    if (newDistance < distance) {
+                        if (newDistance < distance && newDistance < name.length()) {
+                            distance = newDistance;
+                            didYouMean = part;
+                        }
                     }
                 }
             }
-            if(distance <= 10 && distance > 0){
-                return  getItemResponse(items, didYouMean);
+                if (distance <= 10 && distance > 0) {
+                    ItemResponse itemResponse = new ItemResponse(items.map(this::mapToDto), didYouMean);
+                    return itemResponse;
+                }
             }
-        }return getItemResponse(items, "");
-    }
-
-    private ItemResponse getItemResponse(Page<Item> items, String didYouMean) {
-        List<Item> itemList = items.getContent();
-        List<ItemDto> content = itemList.stream()
-                .map(this::mapToDto)
-                .collect(Collectors.toList());
-        ItemResponse itemResponse = new ItemResponse();
-        itemResponse.setContent(content);
-        itemResponse.setPageNo(items.getNumber());
-        itemResponse.setPageSize(items.getSize());
-        itemResponse.setTotalElements(items.getTotalElements());
-        itemResponse.setLast(items.isLast());
-        itemResponse.setDidYouMean(didYouMean);
-
+        ItemResponse itemResponse = new ItemResponse(items.map(this::mapToDto), "");
         return itemResponse;
-    }
+        }
 
     private ItemDto mapToDto(Item item) {
         if (typeMapToDto == null) {

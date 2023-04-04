@@ -1,8 +1,9 @@
 package com.internship.auctionapp.controller;
 
 import com.internship.auctionapp.dto.ItemDto;
-import com.internship.auctionapp.dto.ItemResponse;
+import com.internship.auctionapp.response.ItemResponse;
 import com.internship.auctionapp.service.ItemService;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class ItemController {
     }
 
     @GetMapping("/available")
-    public ItemResponse getAllAvailableItems(
+    public Page<ItemDto> getAllAvailableItems(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,

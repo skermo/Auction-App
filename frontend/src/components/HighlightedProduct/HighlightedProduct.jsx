@@ -37,7 +37,7 @@ const HighlightedProduct = ({ item }) => {
         />
       </div>
       <div>
-        <img src={images[0]?.url} />
+        <img src={images[0]?.url} alt="item" />
       </div>
     </div>
   );

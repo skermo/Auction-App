@@ -13,9 +13,10 @@ import "./shop.scss";
 
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
-  var name = searchParams.get("name");
-  var category = searchParams.get("category");
+  let name = searchParams.get("name");
+  let category = searchParams.get("category");
 
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -24,19 +25,20 @@ const Shop = () => {
   const [page, setPage] = useState(1);
   const [didYouMean, setDidYouMean] = useState("");
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     itemService.getSearchedItems(name, category, 0).then((res) => {
-      setItems(res.content);
-      setLastPage(res.last);
+      setItems(res.items.content);
+      setLastPage(res.items.last);
       setDidYouMean(res.didYouMean);
       if (didYouMean !== "") {
         name = didYouMean;
       }
     });
-    categoryService.getAllCategories().then((res) => setCategories(res));
   }, [name, category]);
+
+  useEffect(() => {
+    categoryService.getAllCategories().then((res) => setCategories(res));
+  }, []);
 
   const handleClick = (event) => {
     if (event.target.value === checkedCategory) {
@@ -46,20 +48,22 @@ const Shop = () => {
       setCheckedCategory(event.target.value);
       setSearchParams({ name: name, category: event.target.value });
     }
+    setPage(1);
   };
 
   const fetchData = () => {
+    console.log("name: " + name + " category: " + category + " page" + page);
     itemService.getSearchedItems(name, category, page).then((res) => {
-      setItems([...items, ...res.content]);
-      setLastPage(res.last);
+      setItems([...items, ...res.items.content]);
+      setLastPage(res.items.last);
       setPage(page + 1);
     });
   };
 
   const fetchSuggestedData = () => {
     itemService.getSearchedItems(didYouMean, category, 0).then((res) => {
-      setItems(res.content);
-      setLastPage(res.last);
+      setItems(res.items.content);
+      setLastPage(res.items.last);
     });
     setSearchParams({ name: didYouMean, category: category });
   };
