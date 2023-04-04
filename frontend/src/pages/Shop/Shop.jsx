@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import {
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import Button from "../../components/Button/Button";
 import GridItem from "../../components/GridItem/GridItem";
+import { SHOP } from "../../routes";
 import { categoryService } from "../../services/categoryService";
 import { itemService } from "../../services/itemService";
 import "./shop.scss";
 
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
-  var name = searchParams.get("name");
-  var category = searchParams.get("category");
+  let name = searchParams.get("name");
+  let category = searchParams.get("category");
 
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -25,6 +31,10 @@ const Shop = () => {
     });
     categoryService.getAllCategories().then((res) => setCategories(res));
   }, [name, category]);
+
+  useEffect(() => {
+    categoryService.getAllCategories().then((res) => setCategories(res));
+  }, []);
 
   const handleClick = (event) => {
     if (event.target.value === checkedCategory) {
@@ -46,40 +56,67 @@ const Shop = () => {
 
   return (
     <div className="shop-page">
-      <div className="content">
-        <div className="forms">
-          <form>
-            <ul title="PRODUCT CATEGORIES">
-              {categories.map((value, key) => {
-                return (
-                  <li key={value.id}>
-                    <input
-                      type="checkbox"
-                      value={value.name}
-                      name="categories"
-                      checked={checkedCategory === value.name}
-                      onChange={handleClick}
-                    />
-                    {value.name}
-                  </li>
-                );
-              })}
-            </ul>
-          </form>
-        </div>
-        <div className="products">
-          {items.map((value, key) => {
-            return (
-              <GridItem key={value.id} item={value} className="portrait" />
-            );
-          })}
-          <div className="button">
-            {!lastPage && (
-              <Button type="primary" text="EXPLORE MORE" onClick={fetchData} />
-            )}
+      {items.length === 0 ? (
+        <div className="item-not-found">
+          <h1>No results found.</h1>
+          <div>
+            <Button
+              type="secondary"
+              text="GO BACK"
+              onClick={() => {
+                setCheckedCategory("");
+                navigate({
+                  pathname: SHOP,
+                  search: `?${createSearchParams({
+                    name: "",
+                    category: "",
+                  })}`,
+                });
+              }}
+              className="btn-go-back"
+            />
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="content">
+          <div className="forms">
+            <form>
+              <ul title="PRODUCT CATEGORIES">
+                {categories.map((value, key) => {
+                  return (
+                    <li key={value.id}>
+                      <input
+                        type="checkbox"
+                        value={value.name}
+                        name="categories"
+                        checked={checkedCategory === value.name}
+                        onChange={handleClick}
+                      />
+                      {value.name}
+                    </li>
+                  );
+                })}
+              </ul>
+            </form>
+          </div>
+          <div className="products">
+            {items.map((value, key) => {
+              return (
+                <GridItem key={value.id} item={value} className="portrait" />
+              );
+            })}
+            <div className="button">
+              {!lastPage && (
+                <Button
+                  type="primary"
+                  text="EXPLORE MORE"
+                  onClick={fetchData}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

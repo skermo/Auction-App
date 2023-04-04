@@ -9,19 +9,16 @@ import { SHOP } from "../../routes";
 import "./search-bar.scss";
 
 const SearchBar = () => {
-  const [updated, setUpdated] = useState("");
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchParams] = useSearchParams();
 
-  var category = searchParams.get("category");
-  if (category === null) {
-    category = "";
-  }
+  const category = searchParams.get("category") || "";
 
-  const params = { name: updated, category: category };
+  const params = { name: searchTerm, category: category };
   const navigate = useNavigate();
 
   const handleChange = (event) => {
-    setUpdated(event.target.value);
+    setSearchTerm(event.target.value);
   };
 
   const handleKeyDown = (event) => {
@@ -39,7 +36,7 @@ const SearchBar = () => {
       placeholder="Search.."
       className="search-bar"
       style={{ backgroundImage: `url(${searchIcon})` }}
-      value={updated}
+      value={searchTerm}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
     />
