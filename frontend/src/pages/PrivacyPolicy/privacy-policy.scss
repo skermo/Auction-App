@@ -1,11 +1,13 @@
 @import "src/styles/variables.scss";
 
 .privacy-policy {
-  text-align: left;
-  margin: auto;
-  padding: 50px 0;
-  width: 50%;
-  display: block;
+  .content {
+    margin: auto;
+    padding: 20px 0;
+    width: 50%;
+    display: block;
+    text-align: left;
+  }
   p,
   li,
   a {

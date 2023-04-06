@@ -1,13 +1,29 @@
 @import "../../styles/variables";
 
-.header-navigate-breadcrumb {
-  color: $lightGrey;
-  padding: 0 1em;
-}
-
-.header-item-name {
-  font-size: 18px;
-  margin: 0 4em 0 10em;
-  text-align: left;
-  width: 50%;
+.header {
+  letter-spacing: 0.56px;
+  height: 64px;
+  font-size: 16px;
+  background-color: $offWhite;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .header-item-name {
+    margin: 0 4em 0 10em;
+  }
+  .header-navigate {
+    margin: 0 10em 0 0;
+    .breadcrumbs {
+      color: $lightGrey;
+      .breadcrumb-active {
+        font-weight: $Lato-Bold;
+        color: $purple;
+        padding: 0 3px;
+      }
+      .breadcrumb-not-active {
+        padding: 0 3px;
+        color: $lightGrey;
+      }
+    }
+  }
 }

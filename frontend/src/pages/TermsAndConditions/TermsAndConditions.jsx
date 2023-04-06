@@ -1,10 +1,12 @@
 import React from "react";
+import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
 import "./terms-and-conditions.scss";
 
 const TermsAndConditions = () => {
   return (
-    <div>
-      <div className="terms-and-conditions">
+    <div className="terms-and-conditions">
+      <Breadcrumbs headline={"Terms and Conditions"} />
+      <div className="content">
         <h1>Terms and Conditions for Auction App</h1>
         <h2>Introduction</h2>
 
