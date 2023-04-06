@@ -1,11 +1,52 @@
 package com.internship.auctionapp.util;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import static java.util.function.Predicate.not;
+
+/**
+ * Util Class for implementing "Did you mean?" feature when searching with a typo
+ */
 
 public class StringComparison {
 
-    //Levenshtein Distance Algorithm
-    public static int calculate(String x, String y) {
+    /**
+     * Method that finds which part of the goalTerms best match the search term
+     * @param searchTerm - the term the user searched for (with the typo)
+     * @param goalTerms - terms from the database, which we are trying to match the searchTerm to
+     * @return Optional of the suggestion, or empty Optional if the suggestion is empty or null
+     */
+    public static Optional<String>  getSuggestedName (String searchTerm, List<String> goalTerms){
+        String didYouMean = null;
+        int distance = Integer.MAX_VALUE;
+        for (String goalTerm : goalTerms) {
+            int newDistance;
+            String[] parts = goalTerm.split(" ");
+            for (String part : parts) {
+                newDistance = StringComparison.getEditDistance(part, searchTerm);
+                if (newDistance < distance) {
+                    if (newDistance < distance && newDistance < searchTerm.length()) {
+                        distance = newDistance;
+                        didYouMean = part;
+                    }
+                }
+            }
+        }
+        return Optional.ofNullable(didYouMean).filter(not(String::isEmpty));
+    }
+
+    /**
+     * Method that implements the Levenshtein Edit Distance Algorithm.
+     * It measures the difference between two strings by finding the minimum
+     * number of single-character edits (insertions, deletions, substitutions).
+     * This method implements the algorithm by the Dynamic Programming approach.
+     * @param x - first string we receive
+     * @param y - second string we receive
+     * @return - edit distance between the first and the second string
+     */
+    public static int getEditDistance(String x, String y) {
         x = x.toLowerCase();
         y = y.toLowerCase();
 
@@ -29,12 +70,13 @@ public class StringComparison {
         return dp[x.length()][y.length()];
     }
 
-    public static int costOfSubstitution(char a, char b) {
+    private static int costOfSubstitution(char a, char b) {
         return a == b ? 0 : 1;
     }
 
-    public static int min(int... numbers) {
+    private static int min(int... numbers) {
         return Arrays.stream(numbers)
-                .min().orElse(Integer.MAX_VALUE);
+                .min()
+                .orElse(Integer.MAX_VALUE);
     }
 }

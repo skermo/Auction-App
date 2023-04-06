@@ -6,6 +6,7 @@ import com.internship.auctionapp.repository.ItemRepository;
 import com.internship.auctionapp.response.ItemResponse;
 import com.internship.auctionapp.service.ItemService;
 import com.internship.auctionapp.util.StringComparison;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -74,30 +76,11 @@ public class ItemServiceImpl implements ItemService {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Item> items = itemRepository.searchItems(name, category, pageable);
         String didYouMean = "";
-        if (items.isEmpty() && name != "") {
-            LocalDateTime localDateTime = java.time.LocalDateTime.now();
-            List<Item> itemList = itemRepository.findByEndDateGreaterThanEqualAndStartDateLessThanEqual(localDateTime, localDateTime);
-            int distance = Integer.MAX_VALUE;
-            for (Item item : itemList) {
-                int newDistance;
-                String[] parts = item.getName().split(" ");
-                for (String part : parts) {
-                    newDistance = StringComparison.calculate(part, name);
-                    if (newDistance < distance) {
-                        if (newDistance < distance && newDistance < name.length()) {
-                            distance = newDistance;
-                            didYouMean = part;
-                        }
-                    }
-                }
+        if (items.isEmpty() && !StringUtils.isEmpty(name)) {
+            List<String> itemNames = itemRepository.findAllNames();
+            didYouMean = StringComparison.getSuggestedName(name, itemNames).orElse("");
             }
-                if (distance <= 10 && distance > 0) {
-                    ItemResponse itemResponse = new ItemResponse(items.map(this::mapToDto), didYouMean);
-                    return itemResponse;
-                }
-            }
-        ItemResponse itemResponse = new ItemResponse(items.map(this::mapToDto), "");
-        return itemResponse;
+        return new ItemResponse(items.map(this::mapToDto), didYouMean);
         }
 
     private ItemDto mapToDto(Item item) {

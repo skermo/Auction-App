@@ -52,7 +52,6 @@ const Shop = () => {
   };
 
   const fetchData = () => {
-    console.log("name: " + name + " category: " + category + " page" + page);
     itemService.getSearchedItems(name, category, page).then((res) => {
       setItems([...items, ...res.items.content]);
       setLastPage(res.items.last);
