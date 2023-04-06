@@ -33,8 +33,11 @@ public class StringComparison {
                     }
                 }
             }
+            if(distance <= 10 && distance > 0){
+                return Optional.of(didYouMean);
+            }
         }
-        return Optional.ofNullable(didYouMean).filter(not(String::isEmpty));
+        return Optional.empty();
     }
 
     /**
