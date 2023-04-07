@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -68,7 +67,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto getItemById(UUID id) {
-       return mapToDto(itemRepository.findById(id).get());
+        return mapToDto(itemRepository.findById(id).get());
     }
 
     @Override
@@ -78,10 +77,13 @@ public class ItemServiceImpl implements ItemService {
         String didYouMean = "";
         if (items.isEmpty() && !StringUtils.isEmpty(name)) {
             List<String> itemNames = itemRepository.findAllNames();
-            didYouMean = StringComparison.getSuggestedName(name, itemNames).orElse("");
-            }
-        return new ItemResponse(items.map(this::mapToDto), didYouMean);
+            didYouMean = StringComparison
+                    .getSuggestedName(name, itemNames)
+                    .orElse("");
         }
+        return new ItemResponse(
+                items.map(this::mapToDto), didYouMean);
+    }
 
     private ItemDto mapToDto(Item item) {
         if (typeMapToDto == null) {
@@ -90,8 +92,7 @@ public class ItemServiceImpl implements ItemService {
                 mapper.map(src -> src.getSubcategory().getId(), ItemDto::setSubcategoryId);
             });
         }
-        ItemDto itemDto = mapper.map(item, ItemDto.class);
-        return itemDto;
+        return mapper.map(item, ItemDto.class);
     }
 
 }

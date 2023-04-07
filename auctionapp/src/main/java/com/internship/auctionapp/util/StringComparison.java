@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.function.Predicate.not;
 
 /**
  * Util Class for implementing "Did you mean?" feature when searching with a typo
@@ -14,26 +13,24 @@ public class StringComparison {
 
     /**
      * Method that finds which part of the goalTerms best match the search term
+     *
      * @param searchTerm - the term the user searched for (with the typo)
-     * @param goalTerms - terms from the database, which we are trying to match the searchTerm to
+     * @param goalTerms  - terms from the database, which we are trying to match the searchTerm to
      * @return Optional of the suggestion, or empty Optional if the suggestion is empty or null
      */
-    public static Optional<String>  getSuggestedName (String searchTerm, List<String> goalTerms){
+    public static Optional<String> getSuggestedName(String searchTerm, List<String> goalTerms) {
         String didYouMean = null;
         int distance = Integer.MAX_VALUE;
         for (String goalTerm : goalTerms) {
-            int newDistance;
             String[] parts = goalTerm.split(" ");
             for (String part : parts) {
-                newDistance = StringComparison.getEditDistance(part, searchTerm);
-                if (newDistance < distance) {
-                    if (newDistance < distance && newDistance < searchTerm.length()) {
-                        distance = newDistance;
-                        didYouMean = part;
-                    }
+                int newDistance = StringComparison.getEditDistance(part, searchTerm);
+                if (newDistance < distance && newDistance < searchTerm.length()) {
+                    distance = newDistance;
+                    didYouMean = part;
                 }
             }
-            if(distance <= 10 && distance > 0){
+            if (distance <= 10 && distance > 0) {
                 return Optional.of(didYouMean);
             }
         }
@@ -45,6 +42,7 @@ public class StringComparison {
      * It measures the difference between two strings by finding the minimum
      * number of single-character edits (insertions, deletions, substitutions).
      * This method implements the algorithm by the Dynamic Programming approach.
+     *
      * @param x - first string we receive
      * @param y - second string we receive
      * @return - edit distance between the first and the second string
