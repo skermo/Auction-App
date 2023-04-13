@@ -45,14 +45,11 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-        authenticationManager = authenticationManagerBuilder.build();
         http.csrf().disable()
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                                 .requestMatchers("/api/auth/**").permitAll()
-                                .anyRequest().permitAll().and().authenticationManager(authenticationManager)
+                                .anyRequest().permitAll()
 
                 ).exceptionHandling(exception -> exception
                         .authenticationEntryPoint(authEntryPointJwt))
