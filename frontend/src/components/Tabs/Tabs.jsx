@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React, { useState } from "react";
 import "./tab.scss";
 
-const Tabs = ({ children, labels, className }) => {
+const Tabs = ({ children, labels, className, Icons }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const handleClick = (index) => {
     setSelectedIndex(index);
@@ -22,6 +22,7 @@ const Tabs = ({ children, labels, className }) => {
               "tab-list-active": selectedIndex === key,
             })}
           >
+            {Icons && <img src={Icons[key]} />}
             {value}
           </button>
         ))}

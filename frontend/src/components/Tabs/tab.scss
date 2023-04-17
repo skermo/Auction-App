@@ -44,3 +44,36 @@
     margin-top: 25px;
   }
 }
+
+.tertiary {
+  .tabs {
+    border: none;
+    padding-left: 0;
+    margin-left: 10em;
+    margin-right: 10em;
+    text-align: left;
+    margin-top: 30px;
+    margin-bottom: 50px;
+    .tab-list-item {
+      padding: 1rem 1rem;
+      color: $darkGrey;
+      line-height: 20px;
+      img {
+        padding-right: 1rem;
+        line-height: 1.5;
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+    .tab-list-active {
+      border: none;
+      background-color: $purple;
+      color: white;
+      font-weight: 400;
+      img {
+        filter: invert(100%) sepia(25%) saturate(0%) hue-rotate(62deg)
+          brightness(106%) contrast(101%);
+      }
+    }
+  }
+}

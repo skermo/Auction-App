@@ -6,6 +6,7 @@ import Page from "./components/Page/Page";
 import AboutUs from "./pages/AboutUs/AboutUs";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import Login from "./pages/Login/Login";
+import MyProfile from "./pages/MyProfile/MyProfile";
 import PageNotFound from "./pages/PageNotFound/PageNotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import ProductOverview from "./pages/ProductOverview/ProductOverview";
@@ -88,6 +89,15 @@ function App() {
             element={
               <Page hideSearch>
                 <Login />
+              </Page>
+            }
+          />
+          <Route
+            path={routes.MY_PROFILE}
+            exact
+            element={
+              <Page>
+                <MyProfile />
               </Page>
             }
           />
