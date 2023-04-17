@@ -13,7 +13,7 @@ export const login = async (user) => {
   });
 };
 
-const ApiRequest = async () => {
+const ApiRequest = () => {
   return axios.create({
     baseURL: BASE_URL,
     headers: {
