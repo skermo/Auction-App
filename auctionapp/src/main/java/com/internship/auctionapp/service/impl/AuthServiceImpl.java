@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public JwtAuthResponse registration(RegisterRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "Email already exists!");
+            throw new ApiException(HttpStatus.CONFLICT, "Email already exists!");
         }
         User user = new User();
         user.setFirstName(registerRequest.getFirstName());

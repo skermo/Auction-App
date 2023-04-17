@@ -1,0 +1,90 @@
+@import "src/styles/variables.scss";
+
+.login {
+  color: $darkGrey;
+  margin: 40px 0;
+  .form-container {
+    padding-bottom: 30px;
+    width: 738px;
+    height: auto;
+    border: 1px solid $lightestGrey;
+    margin: auto;
+    h3 {
+      font-size: 24px;
+      background-color: $white;
+      padding: 1em 0;
+      margin: 0 0 1em;
+    }
+    .form {
+      position: relative;
+      margin: 0 6rem;
+      label {
+        text-align: left;
+        display: block;
+        font-weight: $Lato-Bold;
+        font-size: 16px;
+      }
+      span {
+        display: block;
+        color: $red;
+        margin-bottom: 5px;
+      }
+      .checkbox-container {
+        margin-bottom: 2em;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        #rememberMe {
+          display: inline;
+          font-weight: 400;
+        }
+        input[type="checkbox"] {
+          text-align: left;
+          margin-right: 10px;
+          appearance: none;
+          background-color: #fff;
+          width: 15px;
+          height: 15px;
+          border: 1px solid $lightestGrey;
+          border-radius: 2px;
+          display: inline-grid;
+          place-content: center;
+        }
+
+        input[type="checkbox"]::before {
+          content: "";
+          width: 10px;
+          height: 10px;
+          transform: scale(0);
+          transform-origin: bottom left;
+          background-color: #fff;
+          clip-path: polygon(
+            13% 50%,
+            34% 66%,
+            81% 2%,
+            100% 18%,
+            39% 100%,
+            0 71%
+          );
+        }
+
+        input[type="checkbox"]:checked::before {
+          transform: scale(1);
+        }
+        input[type="checkbox"]:checked {
+          background-color: $purple;
+          border: 2px solid $purple;
+        }
+      }
+    }
+    p {
+      color: $lightGrey;
+    }
+    a {
+      color: $purple;
+      padding: 0 20px;
+      font-weight: $Lato-Bold;
+      cursor: pointer;
+    }
+  }
+}

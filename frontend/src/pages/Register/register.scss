@@ -1,0 +1,43 @@
+@import "src/styles/variables.scss";
+
+.register {
+  color: $darkGrey;
+  margin: 40px 0;
+  .form-container {
+    padding-bottom: 30px;
+    width: 738px;
+    height: auto;
+    border: 1px solid $lightestGrey;
+    margin: auto;
+    h3 {
+      font-size: 24px;
+      background-color: $white;
+      padding: 1em 0;
+      margin: 0 0 1em;
+    }
+    .form {
+      position: relative;
+      margin: 0 6rem;
+      label {
+        text-align: left;
+        display: block;
+        font-weight: $Lato-Bold;
+        font-size: 16px;
+      }
+      span {
+        display: block;
+        color: $red;
+        margin-bottom: 5px;
+      }
+    }
+    p {
+      color: $lightGrey;
+    }
+    a {
+      color: $purple;
+      padding: 0 20px;
+      font-weight: $Lato-Bold;
+      cursor: pointer;
+    }
+  }
+}

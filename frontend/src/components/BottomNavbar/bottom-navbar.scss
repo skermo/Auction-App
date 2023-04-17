@@ -1,7 +1,7 @@
 @import "src/styles/variables.scss";
 
 .nav-white {
-  margin: 0 10em;
+  padding: 0 10em;
   height: 80px;
   background-color: white;
   display: flex;
@@ -29,4 +29,8 @@
     font-weight: $Lato-Bold;
     letter-spacing: 0;
   }
+}
+.hide-search {
+  justify-content: center;
+  border-bottom: 1px solid $lightestGrey;
 }

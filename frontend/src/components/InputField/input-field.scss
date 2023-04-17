@@ -1,0 +1,23 @@
+@import "src/styles/variables.scss";
+
+.input-field {
+  display: block;
+  width: 100%;
+  height: 30px;
+  border: 1px solid $lightestGrey;
+  box-sizing: content-box;
+  padding: 10px;
+  color: $darkGrey;
+  letter-spacing: 0.2px;
+  margin: 15px 0;
+  background-color: $white;
+}
+
+.input-field::placeholder {
+  color: $lightGrey;
+  letter-spacing: 0.2px;
+}
+
+.input-field:focus {
+  outline-color: $darkGrey;
+}
