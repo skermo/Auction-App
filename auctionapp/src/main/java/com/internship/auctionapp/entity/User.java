@@ -1,12 +1,10 @@
 package com.internship.auctionapp.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 import java.util.UUID;
@@ -15,6 +13,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "users")
 public class User {
@@ -27,6 +26,7 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    @JsonIgnore
     @NotNull
     private String password;
 

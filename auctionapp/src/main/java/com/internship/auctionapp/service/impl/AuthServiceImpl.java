@@ -2,7 +2,8 @@ package com.internship.auctionapp.service.impl;
 
 import com.internship.auctionapp.entity.Role;
 import com.internship.auctionapp.entity.User;
-import com.internship.auctionapp.exception.ApiException;
+import com.internship.auctionapp.exception.ConflictException;
+import com.internship.auctionapp.exception.NotFoundException;
 import com.internship.auctionapp.repository.RoleRepository;
 import com.internship.auctionapp.repository.UserRepository;
 import com.internship.auctionapp.request.LoginRequest;
@@ -10,7 +11,6 @@ import com.internship.auctionapp.request.RegisterRequest;
 import com.internship.auctionapp.response.JwtAuthResponse;
 import com.internship.auctionapp.security.jwt.JwtUtils;
 import com.internship.auctionapp.service.AuthService;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
     public JwtAuthResponse login(LoginRequest loginRequest) {
         User user = userRepository.findByEmail(loginRequest.getEmail()).orElse(null);
         if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, "Wrong email or password");
+            throw new NotFoundException("Wrong email or password");
         }
         Authentication authentication = authenticationManager
                 .authenticate
@@ -56,25 +56,25 @@ public class AuthServiceImpl implements AuthService {
                                 (loginRequest.getEmail(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.generateJwtToken(authentication);
-        user.setPassword(null);
         return new JwtAuthResponse(user, jwt);
     }
 
     @Override
     public JwtAuthResponse registration(RegisterRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new ApiException(HttpStatus.CONFLICT, "Email already exists!");
+            throw new ConflictException("Email already exists");
         }
-        User user = new User();
-        user.setFirstName(registerRequest.getFirstName());
-        user.setLastName(registerRequest.getLastName());
-        user.setEmail(registerRequest.getEmail());
-        user.setPassword(passwordEncoder
-                .encode(registerRequest.getPassword()));
         Set<Role> roles = new HashSet<>();
         Role role = roleRepository.findByName("USER").get();
         roles.add(role);
-        user.setRoles(roles);
+        User user = User.builder()
+                .firstName(registerRequest.getFirstName())
+                .lastName(registerRequest.getLastName())
+                .email(registerRequest.getEmail())
+                .password(passwordEncoder
+                        .encode(registerRequest.getPassword()))
+                .roles(roles)
+                .build();
         userRepository.save(user);
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(
@@ -82,7 +82,6 @@ public class AuthServiceImpl implements AuthService {
                         registerRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.generateJwtToken(authentication);
-        user.setPassword(null);
         return new JwtAuthResponse(user, jwt);
     }
 
