@@ -2,15 +2,15 @@ import { ErrorMessage, Form, Formik } from "formik";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Button from "../../components/Button/Button";
+import Checkbox from "../../components/Checkbox/Checkbox";
 import InputField from "../../components/InputField/InputField";
-import { loginUser } from "../../context/AuthProvider";
 import useAuth from "../../hooks/useAuth";
-import { REGISTER } from "../../routes";
+import { REGISTER } from "../../routes/routes";
 import { loginValidationSchema } from "../../utils/formValidation";
 import "./login.scss";
 
 const Login = () => {
-  const { setAuth } = useAuth();
+  const { setAuth, loginUser } = useAuth();
   const [rememberMe, setRememberMe] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
@@ -62,30 +62,35 @@ const Login = () => {
             />
             <ErrorMessage name="password" component="span" />
             <div className="checkbox-container">
-              <input
-                type="checkbox"
+              <Checkbox
                 name="rememberMe"
+                value={rememberMe}
                 onChange={() => {
                   setRememberMe(!rememberMe);
                 }}
-                value={rememberMe}
+                className="checkbox-grey-border"
               />
               <label id="rememberMe">Remember me</label>
             </div>
-            <span className={errMsg ? "errmsg" : "offscreen"}>{errMsg}</span>
-            <Button text="LOGIN" type="primary" className="btn-full-width" />
+            <span>{errMsg}</span>
+            <Button
+              text="LOGIN"
+              type="primary"
+              className="btn-full-width"
+              model="submit"
+            />
           </Form>
         </Formik>
-        <p>
-          Don't have an account?
-          <a
+        <div className="links">
+          <p>Don't have an account?</p>
+          <div
             onClick={() => {
               navigate(REGISTER);
             }}
           >
             Register
-          </a>
-        </p>
+          </div>
+        </div>
       </div>
     </div>
   );

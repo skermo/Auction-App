@@ -3,16 +3,15 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Button from "../../components/Button/Button";
 import InputField from "../../components/InputField/InputField";
-import { registerUser } from "../../context/AuthProvider";
 import useAuth from "../../hooks/useAuth";
-import { LOGIN } from "../../routes";
+import { LOGIN } from "../../routes/routes";
 import { registerValidationSchema } from "../../utils/formValidation";
 import "./register.scss";
 
 const Register = () => {
   const [errMsg, setErrMsg] = useState("");
 
-  const { setAuth } = useAuth();
+  const { setAuth, registerUser } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (user) => {
@@ -81,20 +80,25 @@ const Register = () => {
               autoComplete="off"
             />
             <ErrorMessage name="password" component="span" />
-            <span className={errMsg ? "errmsg" : "offscreen"}>{errMsg}</span>
-            <Button text="REGISTER" type="primary" className="btn-full-width" />
+            <span>{errMsg}</span>
+            <Button
+              text="REGISTER"
+              type="primary"
+              className="btn-full-width"
+              model="submit"
+            />
           </Form>
         </Formik>
-        <p>
-          Already have an account?
-          <a
+        <div className="links">
+          <p>Already have an account?</p>
+          <div
             onClick={() => {
               navigate(LOGIN);
             }}
           >
             Login
-          </a>
-        </p>
+          </div>
+        </div>
       </div>
     </div>
   );

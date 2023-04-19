@@ -14,18 +14,25 @@
     margin-left: 15em;
   }
   .welcome-text {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     letter-spacing: 0.49px;
     color: white;
     margin-right: 15em;
+    span {
+      color: $lightestGrey;
+      padding: 0 0 0 50px;
+    }
   }
   .login-registration {
     letter-spacing: 0.49px;
     color: $lightGrey;
     margin-right: 15em;
-    span {
-      cursor: pointer;
-      color: white;
-      padding: 0 10px;
-    }
+  }
+  span {
+    cursor: pointer;
+    color: white;
+    padding: 0 10px;
   }
 }

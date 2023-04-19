@@ -5,8 +5,9 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import Button from "../../components/Button/Button";
+import Checkbox from "../../components/Checkbox/Checkbox";
 import GridItem from "../../components/GridItem/GridItem";
-import { SHOP } from "../../routes";
+import { SHOP } from "../../routes/routes";
 import { categoryService } from "../../services/categoryService";
 import { itemService } from "../../services/itemService";
 import "./shop.scss";
@@ -104,12 +105,11 @@ const Shop = () => {
                 {categories.map((value, key) => {
                   return (
                     <li key={value.id}>
-                      <input
-                        type="checkbox"
+                      <Checkbox
                         value={value.name}
                         name="categories"
-                        checked={checkedCategory === value.name}
                         onChange={handleClick}
+                        checked={checkedCategory === value.name}
                       />
                       {value.name}
                     </li>

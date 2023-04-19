@@ -6,12 +6,12 @@ import {
   InstagramIcon,
   TwitterIcon,
 } from "../../resources/icons";
-import { LOGIN, REGISTER } from "../../routes";
+import { LOGIN, REGISTER } from "../../routes/routes";
 import Icon from "../Icon/Icon";
 import "./top-navbar.scss";
 
 const TopNavbar = () => {
-  const { auth } = useAuth();
+  const { auth, logoutUser } = useAuth();
   const navigate = useNavigate();
 
   return (
@@ -23,7 +23,16 @@ const TopNavbar = () => {
           <Icon Icon={TwitterIcon} url={"https://www.twitter.com/"} />
         </div>
         {auth?.user ? (
-          <div className="welcome-text">Hi, {auth.user.firstName}</div>
+          <div className="welcome-text">
+            <div>Hi, {auth.user.firstName}</div>
+            <span
+              onClick={() => {
+                logoutUser();
+              }}
+            >
+              Logout
+            </span>
+          </div>
         ) : (
           <div className="login-registration">
             <span onClick={() => navigate(LOGIN)}>Login</span>or

@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 import useAuth from "../hooks/useAuth";
 
-const NeedlessAuth = () => {
+const AuthLayout = () => {
   const { auth } = useAuth();
   const { location } = useLocation();
 
@@ -12,4 +12,4 @@ const NeedlessAuth = () => {
   );
 };
 
-export default NeedlessAuth;
+export default AuthLayout;
