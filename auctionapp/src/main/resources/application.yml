@@ -15,5 +15,5 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 app:
-  jwtSecret: d178899b7beeb99ec2ebdad4636c7e21a2364494414013f78dd5a00725b77f14
+  jwtSecret: ${jwt_secret}
   jwtExpiration: 604800000

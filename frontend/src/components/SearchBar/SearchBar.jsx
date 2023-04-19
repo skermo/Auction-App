@@ -5,7 +5,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import searchIcon from "../../resources/icons/searchIcon.svg";
-import { SHOP } from "../../routes";
+import { SHOP } from "../../routes/routes";
 import "./search-bar.scss";
 
 const SearchBar = () => {

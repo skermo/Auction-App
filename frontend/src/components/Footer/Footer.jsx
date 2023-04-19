@@ -5,7 +5,11 @@ import {
   InstagramIcon,
   TwitterIcon,
 } from "../../resources/icons";
-import { ABOUT_US, PRIVACY_POLICY, TERMS_AND_CONDITIONS } from "../../routes";
+import {
+  ABOUT_US,
+  PRIVACY_POLICY,
+  TERMS_AND_CONDITIONS,
+} from "../../routes/routes";
 import Icon from "../Icon/Icon";
 import "./footer.scss";
 

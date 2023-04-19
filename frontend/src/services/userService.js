@@ -1,52 +1,38 @@
 import axios from "axios";
 import { BASE_URL } from "../config";
-import {
-  getTokenFromSession,
-  getTokenFromStorage,
-  setInSession,
-  setInStorage,
-} from "../utils/JwtSession";
 
-export const config = () => {
-  let token = getTokenFromSession();
-  if (token === null) {
-    token = getTokenFromStorage();
-    if (token === null) {
-      return null;
-    }
-  }
-  return {
-    headers: {
-      Authorization: "Bearer " + token,
-      "Content-type": "application/json",
-    },
-  };
-};
-export const registerUser = async (user) => {
-  return (await createRequest())
+export const register = async (user) => {
+  return ApiRequest()
     .post("/auth/register", user)
     .then((response) => {
-      setInSession(response.data.user, response.data.accessToken);
       return response.data;
     });
 };
 
-export const loginUser = async (user, rememberMe) => {
-  return (await createRequest()).post("/auth/login", user).then((response) => {
-    if (!rememberMe) {
-      setInSession(response.data.user, response.data.accessToken);
-    } else {
-      setInStorage(response.data.user, response.data.accessToken);
-    }
-    return response.data;
-  });
+export const login = async (user) => {
+  return ApiRequest()
+    .post("/auth/login", user)
+    .then((response) => {
+      return response.data;
+    });
 };
 
-export const createRequest = async () => {
+export const logout = async (token) => {
+  ApiTokenRequest(token).get("/auth/logout");
+};
+
+const ApiRequest = () => {
   return axios.create({
     baseURL: BASE_URL,
     headers: {
       "Content-type": "application/json",
     },
+  });
+};
+
+const ApiTokenRequest = (token) => {
+  return axios.create({
+    baseURL: BASE_URL,
+    headers: { Authorization: `Bearer ${token}` },
   });
 };

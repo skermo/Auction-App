@@ -6,7 +6,7 @@ import {
   PRIVACY_POLICY,
   PRODUCT_OVERVIEW,
   TERMS_AND_CONDITIONS,
-} from "../../routes";
+} from "../../routes/routes";
 import "./breadcrumbs.scss";
 
 const routes = [

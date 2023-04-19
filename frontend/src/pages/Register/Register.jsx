@@ -1,48 +1,18 @@
 import { ErrorMessage, Form, Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import * as yup from "yup";
 import Button from "../../components/Button/Button";
 import InputField from "../../components/InputField/InputField";
 import useAuth from "../../hooks/useAuth";
-import { LOGIN } from "../../routes";
-import { registerUser } from "../../services/userService";
-import { removeFromSession, removeFromStorage } from "../../utils/JwtSession";
+import { LOGIN } from "../../routes/routes";
+import { registerValidationSchema } from "../../utils/formValidation";
 import "./register.scss";
 
 const Register = () => {
   const [errMsg, setErrMsg] = useState("");
 
-  const { setAuth } = useAuth();
+  const { setAuth, registerUser } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    removeFromSession();
-    removeFromStorage();
-  }, []);
-
-  const validationSchema = yup.object().shape({
-    firstName: yup
-      .string()
-      .min(2, "First name must have at least 2 characters")
-      .max(50, "First name can't be longer than 50 characters")
-      .required("First name is required"),
-    lastName: yup
-      .string()
-      .min(2, "Last name must have at least 2 characters")
-      .max(50, "Last name can't be longer than 50 characters")
-      .required("Last name is required"),
-    email: yup
-      .string()
-      .email("Email must be valid")
-      .max(320, "Email must be less than 320 characters")
-      .required("Email is required"),
-    password: yup
-      .string()
-      .min(8, "Password must have at least 8 characters")
-      .max(128, "Password can't be longer than 128 characters")
-      .required("Password is required"),
-  });
 
   const handleSubmit = async (user) => {
     try {
@@ -64,7 +34,7 @@ const Register = () => {
       <div className="form-container">
         <h3>REGISTER</h3>
         <Formik
-          validationSchema={validationSchema}
+          validationSchema={registerValidationSchema}
           initialValues={{
             firstName: "",
             lastName: "",
@@ -110,20 +80,25 @@ const Register = () => {
               autoComplete="off"
             />
             <ErrorMessage name="password" component="span" />
-            <span className={errMsg ? "errmsg" : "offscreen"}>{errMsg}</span>
-            <Button text="REGISTER" type="primary" className="btn-full-width" />
+            <span>{errMsg}</span>
+            <Button
+              text="REGISTER"
+              type="primary"
+              className="btn-full-width"
+              model="submit"
+            />
           </Form>
         </Formik>
-        <p>
-          Already have an account?
-          <a
+        <div className="links">
+          <p>Already have an account?</p>
+          <div
             onClick={() => {
               navigate(LOGIN);
             }}
           >
             Login
-          </a>
-        </p>
+          </div>
+        </div>
       </div>
     </div>
   );

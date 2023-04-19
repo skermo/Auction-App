@@ -1,21 +1,20 @@
 import { decodeToken } from "react-jwt";
 
-export const setInStorage = (user, token) => {
+export const setInBrowser = (user, token) => {
   localStorage.setItem("token", token);
   localStorage.setItem("user", JSON.stringify(user));
 };
 
-export const removeFromStorage = () => {
+export const removeFromBrowser = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
 };
 
-export const getUserFromStorage = () => {
-  const user = localStorage.getItem("user");
-  return user ? JSON.parse(user) : null;
+export const getUserFromBrowser = () => {
+  return JSON.parse(localStorage.getItem("user")) || null;
 };
 
-export const getTokenFromStorage = () => {
+export const getTokenFromBrowser = () => {
   return localStorage.getItem("token") || null;
 };
 
@@ -30,15 +29,14 @@ export const removeFromSession = () => {
 };
 
 export const getUserFromSession = () => {
-  const user = sessionStorage.getItem("user");
-  return user ? JSON.parse(user) : null;
+  return JSON.parse(sessionStorage.getItem("user")) || null;
 };
 
 export const getTokenFromSession = () => {
   return sessionStorage.getItem("token") || null;
 };
 
-export const validToken = () => {
+export const isTokenValid = () => {
   const token = getTokenFromSession();
   if (token === null) {
     return false;

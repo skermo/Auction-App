@@ -5,7 +5,7 @@ import GridItem from "../../components/GridItem/GridItem";
 import HighlightedProduct from "../../components/HighlightedProduct/HighlightedProduct";
 import Loader from "../../components/Loader/Loader";
 import Tabs from "../../components/Tabs/Tabs";
-import { SHOP } from "../../routes";
+import { SHOP } from "../../routes/routes";
 import { categoryService } from "../../services/categoryService";
 import { itemService } from "../../services/itemService";
 import "./landing-page.scss";

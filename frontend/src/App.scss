@@ -36,4 +36,25 @@
   .text-select {
     cursor: pointer;
   }
+  .links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    p {
+      color: $lightGrey;
+    }
+    div {
+      color: $purple;
+      padding: 0 20px;
+      font-weight: $Lato-Bold;
+      cursor: pointer;
+    }
+    div:hover {
+      text-decoration: underline;
+      color: $purple;
+    }
+    div:active {
+      text-decoration: underline;
+    }
+  }
 }

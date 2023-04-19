@@ -1,24 +1,18 @@
 import { ErrorMessage, Form, Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import * as yup from "yup";
 import Button from "../../components/Button/Button";
+import Checkbox from "../../components/Checkbox/Checkbox";
 import InputField from "../../components/InputField/InputField";
 import useAuth from "../../hooks/useAuth";
-import { REGISTER } from "../../routes";
-import { loginUser } from "../../services/userService";
-import { removeFromSession, removeFromStorage } from "../../utils/JwtSession";
+import { REGISTER } from "../../routes/routes";
+import { loginValidationSchema } from "../../utils/formValidation";
 import "./login.scss";
 
 const Login = () => {
-  const { setAuth } = useAuth();
+  const { setAuth, loginUser } = useAuth();
   const [rememberMe, setRememberMe] = useState(false);
   const [errMsg, setErrMsg] = useState("");
-
-  useEffect(() => {
-    removeFromSession();
-    removeFromStorage();
-  }, []);
 
   const navigate = useNavigate();
 
@@ -38,21 +32,12 @@ const Login = () => {
     }
   };
 
-  const validationSchema = yup.object().shape({
-    email: yup
-      .string()
-      .email("Email must be valid")
-      .max(320, "Email must be less than 320 characters")
-      .required("Email is required"),
-    password: yup.string().required("Password is required"),
-  });
-
   return (
     <div className="login">
       <div className="form-container">
         <h3>LOGIN</h3>
         <Formik
-          validationSchema={validationSchema}
+          validationSchema={loginValidationSchema}
           initialValues={{
             email: "",
             password: "",
@@ -77,30 +62,35 @@ const Login = () => {
             />
             <ErrorMessage name="password" component="span" />
             <div className="checkbox-container">
-              <input
-                type="checkbox"
+              <Checkbox
                 name="rememberMe"
+                value={rememberMe}
                 onChange={() => {
                   setRememberMe(!rememberMe);
                 }}
-                value={rememberMe}
+                className="checkbox-grey-border"
               />
               <label id="rememberMe">Remember me</label>
             </div>
-            <span className={errMsg ? "errmsg" : "offscreen"}>{errMsg}</span>
-            <Button text="LOGIN" type="primary" className="btn-full-width" />
+            <span>{errMsg}</span>
+            <Button
+              text="LOGIN"
+              type="primary"
+              className="btn-full-width"
+              model="submit"
+            />
           </Form>
         </Formik>
-        <p>
-          Don't have an account?
-          <a
+        <div className="links">
+          <p>Don't have an account?</p>
+          <div
             onClick={() => {
               navigate(REGISTER);
             }}
           >
             Register
-          </a>
-        </p>
+          </div>
+        </div>
       </div>
     </div>
   );
