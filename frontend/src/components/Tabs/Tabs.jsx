@@ -14,7 +14,9 @@ const Tabs = ({ children, labels, className, Icons }) => {
         {labels.map((value, key) => (
           <button
             key={`tab-${key}`}
-            onClick={() => handleClick(key)}
+            onClick={() => {
+              handleClick(key);
+            }}
             onFocus={() => {
               setSelectedIndex(key);
             }}
@@ -22,7 +24,7 @@ const Tabs = ({ children, labels, className, Icons }) => {
               "tab-list-active": selectedIndex === key,
             })}
           >
-            {Icons && <img src={Icons[key]} />}
+            {Icons && <img src={Icons[key]} alt="icon" />}
             {value}
           </button>
         ))}

@@ -32,10 +32,28 @@ async function getSearchedItems(name, category, pageNo) {
   return result.data || [];
 }
 
+async function getActiveItemsBySellerId(sellerId) {
+  const result = await axios.get(`${BASE_URL}/items/seller/active/${sellerId}`);
+  return result.data || [];
+}
+
+async function getSoldItemsBySellerId(sellerId) {
+  const result = await axios.get(`${BASE_URL}/items/seller/sold/${sellerId}`);
+  return result.data || [];
+}
+
+async function getBiddedOnItemsBySellerId(sellerId) {
+  const result = await axios.get(`${BASE_URL}/items/seller/bids/${sellerId}`);
+  return result.data || [];
+}
+
 export const itemService = {
   getFirstItem,
   getNewArrivals,
   getLastChance,
   getItemById,
   getSearchedItems,
+  getActiveItemsBySellerId,
+  getSoldItemsBySellerId,
+  getBiddedOnItemsBySellerId,
 };

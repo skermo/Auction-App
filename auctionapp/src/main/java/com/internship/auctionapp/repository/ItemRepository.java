@@ -23,5 +23,10 @@ public interface ItemRepository extends JpaRepository<Item, UUID> {
     @Query ("SELECT i.name FROM Item i " +
             "WHERE i.endDate >= NOW() AND i.startDate <= NOW()")
     List<String> findAllNames();
+    List<Item> findByEndDateGreaterThanEqualAndStartDateLessThanEqualAndSeller_Id(LocalDateTime endDate, LocalDateTime startDate, UUID sellerId);
+    @Query ("SELECT i FROM Item i " +
+            "INNER JOIN Shipment s ON i.id = s.item.id " +
+            "WHERE i.seller.id = :sellerId")
+    List<Item> findSoldItemsByUser(UUID sellerId);
 
 }

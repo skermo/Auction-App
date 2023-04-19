@@ -2,5 +2,7 @@ export { ReactComponent as AppLogo } from "./appLogo.svg";
 export { ReactComponent as ArrowRight } from "./arrowRight.svg";
 export { ReactComponent as FacebookIcon } from "./fbIcon.svg";
 export { ReactComponent as InstagramIcon } from "./igIcon.svg";
+export { ReactComponent as PlusIcon } from "./plus.svg";
 export { ReactComponent as SearchIcon } from "./searchIcon.svg";
+export { ReactComponent as ShoppingCart } from "./shoppingCart.svg";
 export { ReactComponent as TwitterIcon } from "./twIcon.svg";

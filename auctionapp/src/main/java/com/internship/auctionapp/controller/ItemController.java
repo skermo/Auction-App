@@ -46,7 +46,7 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    public ItemDto getItemById (@PathVariable(name = "id") UUID id){
+    public ItemDto getItemById(@PathVariable(name = "id") UUID id) {
         return itemService.getItemById(id);
     }
 
@@ -55,9 +55,22 @@ public class ItemController {
             @RequestParam("name") String name,
             @RequestParam("category") String category,
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "2", required = false) int pageSize){
+            @RequestParam(value = "pageSize", defaultValue = "2", required = false) int pageSize) {
         return itemService.searchItems(name, category, pageNo, pageSize);
     }
 
+    @GetMapping("/seller/active/{id}")
+    public List<ItemDto> getActiveSellerItems(@PathVariable(name = "id") UUID sellerId) {
+        return itemService.getActiveSellerItems(sellerId);
+    }
+
+    @GetMapping("/seller/sold/{id}")
+    public List<ItemDto> getSoldSellerItems(@PathVariable(name = "id") UUID sellerId) {
+        return itemService.getSoldSellerItems(sellerId);
+    }
+    @GetMapping("/seller/bids/{id}")
+    public List<ItemDto> getBiddedOnItemsByUser(@PathVariable(name = "id") UUID bidder){
+        return itemService.getBiddedOnItemsByUser(bidder);
+    }
 }
 

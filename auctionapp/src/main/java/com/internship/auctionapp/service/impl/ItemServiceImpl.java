@@ -1,7 +1,9 @@
 package com.internship.auctionapp.service.impl;
 
 import com.internship.auctionapp.dto.ItemDto;
+import com.internship.auctionapp.entity.Bid;
 import com.internship.auctionapp.entity.Item;
+import com.internship.auctionapp.repository.BidRepository;
 import com.internship.auctionapp.repository.ItemRepository;
 import com.internship.auctionapp.response.ItemResponse;
 import com.internship.auctionapp.service.ItemService;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -24,13 +27,15 @@ import java.util.stream.Collectors;
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
+    private final BidRepository bidRepository;
     private final ModelMapper mapper;
     TypeMap<Item, ItemDto> typeMapToDto;
 
-    public ItemServiceImpl(ItemRepository itemRepository, ModelMapper mapper) {
+    public ItemServiceImpl(ItemRepository itemRepository, ModelMapper mapper, BidRepository bidRepository) {
         this.itemRepository = itemRepository;
         this.mapper = mapper;
         typeMapToDto = mapper.createTypeMap(Item.class, ItemDto.class);
+        this.bidRepository = bidRepository;
     }
 
     @Override
@@ -83,6 +88,44 @@ public class ItemServiceImpl implements ItemService {
         }
         return new ItemResponse(
                 items.map(this::mapToDto), didYouMean);
+    }
+
+    @Override
+    public List<ItemDto> getActiveSellerItems(UUID sellerId) {
+        LocalDateTime localDateTime = java.time.LocalDateTime.now();
+        List<Item> items = itemRepository
+                .findByEndDateGreaterThanEqualAndStartDateLessThanEqualAndSeller_Id(
+                        localDateTime,
+                        localDateTime,
+                        sellerId
+                );
+        return items.stream()
+                .map(item -> mapToDto(item))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ItemDto> getSoldSellerItems(UUID sellerId) {
+        List<Item> items = itemRepository.findSoldItemsByUser(sellerId);
+        return items.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ItemDto> getBiddedOnItemsByUser(UUID bidderId) {
+        List<Bid> bids = bidRepository.findAllByUser(bidderId);
+        List<Item> items = new ArrayList<>();
+        for (Bid bid : bids) {
+            Item item = itemRepository.findById(bid.getItem().getId()).orElse(null);
+            if (item != null) {
+                item.setStartPrice(bid.getAmount());
+                items.add(item);
+            }
+        }
+        return items.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
     private ItemDto mapToDto(Item item) {

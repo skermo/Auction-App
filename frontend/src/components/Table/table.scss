@@ -1,0 +1,49 @@
+@import "src/styles/variables.scss";
+
+table {
+  max-width: 100%;
+  min-width: calc(100vw - 20em);
+  margin: 0 10em 5em;
+  border-spacing: 0;
+  text-align: left;
+  border: 1px solid $lightestGrey;
+  padding: 0;
+  thead {
+    padding: 8px;
+    .header {
+      display: table-row;
+      background-color: $offWhite;
+      th {
+        font-size: 18px;
+        letter-spacing: 0.63px;
+        font-weight: 400;
+        border: none;
+        padding-right: 25px;
+      }
+      th:first-child {
+        padding-left: 25px;
+        padding-right: 0;
+      }
+      .width-10 {
+        width: 10%;
+      }
+      .width-32 {
+        width: 32%;
+      }
+      .width-12 {
+        width: 12%;
+      }
+    }
+  }
+  tbody {
+    padding: 0px 25px;
+    .start-selling {
+      padding: 50px 0;
+      text-align: center;
+      div {
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+}

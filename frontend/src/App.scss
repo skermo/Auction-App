@@ -36,16 +36,4 @@
   .text-select {
     cursor: pointer;
   }
-  table {
-    border-spacing: 0;
-    border: 1px solid $lightestGrey;
-    thead {
-      background-color: $offWhite;
-      th {
-        font-size: 18px;
-        letter-spacing: 0.63px;
-        font-weight: 400;
-      }
-    }
-  }
 }
