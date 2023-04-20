@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
+import useAuth from "../../hooks/useAuth";
 import { itemService } from "../../services/itemService";
 import Table from "../Table/Table";
 
 const Bids = ({ id }) => {
   const [bids, setBids] = useState([]);
+  const { auth } = useAuth();
 
   useEffect(() => {
-    itemService.getBiddedOnItemsBySellerId(id).then((res) => setBids(res));
+    itemService
+      .getBiddedOnItemsBySellerId(id, auth?.accessToken)
+      .then((res) => setBids(res));
   }, [id]);
 
   return <Table items={bids} type="bids" />;

@@ -97,7 +97,7 @@ const RouteElements = () => {
       ],
     },
     {
-      element: <ProtectedLayout />,
+      element: <ProtectedLayout requireId />,
       children: [
         {
           path: MY_ACCOUNT,
