@@ -28,7 +28,7 @@ const App = () => {
       });
     }
     setLoading(false);
-  }, [setAuth]);
+  }, [setAuth, setLoading]);
 
   return (
     <div className="App">

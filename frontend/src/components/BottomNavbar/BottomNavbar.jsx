@@ -1,41 +1,73 @@
-import classNames from "classnames";
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import { AppLogo } from "../../resources/icons";
-import SearchBar from "../SearchBar/SearchBar";
-import "./bottom-navbar.scss";
+import { Link, useLocation } from "react-router-dom";
+import useBreadcrumbs from "use-react-router-breadcrumbs";
+import {
+  ABOUT_US,
+  PRIVACY_POLICY,
+  PRODUCT_OVERVIEW,
+  TERMS_AND_CONDITIONS,
+} from "../../routes/routes";
+import "./breadcrumbs.scss";
 
-const BottomNavbar = ({ hideSearch }) => {
-  const { auth } = useAuth();
-  const navigate = useNavigate();
+const routes = [
+  { path: "/", breadcrumb: null },
+  { path: ABOUT_US, breadcrumb: "About Us" },
+  { path: TERMS_AND_CONDITIONS, breadcrumb: "Terms and Conditions" },
+  { path: PRIVACY_POLICY, breadcrumb: "Privacy Policy" },
+  { path: "items", breadcrumb: null },
+  { path: PRODUCT_OVERVIEW, breadcrumb: "Product Overview" },
+  {
+    path: "my-account",
+    children: [
+      {
+        path: ":id",
+        children: [
+          {
+            path: "seller",
+            breadcrumb: "Seller",
+          },
+          {
+            path: "bids",
+            breadcrumb: "Bids",
+          },
+        ],
+        breadcrumb: null,
+      },
+    ],
+    breadcrumb: "My Account",
+  },
+];
+
+const Breadcrumbs = ({ headline }) => {
+  const location = useLocation();
+  const breadcrumbs = useBreadcrumbs(routes);
+  const divider = " / ";
+
   return (
-    <div>
-      <div
-        className={classNames("nav-white", {
-          "hide-search": hideSearch,
-        })}
-      >
-        <AppLogo className="logged-app-logo" onClick={() => navigate("/")} />
-        {!hideSearch && (
-          <>
-            <SearchBar />
-            <ul className="nav-list">
-              <li onClick={() => navigate("/")}>HOME</li>
-              <li onClick={() => navigate("/shop?name=&category=")}>SHOP</li>
-              {auth?.user && (
-                <li
-                  onClick={() => navigate(`/my-account/${auth.user.id}/seller`)}
-                >
-                  MY ACCOUNT
-                </li>
-              )}
-            </ul>
-          </>
-        )}
+    <div className="header">
+      <div className="header-item-name">{headline}</div>
+      <div className="header-navigate">
+        <div className="breadcrumbs">
+          {breadcrumbs.map(({ match, breadcrumb }, index) => (
+            <React.Fragment key={index}>
+              <Link
+                key={match.url}
+                to={match.pathname}
+                className={
+                  match.pathname === location.pathname
+                    ? "breadcrumb-active"
+                    : "breadcrumb-not-active"
+                }
+              >
+                {breadcrumb}
+              </Link>
+              {index !== breadcrumbs.length - 1 && divider}
+            </React.Fragment>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-export default BottomNavbar;
+export default Breadcrumbs;
