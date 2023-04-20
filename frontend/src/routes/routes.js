@@ -5,3 +5,4 @@ export const PRODUCT_OVERVIEW = "/items/:id";
 export const SHOP = "/shop";
 export const REGISTER = "/auth/register";
 export const LOGIN = "/auth/login";
+export const MY_ACCOUNT = "/my-account/:id/:tab";

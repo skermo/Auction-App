@@ -1,13 +1,12 @@
 package com.internship.auctionapp.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemDto {
@@ -21,4 +20,6 @@ public class ItemDto {
     private int noBids;
     private UUID categoryId;
     private UUID subcategoryId;
+    private UUID buyerId;
+    private UUID sellerId;
 }

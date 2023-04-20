@@ -24,7 +24,9 @@ const BottomNavbar = ({ hideSearch }) => {
               <li onClick={() => navigate("/")}>HOME</li>
               <li onClick={() => navigate("/shop?name=&category=")}>SHOP</li>
               {auth?.user && (
-                <li onClick={() => navigate(`/my-profile/${auth.user.id}`)}>
+                <li
+                  onClick={() => navigate(`/my-account/${auth.user.id}/seller`)}
+                >
                   MY ACCOUNT
                 </li>
               )}

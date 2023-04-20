@@ -1,6 +1,6 @@
 import { ErrorMessage, Form, Formik } from "formik";
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import Button from "../../components/Button/Button";
 import Checkbox from "../../components/Checkbox/Checkbox";
 import InputField from "../../components/InputField/InputField";
@@ -10,17 +10,19 @@ import { loginValidationSchema } from "../../utils/formValidation";
 import "./login.scss";
 
 const Login = () => {
-  const { setAuth, loginUser } = useAuth();
+  const { loginUser } = useAuth();
   const [rememberMe, setRememberMe] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || "/";
 
   const handleSubmit = async (user) => {
     try {
-      const data = await loginUser(user, rememberMe);
-      setAuth(data);
-      navigate("/");
+      await loginUser(user, rememberMe);
+      navigate(from, { replace: true });
     } catch (error) {
       if (!error?.response) {
         setErrMsg("No Server Response");

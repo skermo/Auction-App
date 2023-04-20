@@ -17,10 +17,20 @@ const routes = [
   { path: "items", breadcrumb: null },
   { path: PRODUCT_OVERVIEW, breadcrumb: "Product Overview" },
   {
-    path: "my-profile",
+    path: "my-account",
     children: [
       {
         path: ":id",
+        children: [
+          {
+            path: "seller",
+            breadcrumb: "Seller",
+          },
+          {
+            path: "bids",
+            breadcrumb: "Bids",
+          },
+        ],
         breadcrumb: null,
       },
     ],

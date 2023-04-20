@@ -1,5 +1,8 @@
 package com.internship.auctionapp.service.impl;
 
+import com.internship.auctionapp.dto.ItemDto;
+import com.internship.auctionapp.dto.UserDto;
+import com.internship.auctionapp.entity.Item;
 import com.internship.auctionapp.entity.Role;
 import com.internship.auctionapp.entity.User;
 import com.internship.auctionapp.exception.ConflictException;
@@ -11,6 +14,8 @@ import com.internship.auctionapp.request.RegisterRequest;
 import com.internship.auctionapp.response.JwtAuthResponse;
 import com.internship.auctionapp.security.jwt.JwtUtils;
 import com.internship.auctionapp.service.AuthService;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,12 +36,16 @@ public class AuthServiceImpl implements AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils tokenProvider;
+    private final ModelMapper mapper;
+    TypeMap<User, UserDto> typeMapToDto;
 
     public AuthServiceImpl(AuthenticationManager authenticationManager,
                            UserRepository userRepository,
                            RoleRepository roleRepository,
                            PasswordEncoder passwordEncoder,
-                           JwtUtils tokenProvider) {
+                           JwtUtils tokenProvider, ModelMapper mapper) {
+        this.mapper = mapper;
+        typeMapToDto = mapper.createTypeMap(User.class, UserDto.class);
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -56,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
                                 (loginRequest.getEmail(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.generateJwtToken(authentication);
-        return new JwtAuthResponse(user, jwt);
+        return new JwtAuthResponse(mapToDto(user), jwt);
     }
 
     @Override
@@ -82,7 +91,7 @@ public class AuthServiceImpl implements AuthService {
                         registerRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.generateJwtToken(authentication);
-        return new JwtAuthResponse(user, jwt);
+        return new JwtAuthResponse(mapToDto(user), jwt);
     }
 
     public void logout(String request) {
@@ -91,5 +100,14 @@ public class AuthServiceImpl implements AuthService {
             token = request.substring(7);
         }
         tokenProvider.invalidateToken(token);
+    }
+
+    private UserDto mapToDto(User user) {
+        if (typeMapToDto == null) {
+            typeMapToDto.addMappings(mapper -> {
+                mapper.map(src -> src.getRoles(), UserDto::setRoles);
+            });
+        }
+        return mapper.map(user, UserDto.class);
     }
 }

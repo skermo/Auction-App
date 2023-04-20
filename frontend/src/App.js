@@ -12,9 +12,10 @@ import {
 } from "./utils/JwtSession";
 
 const App = () => {
-  const { setAuth } = useAuth();
+  const { setAuth, setLoading } = useAuth();
 
   useEffect(() => {
+    setLoading(true);
     if (getUserFromSession() != null) {
       setAuth({
         user: getUserFromSession(),
@@ -26,7 +27,8 @@ const App = () => {
         accessToken: getTokenFromBrowser(),
       });
     }
-  }, []);
+    setLoading(false);
+  }, [setAuth]);
 
   return (
     <div className="App">

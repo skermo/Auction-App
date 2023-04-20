@@ -1,9 +1,11 @@
 import { useRoutes } from "react-router-dom";
 import Page from "../components/Page/Page";
 import AuthLayout from "../layout/AuthLayout";
+import ProtectedLayout from "../layout/ProtectedLayout";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import LandingPage from "../pages/LandingPage/LandingPage";
 import Login from "../pages/Login/Login";
+import MyAccount from "../pages/MyAccount/MyAccount";
 import PageNotFound from "../pages/PageNotFound/PageNotFound";
 import PrivacyPolicy from "../pages/PrivacyPolicy/PrivacyPolicy";
 import ProductOverview from "../pages/ProductOverview/ProductOverview";
@@ -13,6 +15,7 @@ import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
 import {
   ABOUT_US,
   LOGIN,
+  MY_ACCOUNT,
   PRIVACY_POLICY,
   PRODUCT_OVERVIEW,
   REGISTER,
@@ -88,6 +91,19 @@ const RouteElements = () => {
           element: (
             <Page hideSearch>
               <Register />
+            </Page>
+          ),
+        },
+      ],
+    },
+    {
+      element: <ProtectedLayout />,
+      children: [
+        {
+          path: MY_ACCOUNT,
+          element: (
+            <Page>
+              <MyAccount />
             </Page>
           ),
         },

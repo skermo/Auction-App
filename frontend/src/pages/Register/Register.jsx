@@ -11,13 +11,12 @@ import "./register.scss";
 const Register = () => {
   const [errMsg, setErrMsg] = useState("");
 
-  const { setAuth, registerUser } = useAuth();
+  const { registerUser } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (user) => {
     try {
-      const data = await registerUser(user);
-      setAuth(data);
+      await registerUser(user);
       navigate("/");
     } catch (error) {
       if (!error?.response) {

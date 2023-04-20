@@ -8,7 +8,7 @@ const Checkbox = ({ name, value, onChange, checked, className }) => {
       name={name}
       onChange={onChange}
       value={value}
-      className="proba"
+      className={className}
       checked={checked}
     />
   );

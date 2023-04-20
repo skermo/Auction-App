@@ -133,6 +133,8 @@ public class ItemServiceImpl implements ItemService {
             typeMapToDto.addMappings(mapper -> {
                 mapper.map(src -> src.getCategory().getId(), ItemDto::setCategoryId);
                 mapper.map(src -> src.getSubcategory().getId(), ItemDto::setSubcategoryId);
+                mapper.map(src -> src.getBuyer().getId(), ItemDto::setBuyerId);
+                mapper.map(src -> src.getSeller().getId(), ItemDto::setSellerId);
             });
         }
         return mapper.map(item, ItemDto.class);
