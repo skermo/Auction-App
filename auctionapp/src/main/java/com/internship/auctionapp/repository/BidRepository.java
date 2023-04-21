@@ -11,4 +11,6 @@ public interface BidRepository extends JpaRepository<Bid, UUID> {
     @Query("SELECT b FROM Bid b " +
             "WHERE b.user.id = :bidder")
     List<Bid> findAllByUser(UUID bidder);
+    boolean existsByUserIdAndItemId(UUID userId, UUID itemId);
+    Bid findByUserIdAndItemId(UUID userId, UUID itemId);
 }

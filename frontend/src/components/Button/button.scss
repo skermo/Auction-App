@@ -52,10 +52,18 @@
   width: 100%;
 }
 
-.text-dark {
-  color: $darkGrey;
-}
-
 .padding-max {
   padding: 10px 40px;
+}
+
+.text-dark {
+  color: $darkGrey;
+  .btn-icon {
+    filter: brightness(0) saturate(100%) invert(0%) sepia(2%) saturate(4537%)
+      hue-rotate(336deg) brightness(109%) contrast(71%);
+  }
+}
+
+.padding-10 {
+  padding: 10px 25px;
 }

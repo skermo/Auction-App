@@ -2,6 +2,18 @@ function parseNum(num) {
   return parseFloat(num).toFixed(2);
 }
 
+function addFloats(num1, num2) {
+  return parseNum(parseFloat(num1) + parseFloat(num2));
+}
+
+function hasDatePassed(inputDate) {
+  const now = new Date();
+  const date = new Date(inputDate);
+  if (date < now) {
+    return true;
+  } else return false;
+}
+
 function convertDate(firstDate, secondDate) {
   const date1 = new Date(firstDate).getTime();
   const date2 = new Date(secondDate).getTime();
@@ -40,5 +52,7 @@ function convertDate(firstDate, secondDate) {
 
 export const utils = {
   parseNum,
+  addFloats,
+  hasDatePassed,
   convertDate,
 };

@@ -12,6 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BidDto {
+    private UUID id;
     private UUID userId;
     private UUID itemId;
     private double amount;

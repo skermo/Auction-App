@@ -31,3 +31,16 @@ export const loginValidationSchema = yup.object().shape({
     .required("Email is required"),
   password: yup.string().required("Password is required"),
 });
+
+/*export function newBidValidationSchema(minValue) {
+  return yup.object().shape({
+    newBid: yup
+      .number()
+      .min(minValue, `Your bid cannot be lower than ${minValue}`)
+      .required("New Bid is required"),
+  });
+}*/
+
+export const newBidValidationSchema = yup.object().shape({
+  amount: yup.number().required(),
+});

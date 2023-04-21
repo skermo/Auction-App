@@ -2,6 +2,24 @@
 
 .overview-page {
   color: $darkGrey;
+  .notification-message {
+    margin: 8px 0;
+    padding: 1em 10em;
+    text-align: left;
+    font-weight: $Lato-Bold;
+  }
+  .valid-amount {
+    background-color: $lilac;
+    color: $purple;
+  }
+  .invalid-amount {
+    background-color: $lightBeige;
+    color: $beige;
+  }
+  .input-error {
+    color: $red;
+    background-color: $offWhite;
+  }
   .header {
     letter-spacing: 0.56px;
     height: 64px;
@@ -26,6 +44,11 @@
     margin-top: 30px;
     .content {
       width: calc(100% / 2);
+      .input-fields {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
     }
     h1 {
       margin-bottom: 10px;
