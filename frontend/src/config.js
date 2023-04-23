@@ -2,18 +2,20 @@ import axios from "axios";
 
 export const BASE_URL = "http://localhost:8080/api";
 
-export const ApiRequest = () => {
-  return axios.create({
-    baseURL: BASE_URL,
-    headers: {
+const headerConfig = (token) => {
+  if (token) {
+    return {
       "Content-type": "application/json",
-    },
-  });
+      Authorization: "Bearer " + token,
+    };
+  } else {
+    return { "Content-type": "application/json" };
+  }
 };
 
-export const ApiTokenRequest = (token) => {
+export const ApiRequest = (token) => {
   return axios.create({
     baseURL: BASE_URL,
-    headers: { Authorization: `Bearer ${token}` },
+    headers: headerConfig(token),
   });
 };

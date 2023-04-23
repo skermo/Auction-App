@@ -3,22 +3,26 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./tab.scss";
 
-const Tabs = ({ children, labels, className, Icons, selectedTab }) => {
+const Tabs = ({
+  children,
+  labels,
+  className,
+  Icons,
+  selectedTab = 0,
+  navigateTo = false,
+}) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [selectedIndex, setSelectedIndex] = useState(selectedTab || 0);
+  const [selectedIndex, setSelectedIndex] = useState(selectedTab);
 
   useEffect(() => {
-    if (selectedTab || selectedTab === 0) {
-      setSelectedIndex(selectedTab);
-    } else {
-      setSelectedIndex(0);
-    }
+    setSelectedIndex(selectedTab);
   }, [selectedTab]);
 
   const handleClick = (index) => {
-    if (selectedTab || selectedTab === 0) {
+    if (navigateTo) {
+      labels[index] = labels[index].toLowerCase();
       navigate(`/my-account/${id}/${labels[index]}`);
     }
     setSelectedIndex(index);

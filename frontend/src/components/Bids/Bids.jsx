@@ -11,7 +11,7 @@ const Bids = ({ id }) => {
     itemService
       .getBiddedOnItemsBySellerId(id, auth?.accessToken)
       .then((res) => setBids(res));
-  }, [id]);
+  }, [auth?.accessToken, id]);
 
   return <Table items={bids} type="bids" />;
 };

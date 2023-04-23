@@ -42,6 +42,7 @@ const MyAccount = () => {
         Icons={tabIcons}
         className="tertiary"
         selectedTab={tabIndex}
+        navigateTo={true}
       >
         <Seller id={id} />
         <Bids id={id} />
