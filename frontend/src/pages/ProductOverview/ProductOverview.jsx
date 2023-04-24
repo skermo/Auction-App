@@ -19,14 +19,15 @@ const ProductOverview = () => {
   const [item, setItem] = useState([]);
   const [notificationMsg, setNotificationMsg] = useState("");
   const [notificationClassName, setNotificatonClassName] = useState("");
+  const [successfulBid, setSuccessfulBid] = useState(false);
 
   const { id } = useParams();
   const { auth } = useAuth();
 
   useEffect(() => {
+    setSuccessfulBid(false);
     itemService.getItemById(id).then((res) => setItem(res));
-    window.scrollTo(0, 0);
-  }, [id]);
+  }, [id, successfulBid]);
 
   const price = utils.parseNum(item.startPrice);
   const highestBid = utils.parseNum(item.highestBid);
@@ -45,18 +46,19 @@ const ProductOverview = () => {
       if (value.amount > highestBid) {
         setNotificationMsg("Congrats! You are the highest bidder!");
         setNotificatonClassName("valid-amount");
-      } else {
-        setNotificationMsg(
-          "There are higher bids than yours. You could give it a second try!"
-        );
-        setNotificatonClassName("invalid-amount");
+        setSuccessfulBid(true);
       }
     } catch (error) {
       setNotificatonClassName("input-error");
       if (!error?.response) {
         setNotificationMsg("No Server Response");
       } else if (error.response?.status === 400) {
-        setNotificationMsg("Bad request");
+        if (value.amount <= highestBid) {
+          setNotificationMsg(
+            "There are higher bids than yours. You could give it a second try!"
+          );
+          setNotificatonClassName("invalid-amount");
+        }
       } else {
         setNotificationMsg("Bidding Failed");
       }

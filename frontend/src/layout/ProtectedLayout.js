@@ -11,14 +11,7 @@ const ProtectedLayout = (requireId = false) => {
     return null;
   }
 
-  if ((requireId = false)) {
-    return auth.user ? (
-      <Outlet />
-    ) : (
-      <Navigate to={LOGIN} state={{ from: location }} replace />
-    );
-  }
-  return auth.user && auth.user.id === id ? (
+  return auth.user && (!requireId || auth.user.id === id) ? (
     <Outlet />
   ) : (
     <Navigate to={LOGIN} state={{ from: location }} replace />

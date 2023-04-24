@@ -1,7 +1,7 @@
-import { ApiTokenRequest } from "../config";
+import { ApiRequest } from "../config";
 
 export const addNewBid = async (bid, token) => {
-  return ApiTokenRequest(token)
+  return ApiRequest(token)
     .post("/bids/new-bid", bid)
     .then((response) => {
       return response.data;

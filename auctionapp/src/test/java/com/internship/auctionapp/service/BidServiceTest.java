@@ -58,6 +58,9 @@ class BidServiceTest {
         Item item = Item.builder()
                 .id(UUID.randomUUID())
                 .startPrice(18)
+                .highestBid(4)
+                .endDate(LocalDateTime.of(2024, Month.FEBRUARY, 3, 6, 30, 40, 50000))
+                .seller(User.builder().id(UUID.randomUUID()).build())
                 .build();
         Mockito.when(itemRepository.findById(bidDto.getItemId())).thenReturn(Optional.ofNullable(item));
         assertThrows(BadRequestException.class, () -> bidService.saveNewBid(bidDto));

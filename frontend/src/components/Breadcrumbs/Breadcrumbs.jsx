@@ -52,7 +52,11 @@ const Breadcrumbs = ({ headline }) => {
             <React.Fragment key={index}>
               <Link
                 key={match.url}
-                to={match.pathname}
+                to={
+                  match.pathname === "/my-account"
+                    ? breadcrumbs[match + 1]
+                    : match.pathname
+                }
                 className={
                   match.pathname === location.pathname
                     ? "breadcrumb-active"

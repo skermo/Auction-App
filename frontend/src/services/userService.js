@@ -1,4 +1,4 @@
-import { ApiRequest, ApiTokenRequest } from "../config";
+import { ApiRequest } from "../config";
 
 export const register = async (user) => {
   return ApiRequest()
@@ -17,5 +17,5 @@ export const login = async (user) => {
 };
 
 export const logout = async (token) => {
-  ApiTokenRequest(token).get("/auth/logout");
+  ApiRequest(token).get("/auth/logout");
 };

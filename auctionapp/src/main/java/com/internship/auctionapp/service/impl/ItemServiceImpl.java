@@ -2,7 +2,9 @@ package com.internship.auctionapp.service.impl;
 
 import com.internship.auctionapp.dto.ItemDto;
 import com.internship.auctionapp.entity.Bid;
+import com.internship.auctionapp.entity.Bid;
 import com.internship.auctionapp.entity.Item;
+import com.internship.auctionapp.repository.BidRepository;
 import com.internship.auctionapp.repository.BidRepository;
 import com.internship.auctionapp.repository.ItemRepository;
 import com.internship.auctionapp.response.ItemResponse;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
