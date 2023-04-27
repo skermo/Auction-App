@@ -1,5 +1,7 @@
 package com.internship.auctionapp.service.impl;
 
+import com.internship.auctionapp.aws.FileStore;
+import com.internship.auctionapp.aws.bucket.BucketName;
 import com.internship.auctionapp.dto.UserDto;
 import com.internship.auctionapp.entity.Role;
 import com.internship.auctionapp.entity.User;
@@ -12,6 +14,7 @@ import com.internship.auctionapp.request.RegisterRequest;
 import com.internship.auctionapp.response.JwtAuthResponse;
 import com.internship.auctionapp.security.jwt.JwtUtils;
 import com.internship.auctionapp.service.AuthService;
+import org.apache.http.entity.ContentType;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,9 +23,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 
 
 @Service
@@ -34,18 +38,21 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils tokenProvider;
     private final ModelMapper mapper;
+    private final FileStore fileStore;
 
     public AuthServiceImpl(AuthenticationManager authenticationManager,
                            UserRepository userRepository,
                            RoleRepository roleRepository,
                            PasswordEncoder passwordEncoder,
-                           JwtUtils tokenProvider, ModelMapper mapper) {
+                           JwtUtils tokenProvider, ModelMapper mapper,
+                           FileStore fileStore) {
         this.mapper = mapper;
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
+        this.fileStore = fileStore;
     }
 
     @Override
@@ -95,6 +102,37 @@ public class AuthServiceImpl implements AuthService {
             token = request.substring(7);
         }
         tokenProvider.invalidateToken(token);
+    }
+
+    @Override
+    public void uploadProfilePhoto(UUID id, MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new IllegalStateException("Cannot upload empty file");
+        }
+        if (!Arrays.asList(ContentType.IMAGE_JPEG.getMimeType(),
+                ContentType.IMAGE_PNG.getMimeType()).contains(file.getContentType())) {
+            throw new IllegalStateException("File must be an image " + file.getContentType());
+        }
+        Map<String, String> metadata = new HashMap<>();
+        metadata.put("Content-Type", file.getContentType());
+        metadata.put("Content-Length", String.valueOf(file.getSize()));
+        String path = String.format("%s/%s", BucketName.AUCTION_APP_IMAGES.getBucketName(), id);
+        String name = String.format("%s-%s", file.getOriginalFilename(), UUID.randomUUID());
+        try {
+            User user = userRepository.findById(id).get();
+            user.setProfilePhotoUrl(name);
+            userRepository.save(user);
+            fileStore.save(path, name, Optional.of(metadata), file.getInputStream());
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    @Override
+    public byte[] downloadProfilePhoto(UUID id) {
+        User user = userRepository.findById(id).get();
+        String path = String.format("%s/%s", BucketName.AUCTION_APP_IMAGES.getBucketName(), id);
+        return fileStore.download(path, user.getProfilePhotoUrl());
     }
 
     private UserDto mapToDto(User user) {

@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +26,14 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     @Override
     public List<SubcategoryDto> getAllSubcategories() {
         List<Subcategory> subcategories = subcategoryRepository.findAll();
+        return subcategories.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SubcategoryDto> getSubcategoriesByCategoryId(UUID categoryId) {
+        List<Subcategory> subcategories = subcategoryRepository.findAllByCategoryId(categoryId);
         return subcategories.stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());

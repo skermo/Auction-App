@@ -30,6 +30,10 @@ const routes = [
             path: "bids",
             breadcrumb: "Bids",
           },
+          {
+            path: "add-item",
+            breadcrumb: "Add Item",
+          },
         ],
         breadcrumb: null,
       },

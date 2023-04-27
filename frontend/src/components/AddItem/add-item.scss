@@ -1,0 +1,51 @@
+@import "src/styles/variables.scss";
+
+.add-item-page {
+  color: $darkGrey;
+  margin: 40px 0;
+  .dropdowns {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 30px 0;
+  }
+  p {
+    text-align: right;
+    margin-top: 0;
+  }
+  .price-input-div {
+    display: flex;
+    align-items: center;
+    .dollar-sign {
+      padding: 2% 4%;
+      height: 30px;
+      font-size: 18px;
+      background-color: $white;
+      border: 1px solid $lightestGrey;
+      border-right: 0;
+    }
+  }
+  .input-dates {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0 5px;
+  }
+  .end-time-info {
+    text-align: left;
+    line-height: 24px;
+    margin-bottom: 10px;
+  }
+  .city-zip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .item {
+      width: 45%;
+      .input-field {
+        width: 90%;
+        padding: 5%;
+      }
+    }
+  }
+}

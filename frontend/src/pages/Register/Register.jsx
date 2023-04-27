@@ -2,6 +2,7 @@ import { ErrorMessage, Form, Formik } from "formik";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Button from "../../components/Button/Button";
+import FormContainer from "../../components/FormContainer/FormContainer";
 import InputField from "../../components/InputField/InputField";
 import useAuth from "../../hooks/useAuth";
 import { LOGIN } from "../../routes/routes";
@@ -30,7 +31,7 @@ const Register = () => {
   };
   return (
     <div className="register">
-      <div className="form-container">
+      <FormContainer>
         <h3>REGISTER</h3>
         <Formik
           validationSchema={registerValidationSchema}
@@ -98,7 +99,7 @@ const Register = () => {
             Login
           </div>
         </div>
-      </div>
+      </FormContainer>
     </div>
   );
 };

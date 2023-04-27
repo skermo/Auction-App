@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import Button from "../../components/Button/Button";
 import Checkbox from "../../components/Checkbox/Checkbox";
+import FormContainer from "../../components/FormContainer/FormContainer";
 import InputField from "../../components/InputField/InputField";
 import useAuth from "../../hooks/useAuth";
 import { REGISTER } from "../../routes/routes";
@@ -36,7 +37,7 @@ const Login = () => {
 
   return (
     <div className="login">
-      <div className="form-container">
+      <FormContainer>
         <h3>LOGIN</h3>
         <Formik
           validationSchema={loginValidationSchema}
@@ -93,7 +94,7 @@ const Login = () => {
             Register
           </div>
         </div>
-      </div>
+      </FormContainer>
     </div>
   );
 };

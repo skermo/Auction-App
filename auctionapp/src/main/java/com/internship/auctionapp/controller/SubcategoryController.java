@@ -2,12 +2,10 @@ package com.internship.auctionapp.controller;
 
 import com.internship.auctionapp.dto.SubcategoryDto;
 import com.internship.auctionapp.service.SubcategoryService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -23,5 +21,9 @@ public class SubcategoryController {
     @GetMapping
     public List<SubcategoryDto> getAllSubcategories() {
         return subcategoryService.getAllSubcategories();
+    }
+    @GetMapping("/category/{categoryId}")
+    public List<SubcategoryDto> getSubcategoriesByCategoryId(@PathVariable(name = "categoryId") UUID categoryId){
+        return subcategoryService.getSubcategoriesByCategoryId(categoryId);
     }
 }

@@ -1,0 +1,19 @@
+@import "src/styles/variables.scss";
+
+.text-area {
+  color: $darkGrey;
+  font-family: Lato;
+  font-size: 14px;
+  height: 160px;
+  width: 96%;
+  padding: 2%;
+  border: 1px solid $lightestGrey;
+  background-color: $white;
+  resize: none;
+  letter-spacing: 0.2px;
+  margin: 15px 0 5px;
+}
+
+.text-area:focus {
+  outline-color: $darkGrey;
+}

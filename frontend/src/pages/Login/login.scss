@@ -3,42 +3,4 @@
 .login {
   color: $darkGrey;
   margin: 40px 0;
-  .form-container {
-    padding-bottom: 30px;
-    width: 738px;
-    height: auto;
-    border: 1px solid $lightestGrey;
-    margin: auto;
-    h3 {
-      font-size: 24px;
-      background-color: $white;
-      padding: 1em 0;
-      margin: 0 0 1em;
-    }
-    .form {
-      position: relative;
-      margin: 0 6rem;
-      label {
-        text-align: left;
-        display: block;
-        font-weight: $Lato-Bold;
-        font-size: 16px;
-      }
-      span {
-        display: block;
-        color: $red;
-        margin-bottom: 5px;
-      }
-      .checkbox-container {
-        margin-bottom: 2em;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        #rememberMe {
-          display: inline;
-          font-weight: 400;
-        }
-      }
-    }
-  }
 }

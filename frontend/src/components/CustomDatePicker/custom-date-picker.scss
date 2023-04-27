@@ -1,0 +1,21 @@
+@import "src/styles/variables.scss";
+
+.custom-datepicker {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid $lightestGrey;
+  height: 30px;
+  padding: 10px;
+  width: 200px;
+  background-color: $white;
+  color: $lightGrey;
+  margin: 15px 0;
+  .item {
+    padding: 10px;
+  }
+}
+.react-datepicker-wrapper {
+  width: inherit;
+}

@@ -44,3 +44,125 @@ export const loginValidationSchema = yup.object().shape({
 export const newBidValidationSchema = yup.object().shape({
   amount: yup.number().required(),
 });
+
+export const newItemStepOneValidationSchema = yup.object().shape({
+  name: yup
+    .string()
+    .min(2, "Name must have at least 2 characters")
+    .max(50, "Name can't be longer than 50 characters")
+    .required("Name is required"),
+  category: yup.string().required("Category is required"),
+  subcategory: yup
+    .string()
+    .when("category", {
+      is: "",
+      then: yup.string("First choose Category"),
+    })
+    .required("Subcategory is required"),
+  description: yup
+    .string()
+    .required("Description is required")
+    .min(2, "Descripton must have at least 2 characters")
+    .max(700, "Decription can't be longer than 700 characters"),
+});
+
+export const newItemStepTwoValidationSchema = yup.object().shape({
+  price: yup
+    .number()
+    .required("Price is required")
+    .max(1_000_000_000_000, "Price can't be greater than 1.000.000.000.000"),
+  startDate: yup
+    .date()
+    .min(new Date(), "Start Date cannot be in the past")
+    .required("Start Date is required"),
+  endDate: yup
+    .date()
+    .required("End Date is required")
+    .when("startDate", (startDate) => {
+      if (startDate) {
+        return yup.date().min(startDate, "End Date must be after Start Date");
+      }
+    }),
+});
+
+export const newItemStepThreeValidationSchema = yup.object().shape({
+  address: yup
+    .string()
+    .required("Address is required")
+    .min(2, "Address must have at least 2 characters")
+    .max(50, "Address can't be longer than 50 characters"),
+  city: yup
+    .string()
+    .required("City is required")
+    .min(2, "City must have at least 2 characters")
+    .max(50, "City can't be longer than 50 characters"),
+  zip: yup
+    .string()
+    .required("Zip is required")
+    .min(5, "Zip must have 5 numbers")
+    .max(5, "Zip must have 5 numbers"),
+  country: yup.string().required("Country is required"),
+  phoneNumber: yup
+    .string()
+    .required("Phone number is required")
+    .min(5, "Invalid phone number")
+    .max(20, "Invalid phone number"),
+});
+
+export const addNewItemValidationSchema = yup.object().shape({
+  name: yup
+    .string()
+    .min(2, "Name must have at least 2 characters")
+    .max(50, "Name can't be longer than 50 characters")
+    .required("Name is required"),
+  category: yup.string().required("Category is required"),
+  subcategory: yup
+    .string()
+    .when("category", {
+      is: "",
+      then: yup.string("First choose Category"),
+    })
+    .required("Subcategory is required"),
+  description: yup
+    .string()
+    .required("Description is required")
+    .min(2, "Descripton must have at least 2 characters")
+    .max(700, "Decription can't be longer than 700 characters"),
+  price: yup
+    .number()
+    .required("Price is required")
+    .max(1_000_000_000_000, "Price can't be greater than 1.000.000.000.000"),
+  startDate: yup
+    .date()
+    .min(new Date(), "Start Date cannot be in the past")
+    .required("Start Date is required"),
+  endDate: yup
+    .date()
+    .required("End Date is required")
+    .when("startDate", (startDate) => {
+      if (startDate) {
+        return yup.date().min(startDate, "End Date must be after Start Date");
+      }
+    }),
+  address: yup
+    .string()
+    .required("Address is required")
+    .min(2, "Address must have at least 2 characters")
+    .max(50, "Address can't be longer than 50 characters"),
+  city: yup
+    .string()
+    .required("City is required")
+    .min(2, "City must have at least 2 characters")
+    .max(50, "City can't be longer than 50 characters"),
+  zip: yup
+    .string()
+    .required("Zip is required")
+    .min(5, "Zip must have 5 numbers")
+    .max(5, "Zip must have 5 numbers"),
+  country: yup.string().required("Country is required"),
+  phoneNumber: yup
+    .string()
+    .required("Phone number is required")
+    .min(5, "Invalid phone number")
+    .max(20, "Invalid phone number"),
+});
