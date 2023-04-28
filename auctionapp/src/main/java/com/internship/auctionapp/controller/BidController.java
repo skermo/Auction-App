@@ -17,10 +17,10 @@ public class BidController {
         this.bidService = bidService;
     }
 
-    @PostMapping("/new-bid")
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    public ResponseEntity<BidDto> register(@RequestBody BidDto bidDto) {
-        BidDto response = bidService.saveNewBid(bidDto);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    @PostMapping
+    @PreAuthorize("hasAnyAuthority(T(com.internship.auctionapp.enums.UserRole).USER, " +
+            "T(com.internship.auctionapp.enums.UserRole).ADMIN)")
+    public ResponseEntity<BidDto> newBid(@RequestBody BidDto bidDto) {
+        return bidService.saveNewBid(bidDto);
     }
 }
