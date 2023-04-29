@@ -49,6 +49,14 @@ async function getBiddedOnItemsBySellerId(sellerId, token) {
   return result.data || [];
 }
 
+async function addNewItem(sellerId, token, data) {
+  return ApiRequest(token, true)
+    .post(`/items/${sellerId}`, data)
+    .then((response) => {
+      return response.data;
+    });
+}
+
 export const itemService = {
   getFirstItem,
   getNewArrivals,
@@ -58,4 +66,5 @@ export const itemService = {
   getActiveItemsBySellerId,
   getSoldItemsBySellerId,
   getBiddedOnItemsBySellerId,
+  addNewItem,
 };

@@ -45,6 +45,14 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    private String address;
+
+    private String city;
+
+    private String zip;
+
+    private String country;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_role",
             joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"),

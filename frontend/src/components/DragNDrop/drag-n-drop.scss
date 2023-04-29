@@ -1,0 +1,55 @@
+@import "src/styles/variables.scss";
+
+.drag-n-drop {
+  margin: 40px 0;
+  background-color: $white;
+  border: 1px solid $lightestGrey;
+  border-style: dashed;
+  padding: 100px 50px;
+  .text {
+    .heading {
+      padding: 5px 0;
+      font-weight: $Lato-Bold;
+      font-size: 16px;
+    }
+    .heading-purple {
+      color: $purple;
+    }
+    p {
+      text-align: center;
+      padding: 5px 0;
+    }
+  }
+  .photos-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    .photo-container {
+      position: relative;
+      display: inline-block;
+      border: 1px solid $lightestGrey;
+      margin-bottom: 8px;
+      margin-right: 8px;
+      padding: 4px;
+      .photo {
+        img {
+          width: 100px;
+          height: 100px;
+          padding: 4px;
+        }
+      }
+      .icon {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 1px solid $lightestGrey;
+        padding: 2px;
+        border-radius: 20%;
+        cursor: pointer;
+      }
+    }
+  }
+}

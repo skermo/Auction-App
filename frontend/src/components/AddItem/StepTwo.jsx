@@ -1,5 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React from "react";
+import { useNavigate } from "react-router";
+import useAuth from "../../hooks/useAuth";
 import { newItemStepTwoValidationSchema } from "../../utils/formValidation";
 import Button from "../Button/Button";
 import CustomDatePicker from "../CustomDatePicker/CustomDatePicker";
@@ -7,6 +9,9 @@ import FormContainer from "../FormContainer/FormContainer";
 import InputField from "../InputField/InputField";
 
 const StepTwo = (props) => {
+  const navigate = useNavigate();
+  const { auth } = useAuth();
+
   const handleSubmit = (values) => {
     props.next(values);
   };
@@ -27,12 +32,12 @@ const StepTwo = (props) => {
               <InputField
                 className="price-input"
                 type="number"
-                name="price"
-                id="price"
+                name="startPrice"
+                id="startPrice"
                 autoComplete="off"
               />
-              <ErrorMessage name="price" component="span" />
             </div>
+            <ErrorMessage name="startPrice" component="span" />
             <div className="input-dates">
               <div>
                 <label>Start Date</label>
@@ -57,13 +62,25 @@ const StepTwo = (props) => {
               The auction will be automatically closed when the end time comes.
               The highest bid will win the auction.
             </p>
-            <Button
-              model="button"
-              text="BACK"
-              vtype="primary"
-              onClick={() => props.prev(values)}
-            />
-            <Button model="submit" text="NEXT" vtype="primary" />
+            <div className="buttons">
+              <Button
+                text="CANCEL"
+                model="button"
+                type="tertiary"
+                className="text-dark"
+                onClick={() => navigate(`/my-account/${auth.user.id}/seller`)}
+              />
+              <div className="buttons-right">
+                <Button
+                  model="button"
+                  text="BACK"
+                  type="secondary"
+                  className="text-dark"
+                  onClick={() => props.prev(values)}
+                />
+                <Button model="submit" text="NEXT" type="primary" />
+              </div>
+            </div>
           </Form>
         )}
       </Formik>

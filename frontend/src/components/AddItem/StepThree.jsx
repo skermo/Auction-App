@@ -1,5 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React from "react";
+import { useNavigate } from "react-router";
+import useAuth from "../../hooks/useAuth";
 import { COUNTRY_LIST } from "../../utils/countryList";
 import { newItemStepThreeValidationSchema } from "../../utils/formValidation";
 import Button from "../Button/Button";
@@ -9,6 +11,9 @@ import FormContainer from "../FormContainer/FormContainer";
 import InputField from "../InputField/InputField";
 
 const StepThree = (props) => {
+  const navigate = useNavigate();
+  const { auth } = useAuth();
+
   const handleSubmit = (values) => {
     props.next(values, true);
   };
@@ -75,13 +80,25 @@ const StepThree = (props) => {
               autoComplete="off"
             />
             <ErrorMessage name="phoneNumber" component="span" />
-            <Button
-              text="BACK"
-              type="primary"
-              model="button"
-              onClick={() => props.prev(values)}
-            />
-            <Button text="SUBMIT" type="primary" model="submit" />
+            <div className="buttons">
+              <Button
+                text="CANCEL"
+                model="button"
+                type="tertiary"
+                className="text-dark"
+                onClick={() => navigate(`/my-account/${auth.user.id}/seller`)}
+              />
+              <div className="buttons-right">
+                <Button
+                  model="button"
+                  text="BACK"
+                  type="secondary"
+                  className="text-dark"
+                  onClick={() => props.prev(values)}
+                />
+                <Button text="SUBMIT" type="primary" model="submit" />
+              </div>
+            </div>
           </Form>
         )}
       </Formik>

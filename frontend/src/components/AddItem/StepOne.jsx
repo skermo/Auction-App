@@ -1,11 +1,14 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import useAuth from "../../hooks/useAuth";
 import { categoryService } from "../../services/categoryService";
 import { subcategoryService } from "../../services/subcategoryService";
 import { newItemStepOneValidationSchema } from "../../utils/formValidation";
 import Button from "../Button/Button";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import { customStyle1 } from "../CustomSelect/selectStyles";
+import DragNDrop from "../DragNDrop/DragNDrop";
 import FormContainer from "../FormContainer/FormContainer";
 import InputField from "../InputField/InputField";
 import TextArea from "../TextArea/TextArea";
@@ -13,6 +16,9 @@ import TextArea from "../TextArea/TextArea";
 const StepOne = (props) => {
   const [categories, setCategories] = useState({});
   const [subcategories, setSubcategories] = useState({});
+
+  const navigate = useNavigate();
+  const { auth } = useAuth();
 
   useEffect(() => {
     categoryService.getAllCategories().then((res) => {
@@ -67,24 +73,24 @@ const StepOne = (props) => {
                 <Field
                   options={categories}
                   component={CustomSelect}
-                  name="category"
-                  id="category"
+                  name="categoryId"
+                  id="categoryId"
                   placeholder="Select Category"
                   styles={customStyle1}
                   sendDataToForm={fetchSubcategories}
                 />
-                <ErrorMessage name="category" component="span" />
+                <ErrorMessage name="categoryId" component="span" />
               </div>
               <div>
                 <Field
                   options={subcategories}
                   component={CustomSelect}
-                  name="subcategory"
-                  id="subcategory"
+                  name="subcategoryId"
+                  id="subcategoryId"
                   placeholder="Select Subcategory"
                   styles={customStyle1}
                 />
-                <ErrorMessage name="subcategory" component="span" />
+                <ErrorMessage name="subcategoryId" component="span" />
               </div>
             </div>
             <label>Description</label>
@@ -96,7 +102,23 @@ const StepOne = (props) => {
             />
             <p>100 words (700 characters)</p>
             <ErrorMessage name="description" component="span" />
-            <Button model="submit" text="NEXT" vtype="primary" />
+            <Field
+              name="photos"
+              id="photos"
+              component={DragNDrop}
+              value={values.files}
+            />
+            <ErrorMessage name="photos" component="span" />
+            <div className="buttons">
+              <Button
+                text="CANCEL"
+                model="button"
+                type="tertiary"
+                className="text-dark"
+                onClick={() => navigate(`/my-account/${auth.user.id}/seller`)}
+              />
+              <Button model="submit" text="NEXT" type="primary" />
+            </div>
           </Form>
         )}
       </Formik>

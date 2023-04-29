@@ -21,6 +21,7 @@
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
     "react-select": "^5.7.2",
+    "react-step-progress-bar": "^1.0.3",
     "resolve-url-loader": "^5.0.0",
     "stream": "npm:stream-browserify",
     "use-react-router-breadcrumbs": "^4.0.1",

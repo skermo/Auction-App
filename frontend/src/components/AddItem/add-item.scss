@@ -5,13 +5,19 @@
   margin: 40px 0;
   .dropdowns {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     margin: 30px 0;
+    div {
+      .css-b62m3t-container {
+        margin-bottom: 10px;
+      }
+    }
   }
   p {
     text-align: right;
-    margin-top: 0;
+    margin: 0;
+    padding: 0;
   }
   .price-input-div {
     display: flex;
@@ -27,7 +33,7 @@
   }
   .input-dates {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     margin: 10px 0 5px;
   }
@@ -38,13 +44,24 @@
   }
   .city-zip {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     .item {
       width: 45%;
       .input-field {
         width: 90%;
         padding: 5%;
+      }
+    }
+  }
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin: 40px 0;
+    .buttons-right {
+      display: flex;
+      button {
+        margin-left: 20px;
       }
     }
   }

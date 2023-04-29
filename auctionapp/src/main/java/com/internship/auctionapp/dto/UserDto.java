@@ -28,6 +28,10 @@ public class UserDto {
     private String lastName;
     private String profilePhotoUrl;
     private String phoneNumber;
+    private String address;
+    private String city;
+    private String zip;
+    private String country;
     private Set<Role> roles;
 
 }
