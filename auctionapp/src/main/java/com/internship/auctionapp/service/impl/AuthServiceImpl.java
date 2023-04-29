@@ -104,37 +104,6 @@ public class AuthServiceImpl implements AuthService {
         tokenProvider.invalidateToken(token);
     }
 
-    @Override
-    public void uploadProfilePhoto(UUID id, MultipartFile file) {
-        if (file.isEmpty()) {
-            throw new IllegalStateException("Cannot upload empty file");
-        }
-        if (!Arrays.asList(ContentType.IMAGE_JPEG.getMimeType(),
-                ContentType.IMAGE_PNG.getMimeType()).contains(file.getContentType())) {
-            throw new IllegalStateException("File must be an image " + file.getContentType());
-        }
-        Map<String, String> metadata = new HashMap<>();
-        metadata.put("Content-Type", file.getContentType());
-        metadata.put("Content-Length", String.valueOf(file.getSize()));
-        String path = String.format("%s/%s", BucketName.AUCTION_APP_IMAGES.getBucketName(), id);
-        String name = String.format("%s-%s", file.getOriginalFilename(), UUID.randomUUID());
-        try {
-            User user = userRepository.findById(id).get();
-            user.setProfilePhotoUrl(name);
-            userRepository.save(user);
-            fileStore.save(path, name, Optional.of(metadata), file.getInputStream());
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    @Override
-    public byte[] downloadProfilePhoto(UUID id) {
-        User user = userRepository.findById(id).get();
-        String path = String.format("%s/%s", BucketName.AUCTION_APP_IMAGES.getBucketName(), id);
-        return fileStore.download(path, user.getProfilePhotoUrl());
-    }
-
     private UserDto mapToDto(User user) {
         return mapper.map(user, UserDto.class);
     }

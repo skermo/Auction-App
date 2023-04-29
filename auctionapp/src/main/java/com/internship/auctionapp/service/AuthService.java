@@ -14,7 +14,4 @@ public interface AuthService {
 
     void logout(String request);
 
-    void uploadProfilePhoto(UUID id, MultipartFile file);
-
-    byte[] downloadProfilePhoto(UUID id);
 }

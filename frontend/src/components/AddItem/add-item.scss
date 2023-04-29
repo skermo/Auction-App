@@ -3,6 +3,13 @@
 .add-item-page {
   color: $darkGrey;
   margin: 40px 0;
+  .error-message {
+    font-size: 16px;
+    color: $red;
+    border-bottom: 1px solid $lightestGrey;
+    font-weight: $Lato-Bold;
+    padding: 5px 25px;
+  }
   .dropdowns {
     display: flex;
     align-items: flex-start;

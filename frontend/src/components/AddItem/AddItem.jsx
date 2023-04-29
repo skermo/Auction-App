@@ -10,6 +10,7 @@ import "./add-item.scss";
 
 const AddItem = () => {
   const { auth } = useAuth();
+  const [errMsg, setErrMsg] = useState("");
 
   const [data, setData] = useState({
     name: "",
@@ -45,8 +46,15 @@ const AddItem = () => {
         });
         formData.append("document", blob);
         await itemService.addNewItem(auth.user.id, auth.accessToken, formData);
-      } catch (e) {
-        console.log(e);
+        navigate(`/my-account/${auth.user.id}/seller`);
+      } catch (error) {
+        if (!error?.response) {
+          setErrMsg("No Server Response");
+        } else if (error.response?.status === 400) {
+          setErrMsg("Item is invalid");
+        } else {
+          setErrMsg("Adding Item Failed");
+        }
       }
 
       return;
@@ -69,6 +77,7 @@ const AddItem = () => {
   return (
     <div className="add-item-page">
       <FormProgressBar page={currentStep} />
+      <span className="error-message">{errMsg}</span>
       {steps[currentStep]}
     </div>
   );
