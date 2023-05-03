@@ -48,105 +48,73 @@ class BidServiceTest {
 
 
     @Test
-    void saveNewBid_amountLowerThanStartPrice_badRequestException() {
-        BidDto bidDto = BidDto.builder()
-                .id(UUID.randomUUID())
-                .itemId(UUID.randomUUID())
-                .userId(UUID.randomUUID())
-                .amount(5)
-                .build();
-        Item item = Item.builder()
-                .id(UUID.randomUUID())
-                .startPrice(18)
-                .highestBid(4)
-                .endDate(LocalDateTime.of(2024, Month.FEBRUARY, 3, 6, 30, 40, 50000))
-                .seller(User.builder().id(UUID.randomUUID()).build())
-                .build();
+    void test_saveNewBid_throws_exception_if_amount_lower_than_start_price() {
+
+        BidDto bidDto = getValidBidDto();
+        bidDto.setAmount(5);
+
+        Item item = getValidItem();
+        item.setStartPrice(18);
+        item.setHighestBid(4);
+
         Mockito.when(itemRepository.findById(bidDto.getItemId())).thenReturn(Optional.ofNullable(item));
         assertThrows(BadRequestException.class, () -> bidService.saveNewBid(bidDto));
     }
 
     @Test
-    void saveNewBid_amountLowerThanHighestBid_badRequestException() {
-        BidDto bidDto = BidDto.builder()
-                .id(UUID.randomUUID())
-                .itemId(UUID.randomUUID())
-                .userId(UUID.randomUUID())
-                .amount(5)
-                .build();
-        Item item = Item.builder()
-                .id(UUID.randomUUID())
-                .startPrice(3)
-                .highestBid(6)
-                .endDate(LocalDateTime.of(2024, Month.FEBRUARY, 3, 6, 30, 40, 50000))
-                .seller(User.builder().id(UUID.randomUUID()).build())
-                .build();
+    void test_saveNewBid_throws_exception_if_amount_lower_than_highest_bid() {
+
+        BidDto bidDto = getValidBidDto();
+        bidDto.setAmount(5);
+
+        Item item = getValidItem();
+
         Mockito.when(itemRepository.findById(bidDto.getItemId())).thenReturn(Optional.ofNullable(item));
         assertThrows(BadRequestException.class, () -> bidService.saveNewBid(bidDto));
     }
 
     @Test
-    void saveNewBid_endDatePassed_badRequestException() {
-        BidDto bidDto = BidDto.builder()
-                .id(UUID.randomUUID())
-                .itemId(UUID.randomUUID())
-                .userId(UUID.randomUUID())
-                .amount(50)
-                .build();
-        Item item = Item.builder()
-                .id(UUID.randomUUID())
-                .startPrice(3)
-                .highestBid(6)
-                .endDate(LocalDateTime.of(2020, Month.FEBRUARY, 3, 6, 30, 40, 50000))
-                .seller(User.builder().id(UUID.randomUUID()).build())
-                .build();
+    void test_saveNewBid_throws_exception_if_end_date_passed() {
+
+        BidDto bidDto = getValidBidDto();
+
+        Item item = getValidItem();
+        item.setEndDate(getInvalidDate());
+
         Mockito.when(itemRepository.findById(bidDto.getItemId())).thenReturn(Optional.ofNullable(item));
         assertThrows(BadRequestException.class, () -> bidService.saveNewBid(bidDto));
     }
 
     @Test
-    void saveNewBid_sellerTriesToBid_badRequestException() {
-        BidDto bidDto = BidDto.builder()
-                .id(UUID.randomUUID())
-                .itemId(UUID.randomUUID())
-                .userId(UUID.randomUUID())
-                .amount(50)
-                .build();
+    void test_saveNewBid_throws_exception_if_sellerId_equals_bidderId() {
+
+        BidDto bidDto = getValidBidDto();
+
         User user = User.builder()
                 .id(bidDto.getUserId())
                 .build();
-        Item item = Item.builder()
-                .id(UUID.randomUUID())
-                .startPrice(3)
-                .highestBid(6)
-                .endDate(LocalDateTime.of(2024, Month.FEBRUARY, 3, 6, 30, 40, 50000))
-                .seller(user)
-                .build();
+
+        Item item = getValidItem();
+        item.setSeller(user);
+
         Mockito.when(itemRepository.findById(bidDto.getItemId())).thenReturn(Optional.ofNullable(item));
         assertThrows(BadRequestException.class, () -> bidService.saveNewBid(bidDto));
     }
 
     @Test
-    void saveNewBid_updateBid_BidDto() {
-        BidDto bidDto = BidDto.builder()
-                .id(UUID.randomUUID())
-                .itemId(UUID.randomUUID())
-                .userId(UUID.randomUUID())
-                .amount(50)
-                .build();
+    void test_saveNewBid_updates_existing_bid() {
+
+        BidDto bidDto = getValidBidDto();
+
         Bid bid = Bid.builder()
                 .id(bidDto.getId())
                 .item(Item.builder().id(bidDto.getItemId()).build())
                 .user(User.builder().id(bidDto.getUserId()).build())
                 .amount(bidDto.getAmount())
                 .build();
-        Item item = Item.builder()
-                .id(UUID.randomUUID())
-                .startPrice(3)
-                .highestBid(6)
-                .endDate(LocalDateTime.of(2024, Month.FEBRUARY, 3, 6, 30, 40, 50000))
-                .seller(new User())
-                .build();
+
+        Item item = getValidItem();
+
         Mockito.when(itemRepository.findById(bidDto.getItemId())).thenReturn(Optional.of(item));
         Mockito.when(bidRepository.existsByUserIdAndItemId(Mockito.any(), Mockito.any())).thenReturn(true);
         Mockito.when(bidRepository.findByUserIdAndItemId(Mockito.any(), Mockito.any())).thenReturn(bid);
@@ -156,25 +124,50 @@ class BidServiceTest {
     }
 
     @Test
-    void saveNewBid_createBid_BidDto() {
-        BidDto bidDto = BidDto.builder()
-                .id(UUID.randomUUID())
-                .itemId(UUID.randomUUID())
-                .userId(UUID.randomUUID())
-                .amount(50)
-                .build();
-        Item item = Item.builder()
-                .id(UUID.randomUUID())
-                .startPrice(3)
-                .highestBid(6)
-                .endDate(LocalDateTime.of(2024, Month.FEBRUARY, 3, 6, 30, 40, 50000))
-                .seller(new User())
-                .build();
+    void test_saveNewBid_creates_new_bid() {
+
+        BidDto bidDto = getValidBidDto();
+
+        Item item = getValidItem();
+
         Mockito.when(itemRepository.findById(bidDto.getItemId())).thenReturn(Optional.of(item));
         Mockito.when(bidRepository.existsByUserIdAndItemId(Mockito.any(), Mockito.any())).thenReturn(false);
         bidService.saveNewBid(bidDto);
         Mockito.verify(bidRepository, Mockito.times(1)).save(ArgumentMatchers.any());
 
+    }
+
+    private User getUser(){
+        return User.builder()
+                .id(UUID.randomUUID())
+                .build();
+    }
+
+    private BidDto getValidBidDto(){
+        return BidDto.builder()
+                .id(UUID.randomUUID())
+                .itemId(UUID.randomUUID())
+                .userId(UUID.randomUUID())
+                .amount(50)
+                .build();
+    }
+
+    private Item getValidItem(){
+        return Item.builder()
+                .id(UUID.randomUUID())
+                .startPrice(3)
+                .highestBid(6)
+                .endDate(getValidDate())
+                .seller(new User())
+                .build();
+    }
+
+    private LocalDateTime getValidDate(){
+        return LocalDateTime.of(2024, Month.FEBRUARY, 3, 6, 30, 40, 50000);
+    }
+
+    private LocalDateTime getInvalidDate(){
+        return LocalDateTime.of(2020, Month.FEBRUARY, 3, 6, 30, 40, 50000);
     }
 
 }

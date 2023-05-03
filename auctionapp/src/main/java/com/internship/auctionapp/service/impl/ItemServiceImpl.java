@@ -154,7 +154,6 @@ public class ItemServiceImpl implements ItemService {
                 Image image = new Image();
                 image.setUrl(imageName);
                 image.setItem(item);
-                //imageRepository.save(image);
                 images.add(image);
             }
             item.setImages(images);
