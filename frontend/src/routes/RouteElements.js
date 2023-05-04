@@ -1,5 +1,6 @@
 import { useRoutes } from "react-router-dom";
 import Page from "../components/Page/Page";
+import StripeContainer from "../components/Payment/StripeContainer";
 import AuthLayout from "../layout/AuthLayout";
 import ProtectedLayout from "../layout/ProtectedLayout";
 import AboutUs from "../pages/AboutUs/AboutUs";
@@ -114,6 +115,14 @@ const RouteElements = () => {
       element: (
         <Page hideBottomNavbar>
           <PageNotFound />
+        </Page>
+      ),
+    },
+    {
+      path: "/proba",
+      element: (
+        <Page>
+          <StripeContainer />
         </Page>
       ),
     },
