@@ -21,6 +21,6 @@ public interface ItemService {
     List<ItemDto> getActiveSellerItems(UUID sellerId);
     List<ItemDto> getSoldSellerItems(UUID sellerId);
     List<ItemDto> getBiddedOnItemsByUser(UUID bidderId);
-    HttpStatus addNewItem(ItemRequest itemRequest, List<MultipartFile> file,  UUID id);
+    ItemDto addNewItem(ItemRequest itemRequest, List<MultipartFile> file,  UUID id);
 
 }

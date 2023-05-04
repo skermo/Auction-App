@@ -1,7 +1,6 @@
 package com.internship.auctionapp.service.impl;
 
 import com.internship.auctionapp.aws.FileStore;
-import com.internship.auctionapp.aws.bucket.BucketName;
 import com.internship.auctionapp.dto.UserDto;
 import com.internship.auctionapp.entity.Role;
 import com.internship.auctionapp.entity.User;
@@ -14,7 +13,6 @@ import com.internship.auctionapp.request.RegisterRequest;
 import com.internship.auctionapp.response.JwtAuthResponse;
 import com.internship.auctionapp.security.jwt.JwtUtils;
 import com.internship.auctionapp.service.AuthService;
-import org.apache.http.entity.ContentType;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,10 +21,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Service

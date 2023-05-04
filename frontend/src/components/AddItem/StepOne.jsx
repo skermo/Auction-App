@@ -13,7 +13,7 @@ import FormContainer from "../FormContainer/FormContainer";
 import InputField from "../InputField/InputField";
 import TextArea from "../TextArea/TextArea";
 
-const StepOne = (props) => {
+const StepOne = ({ data, next }) => {
   const [categories, setCategories] = useState({});
   const [subcategories, setSubcategories] = useState({});
 
@@ -29,10 +29,10 @@ const StepOne = (props) => {
         }))
       );
     });
-    if (props.data.category) {
-      fetchSubcategories(props.data.category);
+    if (data.category) {
+      fetchSubcategories(data.category);
     }
-  }, [props.data.category]);
+  }, [data.category]);
 
   const fetchSubcategories = async (categoryId) => {
     subcategoryService.getSubcategoriesByCategoryId(categoryId).then((res) => {
@@ -46,14 +46,14 @@ const StepOne = (props) => {
   };
 
   const handleSubmit = (values) => {
-    props.next(values);
+    next(values);
   };
 
   return (
     <FormContainer>
       <h3>ADD ITEM</h3>
       <Formik
-        initialValues={props.data}
+        initialValues={data}
         onSubmit={handleSubmit}
         validationSchema={newItemStepOneValidationSchema}
       >

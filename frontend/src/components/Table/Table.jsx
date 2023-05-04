@@ -26,7 +26,7 @@ const Table = ({ items, type }) => {
         </tr>
       </thead>
       <tbody>
-        {items.length > 0 ? (
+        {items?.length > 0 ? (
           items.map((value, key) => <TableRow item={value} key={value.id} />)
         ) : (
           <tr>
@@ -40,7 +40,7 @@ const Table = ({ items, type }) => {
                     <p>You have not sold any items.</p>
                   ) : (
                     <p>You have not placed any bids</p>
-                  )}{" "}
+                  )}
                 </>
               )}
               <div>

@@ -10,19 +10,19 @@ import { customStyle2 } from "../CustomSelect/selectStyles";
 import FormContainer from "../FormContainer/FormContainer";
 import InputField from "../InputField/InputField";
 
-const StepThree = (props) => {
+const StepThree = ({ data, next, prev }) => {
   const navigate = useNavigate();
   const { auth } = useAuth();
 
   const handleSubmit = (values) => {
-    props.next(values, true);
+    next(values, true);
   };
 
   return (
     <FormContainer>
       <h3>LOCATION & SHIPPING</h3>
       <Formik
-        initialValues={props.data}
+        initialValues={data}
         onSubmit={handleSubmit}
         validationSchema={newItemStepThreeValidationSchema}
       >
@@ -94,7 +94,7 @@ const StepThree = (props) => {
                   text="BACK"
                   type="secondary"
                   className="text-dark"
-                  onClick={() => props.prev(values)}
+                  onClick={() => prev(values)}
                 />
                 <Button text="SUBMIT" type="primary" model="submit" />
               </div>

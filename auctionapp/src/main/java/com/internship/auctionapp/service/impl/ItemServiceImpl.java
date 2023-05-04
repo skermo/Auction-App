@@ -16,11 +16,12 @@ import com.internship.auctionapp.util.StringComparison;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.entity.ContentType;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 @Service
 public class ItemServiceImpl implements ItemService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemServiceImpl.class);
     private final ItemRepository itemRepository;
     private final BidRepository bidRepository;
     private final CategoryRepository categoryRepository;
@@ -143,13 +145,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public HttpStatus addNewItem(ItemRequest itemRequest, List<MultipartFile> files, UUID id) {
+    public ItemDto addNewItem(ItemRequest itemRequest, List<MultipartFile> files, UUID id) {
         checkItemRequestValidity(itemRequest, id);
         Item item = mapItemRequestToItem(itemRequest, id);
 
         List<String> imageNames = uploadPhotos(id, item.getId(), files);
         List<Image> images = new ArrayList<>();
-        try{
+        try {
             for (String imageName : imageNames) {
                 Image image = new Image();
                 image.setUrl(imageName);
@@ -160,10 +162,12 @@ public class ItemServiceImpl implements ItemService {
 
             updateUserInfo(itemRequest, id);
             itemRepository.save(item);
-        }catch (BadRequestException exception){
+            LOGGER.info("Successfully saved item " + item.getId() + " to seller " + item.getSeller().getId());
+        } catch (BadRequestException exception) {
+            LOGGER.error("Could not save item " + item.getName() + " to seller " + item.getSeller().getId());
             throw new BadRequestException("Could not save item");
         }
-        return HttpStatus.CREATED;
+        return mapToDto(item);
     }
 
     private void updateUserInfo(ItemRequest itemRequest, UUID id) {
@@ -191,12 +195,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private List<String> uploadPhotos(UUID sellerId, UUID itemId, List<MultipartFile> files) {
-        if (files.isEmpty()) {
-            throw new BadRequestException("Cannot upload empty file");
-        }
-        if (files.size() < 3) {
-            throw new BadRequestException("Must upload at least 3 photos");
-        }
+        checkFilesValidity(files);
         List<String> imageNames = new ArrayList<>();
         for (MultipartFile file : files) {
             if (!Arrays.asList(ContentType.IMAGE_JPEG.getMimeType(),
@@ -216,6 +215,15 @@ public class ItemServiceImpl implements ItemService {
             }
         }
         return imageNames;
+    }
+
+    private void checkFilesValidity(List<MultipartFile> files) {
+        if (files.isEmpty()) {
+            throw new BadRequestException("Cannot upload empty file");
+        }
+        if (files.size() < 3) {
+            throw new BadRequestException("Must upload at least 3 photos");
+        }
     }
 
     private void checkItemRequestValidity(ItemRequest itemRequest, UUID id) {

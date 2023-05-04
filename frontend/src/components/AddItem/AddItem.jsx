@@ -36,15 +36,14 @@ const AddItem = () => {
       try {
         const formData = new FormData();
         newData.photos.forEach((photo) => {
-          formData.append("file", photo);
+          formData.append("files", photo);
         });
-        var data = Object.assign({}, newData);
-        delete data.photos;
+        const { photos, ...data } = newData;
         const json = JSON.stringify(data);
         const blob = new Blob([json], {
           type: "application/json",
         });
-        formData.append("document", blob);
+        formData.append("item", blob);
         await itemService.addNewItem(auth.user.id, auth.accessToken, formData);
         navigate(`/my-account/${auth.user.id}/seller`);
       } catch (error) {
