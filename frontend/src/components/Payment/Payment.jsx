@@ -1,81 +1,30 @@
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
-import React, { useState } from "react";
-
-const CARD_OPTIONS = {
-  iconStyle: "solid",
-  style: {
-    base: {
-      iconColor: "#c4f0ff",
-      color: "#fff",
-      fontWeight: 500,
-      fontFamily: "Roboto, Open Sans, Segoe UI, sans-serif",
-      fontSize: "16px",
-      fontSmoothing: "antialiased",
-      ":-webkit-autofill": { color: "#fce883" },
-      "::placeholder": { color: "#87bbfd" },
-    },
-    invalid: {
-      iconColor: "#ffc7ee",
-      color: "#ffc7ee",
-    },
-  },
-};
+import React from "react";
+import Stripe from "react-stripe-checkout";
 
 const Payment = () => {
-  const [success, setSuccess] = useState(false);
-  const stripe = useStripe();
-  const elements = useElements();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const [error, paymentMethod] = await stripe.createPaymentMethod({
-      type: "card",
-      card: elements.getElement(CardElement),
-    });
-
-    if (!error) {
-      try {
-        const id = paymentMethod;
-        const response = await axios.post(
-          "http://localhost:8080/api/payment/create-payment-intent",
-          {
-            amount: 1000,
-            id,
-          }
-        );
-        if (response.data.success) {
-          console.log("success");
-          setSuccess(true);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      console.log(error.message);
-    }
-  };
+  async function handleToken(token) {
+    console.log(token);
+    await axios
+      .post("http://localhost:8080/api/payment/charge", "", {
+        headers: {
+          token: token.id,
+          amount: 500,
+        },
+      })
+      .then(() => {
+        alert("Payment Success");
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }
 
   return (
-    <>
-      {!success ? (
-        <form onSubmit={handleSubmit}>
-          <fieldset className="FormGroup">
-            <div className="FormRow">
-              <CardElement />
-            </div>
-          </fieldset>
-          <button>Pay</button>
-        </form>
-      ) : (
-        <div>
-          <h2>
-            You just bought a sweet spatula congrats this is the best decision
-            of you're life
-          </h2>
-        </div>
-      )}
-    </>
+    <Stripe
+      stripeKey="pk_test_51N3gQwJfjmrWeWPQ42O2aoDR0Y9nfU098cMHVhYxvpoNW4HKnJN7dCsO9u3lZPRU6R4OI2Wzj5tbuFAP4LhfeZaP00LP0yQWM2"
+      token={handleToken}
+    />
   );
 };
 

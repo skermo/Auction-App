@@ -13,4 +13,9 @@ public interface BidRepository extends JpaRepository<Bid, UUID> {
     List<Bid> findAllByUser(UUID bidder);
     boolean existsByUserIdAndItemId(UUID userId, UUID itemId);
     Bid findByUserIdAndItemId(UUID userId, UUID itemId);
+    @Query("SELECT b FROM Bid b " +
+            "WHERE b.item.id = :itemId " +
+            "ORDER BY amount DESC " +
+            "LIMIT 1")
+    Bid findBiggestBidByItemId(UUID itemId);
 }

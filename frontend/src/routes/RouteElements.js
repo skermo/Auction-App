@@ -1,6 +1,5 @@
 import { useRoutes } from "react-router-dom";
 import Page from "../components/Page/Page";
-import StripeContainer from "../components/Payment/StripeContainer";
 import AuthLayout from "../layout/AuthLayout";
 import ProtectedLayout from "../layout/ProtectedLayout";
 import AboutUs from "../pages/AboutUs/AboutUs";
@@ -25,6 +24,7 @@ import {
 } from "./routes";
 
 import React from "react";
+import Payment from "../components/Payment/Payment";
 
 const RouteElements = () => {
   const element = useRoutes([
@@ -122,7 +122,7 @@ const RouteElements = () => {
       path: "/proba",
       element: (
         <Page>
-          <StripeContainer />
+          <Payment />
         </Page>
       ),
     },

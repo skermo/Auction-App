@@ -6,10 +6,12 @@ import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
 import Button from "../../components/Button/Button";
 import Gallery from "../../components/Gallery/Gallery";
 import InputField from "../../components/InputField/InputField";
+import Payment from "../../components/Payment/Payment";
+import PopUp from "../../components/PopUp/PopUp";
 import Tabs from "../../components/Tabs/Tabs";
 import useAuth from "../../hooks/useAuth";
 import { ArrowRight } from "../../resources/icons";
-import { addNewBid } from "../../services/bidService";
+import { addNewBid, bidService } from "../../services/bidService";
 import { itemService } from "../../services/itemService";
 import { newBidValidationSchema } from "../../utils/formValidation";
 import { utils } from "../../utils/utils";
@@ -20,9 +22,19 @@ const ProductOverview = () => {
   const [notificationMsg, setNotificationMsg] = useState("");
   const [notificationClassName, setNotificatonClassName] = useState("");
   const [successfulBid, setSuccessfulBid] = useState(false);
+  const [isUserHighestBidder, setIsUserHighestBidder] = useState(false);
+  const [openPopUp, setOpenPopUp] = useState(false);
 
   const { id } = useParams();
   const { auth } = useAuth();
+
+  useEffect(() => {
+    if (Object.keys(auth).length !== 0) {
+      bidService
+        .isHighestBidder(id, auth?.user?.id)
+        .then((res) => setIsUserHighestBidder(res));
+    }
+  }, [auth, id]);
 
   useEffect(() => {
     setSuccessfulBid(false);
@@ -67,6 +79,11 @@ const ProductOverview = () => {
 
   return (
     <div className="overview-page">
+      {openPopUp && (
+        <PopUp closePopUp={setOpenPopUp}>
+          <Payment />
+        </PopUp>
+      )}
       <Breadcrumbs headline={item.name} />
       {notificationMsg && (
         <div
@@ -75,6 +92,7 @@ const ProductOverview = () => {
           {notificationMsg}
         </div>
       )}
+
       <div className="product-information">
         <Gallery id={id} className="content" />
         <div className="content">
@@ -123,6 +141,21 @@ const ProductOverview = () => {
               </Form>
             </Formik>
           )}
+          {auth?.user &&
+            auth?.user.id !== item.sellerId &&
+            hasEndDatePassed &&
+            isUserHighestBidder && (
+              <div className="pay-button">
+                <Button
+                  text="PAY"
+                  type="primary"
+                  className="btn-full-width"
+                  onClick={() => {
+                    setOpenPopUp(true);
+                  }}
+                />
+              </div>
+            )}
           <div className="tab">
             <Tabs labels={["Details"]} className="secondary">
               <div>{item.description}</div>

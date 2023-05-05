@@ -3,6 +3,7 @@ package com.internship.auctionapp.service;
 import com.internship.auctionapp.dto.ItemDto;
 import com.internship.auctionapp.entity.Item;
 import com.internship.auctionapp.request.ItemRequest;
+import com.internship.auctionapp.request.PaymentRequest;
 import com.internship.auctionapp.response.ItemResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -22,5 +23,6 @@ public interface ItemService {
     List<ItemDto> getSoldSellerItems(UUID sellerId);
     List<ItemDto> getBiddedOnItemsByUser(UUID bidderId);
     HttpStatus addNewItem(ItemRequest itemRequest, List<MultipartFile> file,  UUID id);
+    void buyItem (PaymentRequest paymentRequest);
 
 }

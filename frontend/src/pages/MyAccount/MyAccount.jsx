@@ -32,7 +32,7 @@ const MyAccount = () => {
     <div className="my-account">
       <Breadcrumbs headline={"My Account"} />
       {tab === "add-item" ? (
-        <AddItem></AddItem>
+        <AddItem />
       ) : (
         <div>
           <div className="add-item-button">

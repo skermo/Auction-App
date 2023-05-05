@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface BidService {
     ResponseEntity<BidDto> saveNewBid (BidDto bidDto);
+    boolean isHighestBidder (UUID itemId, UUID userId);
 }

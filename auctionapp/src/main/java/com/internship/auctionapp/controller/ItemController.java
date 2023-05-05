@@ -2,6 +2,7 @@ package com.internship.auctionapp.controller;
 
 import com.internship.auctionapp.dto.ItemDto;
 import com.internship.auctionapp.request.ItemRequest;
+import com.internship.auctionapp.request.PaymentRequest;
 import com.internship.auctionapp.response.ItemResponse;
 import com.internship.auctionapp.service.ItemService;
 import org.springframework.data.domain.Page;
@@ -88,6 +89,13 @@ public class ItemController {
     @PreAuthorize("#id == authentication.principal.id")
     public HttpStatus addNewItem(@PathVariable("id") UUID id, @RequestPart("document") ItemRequest document, @RequestPart("file") List<MultipartFile> file) {
         return itemService.addNewItem(document, file, id);
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAnyAuthority(T(com.internship.auctionapp.enums.UserRole).USER, " +
+            "T(com.internship.auctionapp.enums.UserRole).ADMIN)")
+    public void buyItem (@RequestBody PaymentRequest paymentRequest){
+
     }
 }
 

@@ -8,8 +8,10 @@ import com.internship.auctionapp.entity.Image;
 import com.internship.auctionapp.entity.Item;
 import com.internship.auctionapp.entity.User;
 import com.internship.auctionapp.exception.BadRequestException;
+import com.internship.auctionapp.exception.NotFoundException;
 import com.internship.auctionapp.repository.*;
 import com.internship.auctionapp.request.ItemRequest;
+import com.internship.auctionapp.request.PaymentRequest;
 import com.internship.auctionapp.response.ItemResponse;
 import com.internship.auctionapp.service.ItemService;
 import com.internship.auctionapp.util.StringComparison;
@@ -149,7 +151,7 @@ public class ItemServiceImpl implements ItemService {
 
         List<String> imageNames = uploadPhotos(id, item.getId(), files);
         List<Image> images = new ArrayList<>();
-        try{
+        try {
             for (String imageName : imageNames) {
                 Image image = new Image();
                 image.setUrl(imageName);
@@ -160,10 +162,15 @@ public class ItemServiceImpl implements ItemService {
 
             updateUserInfo(itemRequest, id);
             itemRepository.save(item);
-        }catch (BadRequestException exception){
+        } catch (BadRequestException exception) {
             throw new BadRequestException("Could not save item");
         }
         return HttpStatus.CREATED;
+    }
+
+    @Override
+    public void buyItem(PaymentRequest paymentRequest) {
+
     }
 
     private void updateUserInfo(ItemRequest itemRequest, UUID id) {
@@ -216,6 +223,15 @@ public class ItemServiceImpl implements ItemService {
             }
         }
         return imageNames;
+    }
+
+    private void checkPaymentRequestValidity(PaymentRequest paymentRequest) {
+        Item item = itemRepository
+                .findById(paymentRequest.getItemId())
+                .orElseThrow(() -> new NotFoundException("Item not found"));
+        User user = userRepository
+                .findById(paymentRequest.getUserId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     private void checkItemRequestValidity(ItemRequest itemRequest, UUID id) {
