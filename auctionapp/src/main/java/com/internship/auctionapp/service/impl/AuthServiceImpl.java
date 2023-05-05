@@ -1,7 +1,6 @@
 package com.internship.auctionapp.service.impl;
 
 import com.internship.auctionapp.aws.FileStore;
-import com.internship.auctionapp.aws.bucket.BucketName;
 import com.internship.auctionapp.dto.UserDto;
 import com.internship.auctionapp.entity.Role;
 import com.internship.auctionapp.entity.User;

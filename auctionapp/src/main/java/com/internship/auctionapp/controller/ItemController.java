@@ -84,11 +84,10 @@ public class ItemController {
         return itemService.getBiddedOnItemsByUser(id);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.POST,
-            consumes = {"multipart/form-data"})
+    @PostMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("#id == authentication.principal.id")
-    public HttpStatus addNewItem(@PathVariable("id") UUID id, @RequestPart("document") ItemRequest document, @RequestPart("file") List<MultipartFile> file) {
-        return itemService.addNewItem(document, file, id);
+    public ItemDto addNewItem(@PathVariable("id") UUID id, @RequestPart("item") ItemRequest item, @RequestPart("files") List<MultipartFile> files) {
+        return itemService.addNewItem(item, files, id);
     }
 
     @PostMapping

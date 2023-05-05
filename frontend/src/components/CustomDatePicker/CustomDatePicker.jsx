@@ -5,7 +5,7 @@ import { CalendarIcon } from "../../resources/icons";
 import "./custom-date-picker.scss";
 
 const CustomDatePicker = ({ field, form }) => {
-  const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
+  const CustomInput = forwardRef(({ value, onClick }, ref) => (
     <div className="custom-datepicker" onClick={onClick}>
       <div ref={ref} className="date-input item">
         {value}
@@ -20,7 +20,7 @@ const CustomDatePicker = ({ field, form }) => {
       onChange={(val) => {
         form.setFieldValue(field.name, val);
       }}
-      customInput={<ExampleCustomInput />}
+      customInput={<CustomInput />}
       showTimeSelect
       minDate={new Date()}
       minTime={

@@ -8,19 +8,19 @@ import CustomDatePicker from "../CustomDatePicker/CustomDatePicker";
 import FormContainer from "../FormContainer/FormContainer";
 import InputField from "../InputField/InputField";
 
-const StepTwo = (props) => {
+const StepTwo = ({ data, next, prev }) => {
   const navigate = useNavigate();
   const { auth } = useAuth();
 
   const handleSubmit = (values) => {
-    props.next(values);
+    next(values);
   };
 
   return (
     <FormContainer>
       <h3>SET PRICES</h3>
       <Formik
-        initialValues={props.data}
+        initialValues={data}
         onSubmit={handleSubmit}
         validationSchema={newItemStepTwoValidationSchema}
       >
@@ -76,7 +76,7 @@ const StepTwo = (props) => {
                   text="BACK"
                   type="secondary"
                   className="text-dark"
-                  onClick={() => props.prev(values)}
+                  onClick={() => prev(values)}
                 />
                 <Button model="submit" text="NEXT" type="primary" />
               </div>
