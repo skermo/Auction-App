@@ -33,5 +33,6 @@ public class UserDto {
     private String zip;
     private String country;
     private Set<Role> roles;
+    private String stripeUserId;
 
 }

@@ -5,6 +5,9 @@ import com.internship.auctionapp.entity.Item;
 import com.internship.auctionapp.request.ItemRequest;
 import com.internship.auctionapp.request.PaymentRequest;
 import com.internship.auctionapp.response.ItemResponse;
+import com.internship.auctionapp.response.PaymentResponse;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -22,7 +25,6 @@ public interface ItemService {
     List<ItemDto> getActiveSellerItems(UUID sellerId);
     List<ItemDto> getSoldSellerItems(UUID sellerId);
     List<ItemDto> getBiddedOnItemsByUser(UUID bidderId);
-    HttpStatus addNewItem(ItemRequest itemRequest, List<MultipartFile> file,  UUID id);
-    void buyItem (PaymentRequest paymentRequest);
+    ItemDto addNewItem(ItemRequest itemRequest, List<MultipartFile> files,  UUID id);
 
 }

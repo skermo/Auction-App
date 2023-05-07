@@ -26,8 +26,10 @@ const Table = ({ items, type }) => {
         </tr>
       </thead>
       <tbody>
-        {items.length > 0 ? (
-          items.map((value, key) => <TableRow item={value} key={value.id} />)
+        {items?.length > 0 ? (
+          items.map((value, key) => (
+            <TableRow item={value} key={value.id} type={type} />
+          ))
         ) : (
           <tr>
             <td className="start-selling" colSpan="7">

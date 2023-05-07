@@ -45,7 +45,7 @@ const AddItem = () => {
         });
         formData.append("item", blob);
         await itemService.addNewItem(auth.user.id, auth.accessToken, formData);
-        navigate(`/my-account/${auth.user.id}/seller`);
+        navigate(`/my-account/${auth.user.id}/seller`, { showToast: true });
       } catch (error) {
         if (!error?.response) {
           setErrMsg("No Server Response");

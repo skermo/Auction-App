@@ -29,4 +29,8 @@ public class BidController {
     public boolean isHighestBidder(@PathVariable("userId") UUID userId, @PathVariable("itemId") UUID itemId){
         return bidService.isHighestBidder(itemId, userId);
     }
+    @GetMapping("/{userId}/{itemId}")
+    public BidDto getBidByUserIdAndItemId(@PathVariable("userId") UUID userId, @PathVariable("itemId") UUID itemId){
+        return bidService.findBidByUserAndItem(userId, itemId);
+    }
 }

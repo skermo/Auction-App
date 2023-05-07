@@ -13,10 +13,6 @@ public class AuctionappApplication {
 	public ModelMapper modelMapper(){
 		return new ModelMapper();
 	}
-	@PostConstruct
-	public void setUp(){
-		Stripe.apiKey = "sk_test_51N3gQwJfjmrWeWPQYVP6EarH9NnTqLGO22fIHrWq1a1Pj5ekkql9y1uoZdq77OP9pfMjOC9pombEot7XfNh1RPM800PqMZS91b";
-	}
 	public static void main(String[] args) {
 		SpringApplication.run(AuctionappApplication.class, args);
 	}

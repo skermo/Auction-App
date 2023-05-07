@@ -67,4 +67,10 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bid> bids;
+
+    @Column(name = "stripe_user_id")
+    private String stripeUserId;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Card> card;
 }

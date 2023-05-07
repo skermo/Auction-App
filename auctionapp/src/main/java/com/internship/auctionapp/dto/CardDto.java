@@ -11,12 +11,8 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Shipment {
-    private UUID id;
-    private String address;
-    private String country;
-    private String city;
-    private int zip;
-    private String phoneNumber;
-    private UUID item_id;
+public class CardDto {
+    private String id;
+    private String cardFingerprint;
+    private UUID userId;
 }

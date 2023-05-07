@@ -14,6 +14,10 @@ spring:
       ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
 app:
   jwtSecret: ${jwt_secret}
   jwtExpiration: 604800000

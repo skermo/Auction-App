@@ -37,7 +37,15 @@ const HighlightedProduct = ({ item }) => {
         />
       </div>
       <div>
-        <img src={images[0]?.url} alt="item" />
+        <img
+          src={
+            "https://auction-app-atlantbh.s3.eu-central-1.amazonaws.com/" +
+            item.sellerId +
+            "/" +
+            images[0]?.url
+          }
+          alt="item"
+        />
       </div>
     </div>
   );

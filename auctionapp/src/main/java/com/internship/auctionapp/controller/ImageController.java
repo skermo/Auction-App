@@ -21,4 +21,5 @@ public class ImageController {
     public List<ImageDto> getImagesByItemId(@PathVariable(name = "itemId") UUID itemId) {
         return imageService.getImagesByItemId(itemId);
     }
+
 }

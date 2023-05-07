@@ -1,15 +1,15 @@
+import classNames from "classnames";
 import React, { useEffect } from "react";
-import Button from "../Button/Button";
 import "./pop-up.scss";
 
-const PopUp = ({ closePopUp, children }) => {
+const PopUp = ({ closePopUp, children, className }) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => (document.body.style.overflow = "unset");
   }, []);
 
   return (
-    <div className="modal">
+    <div className={classNames("modal", className)}>
       <div className="modalBackground">
         <div className="modalContainer">
           <div className="titleCloseBtn">
@@ -21,18 +21,7 @@ const PopUp = ({ closePopUp, children }) => {
               X
             </button>
           </div>
-          {children}
-          <div className="footer">
-            <Button
-              text="CANCEL"
-              type="tertiary"
-              className="text-dark padding-10"
-              onClick={() => {
-                closePopUp(false);
-              }}
-            />
-            <Button text="CONTINUE" type="primary" className="padding-10" />
-          </div>
+          <div className="body">{children}</div>
         </div>
       </div>
     </div>

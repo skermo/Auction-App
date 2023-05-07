@@ -21,13 +21,13 @@ public class ImageServiceImpl implements ImageService {
         this.mapper = mapper;
     }
 
+
     @Override
     public List<ImageDto> getImagesByItemId(UUID itemId) {
-        List<Image> images = imageRepository.findByItemId(itemId);
-        return images.stream()
+        return imageRepository.findByItemId(itemId)
+                .stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
-
     }
 
     private ImageDto mapToDto(Image image) {

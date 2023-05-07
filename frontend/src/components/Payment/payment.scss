@@ -1,0 +1,73 @@
+@import "src/styles/variables.scss";
+
+.payment {
+  .form-row {
+    text-align: left;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    span {
+      text-align: left;
+      display: block;
+      color: $red;
+      margin-bottom: 5px;
+    }
+    .jAHDKZ,
+    .cszLCl,
+    .ddPrgl,
+    .sc-gTRrQi {
+      justify-content: space-between;
+      background-color: $white;
+      height: 45px;
+      padding: 3%;
+      box-shadow: none;
+    }
+    .hEojBP {
+      text-align: left;
+      display: block;
+      color: $red;
+      margin-bottom: 5px;
+      font-size: inherit;
+    }
+    .jAHDKZ {
+      border: 1px solid $lightestGrey;
+      border-radius: 0%;
+    }
+    .cszLCl {
+      border: 2px solid $darkGrey;
+    }
+    .ddPrgl {
+      border: 2px solid $darkGrey;
+    }
+    .form-item {
+      width: 48%;
+      display: block;
+      label {
+        display: block;
+        font-weight: $Lato-Bold;
+      }
+      .form-card {
+        margin-bottom: 30px;
+        margin-top: 10px;
+        height: 45px;
+        width: 100%;
+        .sc-gTRrQi {
+          color: $darkGrey;
+          border-radius: 0%;
+          border: 1px solid $lightestGrey;
+          align-items: center;
+          input {
+            background-color: $white;
+          }
+          input::placeholder {
+            color: $lightGrey;
+            letter-spacing: 0.2px;
+          }
+        }
+      }
+    }
+    .full-width {
+      width: 100%;
+    }
+  }
+}

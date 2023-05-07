@@ -23,7 +23,10 @@ const ProductOverview = () => {
   const [notificationClassName, setNotificatonClassName] = useState("");
   const [successfulBid, setSuccessfulBid] = useState(false);
   const [isUserHighestBidder, setIsUserHighestBidder] = useState(false);
-  const [openPopUp, setOpenPopUp] = useState(false);
+  const [openPopUpPayment, setOpenPopUpPayment] = useState(false);
+  const [openPopUpBid, setOpenPopUpBid] = useState(false);
+  const [isBought, setIsBought] = useState(false);
+  const [formValues, setFormValues] = useState([]);
 
   const { id } = useParams();
   const { auth } = useAuth();
@@ -38,7 +41,12 @@ const ProductOverview = () => {
 
   useEffect(() => {
     setSuccessfulBid(false);
-    itemService.getItemById(id).then((res) => setItem(res));
+    itemService.getItemById(id).then((res) => {
+      setItem(res);
+      if (res.buyerId) {
+        setIsBought(true);
+      }
+    });
   }, [id, successfulBid]);
 
   const price = utils.parseNum(item.startPrice);
@@ -47,7 +55,7 @@ const ProductOverview = () => {
   const newBid = utils.addFloats(highestBid, 1);
   const hasEndDatePassed = utils.hasDatePassed(item.endDate);
 
-  const handleSubmit = async (value) => {
+  const submitBid = async (value) => {
     try {
       const bid = {
         userId: auth?.user.id,
@@ -56,7 +64,7 @@ const ProductOverview = () => {
       };
       await addNewBid(bid, auth?.accessToken);
       if (value.amount > highestBid) {
-        setNotificationMsg("Congrats! You are the highest bidder!");
+        setNotificationMsg("You are the highest bidder!");
         setNotificatonClassName("valid-amount");
         setSuccessfulBid(true);
       }
@@ -66,9 +74,7 @@ const ProductOverview = () => {
         setNotificationMsg("No Server Response");
       } else if (error.response?.status === 400) {
         if (value.amount <= highestBid) {
-          setNotificationMsg(
-            "There are higher bids than yours. You could give it a second try!"
-          );
+          setNotificationMsg("There are higher bids than yours.");
           setNotificatonClassName("invalid-amount");
         }
       } else {
@@ -77,11 +83,41 @@ const ProductOverview = () => {
     }
   };
 
+  const handleSubmit = async (value) => {
+    setOpenPopUpBid(true);
+    setFormValues(value);
+  };
+
   return (
     <div className="overview-page">
-      {openPopUp && (
-        <PopUp closePopUp={setOpenPopUp}>
-          <Payment />
+      {openPopUpPayment && (
+        <PopUp closePopUp={setOpenPopUpPayment} className="payment-modal">
+          <Payment item={item} isBought={setIsBought} />
+        </PopUp>
+      )}
+      {openPopUpBid && (
+        <PopUp closePopUp={setOpenPopUpBid} className="are-you-sure">
+          <h3 className="title">Are you sure?</h3>
+          <div>
+            <div className="property">You're about to bid on: </div>
+            <div className="value">{item.name}</div>
+            <div className="footer">
+              <Button
+                text="CANCEL"
+                type="tertiary"
+                className="text-dark"
+                onClick={() => setOpenPopUpBid(false)}
+              />
+              <Button
+                text="CONTINUE"
+                type="primary"
+                onClick={() => {
+                  setOpenPopUpBid(false);
+                  submitBid(formValues);
+                }}
+              />
+            </div>
+          </div>
         </PopUp>
       )}
       <Breadcrumbs headline={item.name} />
@@ -94,7 +130,7 @@ const ProductOverview = () => {
       )}
 
       <div className="product-information">
-        <Gallery id={id} className="content" />
+        <Gallery id={id} sellerId={item.sellerId} className="content" />
         <div className="content">
           <h1>{item.name}</h1>
           <p className="starts-from">
@@ -107,10 +143,16 @@ const ProductOverview = () => {
             <p>
               Number of bids: <span>{item.noBids}</span>
             </p>
-            <p>
-              Time left:
-              <span> {timeLeft}</span>
-            </p>
+            {hasEndDatePassed ? (
+              <p>
+                Auction: <span>finished</span>
+              </p>
+            ) : (
+              <p>
+                Time left:
+                <span> {timeLeft}</span>
+              </p>
+            )}
           </div>
           {auth?.user && auth?.user.id !== item.sellerId && !hasEndDatePassed && (
             <Formik
@@ -118,7 +160,10 @@ const ProductOverview = () => {
               initialValues={{
                 amount: "",
               }}
-              onSubmit={handleSubmit}
+              onSubmit={(values, { resetForm }) => {
+                handleSubmit(values);
+                resetForm();
+              }}
             >
               <Form>
                 <div className="input-fields">
@@ -146,14 +191,23 @@ const ProductOverview = () => {
             hasEndDatePassed &&
             isUserHighestBidder && (
               <div className="pay-button">
-                <Button
-                  text="PAY"
-                  type="primary"
-                  className="btn-full-width"
-                  onClick={() => {
-                    setOpenPopUp(true);
-                  }}
-                />
+                {isBought ? (
+                  <Button
+                    text="BOUGHT"
+                    type="disabled"
+                    className="btn-full-width"
+                    disabled
+                  />
+                ) : (
+                  <Button
+                    text="PAY"
+                    type="primary"
+                    className="btn-full-width"
+                    onClick={() => {
+                      setOpenPopUpPayment(true);
+                    }}
+                  />
+                )}
               </div>
             )}
           <div className="tab">

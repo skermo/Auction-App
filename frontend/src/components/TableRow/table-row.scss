@@ -3,6 +3,7 @@
 .table-row {
   font-weight: $Lato-Bold;
   padding: 100px 0;
+  cursor: pointer;
   td {
     padding: 25px 25px 25px 0;
   }
@@ -22,12 +23,10 @@
   .width-12 {
     width: 12%;
   }
-  .item-id {
-    color: $purple;
-    font-weight: 400;
-    margin-top: 8px;
-  }
   .highest-bid {
     color: $blue;
   }
+}
+.table-row:hover {
+  background-color: $lightestGrey;
 }

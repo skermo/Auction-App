@@ -13,8 +13,12 @@ import com.internship.auctionapp.repository.*;
 import com.internship.auctionapp.request.ItemRequest;
 import com.internship.auctionapp.request.PaymentRequest;
 import com.internship.auctionapp.response.ItemResponse;
+import com.internship.auctionapp.response.PaymentResponse;
 import com.internship.auctionapp.service.ItemService;
+import com.internship.auctionapp.service.PaymentService;
 import com.internship.auctionapp.util.StringComparison;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.entity.ContentType;
 import org.modelmapper.ModelMapper;
@@ -24,7 +28,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,10 +46,12 @@ public class ItemServiceImpl implements ItemService {
     private final SubcategoryRepository subcategoryRepository;
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
+    private final ShipmentRepository shipmentRepository;
+    private final PaymentService paymentService;
     private final ModelMapper mapper;
     private final FileStore fileStore;
 
-    public ItemServiceImpl(ItemRepository itemRepository, ModelMapper mapper, BidRepository bidRepository, CategoryRepository categoryRepository, SubcategoryRepository subcategoryRepository, UserRepository userRepository, ImageRepository imageRepository, FileStore fileStore) {
+    public ItemServiceImpl(ItemRepository itemRepository, ModelMapper mapper, BidRepository bidRepository, CategoryRepository categoryRepository, SubcategoryRepository subcategoryRepository, UserRepository userRepository, ImageRepository imageRepository, ShipmentRepository shipmentRepository, PaymentService paymentService, FileStore fileStore) {
         this.itemRepository = itemRepository;
         this.mapper = mapper;
         this.bidRepository = bidRepository;
@@ -54,6 +59,8 @@ public class ItemServiceImpl implements ItemService {
         this.subcategoryRepository = subcategoryRepository;
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
+        this.shipmentRepository = shipmentRepository;
+        this.paymentService = paymentService;
         this.fileStore = fileStore;
     }
 
@@ -248,14 +255,6 @@ public class ItemServiceImpl implements ItemService {
         if (!userRepository.existsById(id)) {
             throw new BadRequestException("User doesn't exist");
         }
-    }
-        private void checkPaymentRequestValidity(PaymentRequest paymentRequest) {
-        Item item = itemRepository
-                .findById(paymentRequest.getItemId())
-                .orElseThrow(() -> new NotFoundException("Item not found"));
-        User user = userRepository
-                .findById(paymentRequest.getUserId())
-                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     private ItemDto mapToDto(Item item) {

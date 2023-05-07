@@ -22,7 +22,15 @@ const GridItem = ({ item, className }) => {
   return (
     <div className={classNames("grid-item", className)}>
       <div className={classNames("image-container", className)}>
-        <img src={images[0]?.url} alt="item" />
+        <img
+          src={
+            "https://auction-app-atlantbh.s3.eu-central-1.amazonaws.com/" +
+            item.sellerId +
+            "/" +
+            images[0]?.url
+          }
+          alt="item"
+        />
         <div className="overlay" onClick={onClick}></div>
       </div>
       <h4>{item.name}</h4>

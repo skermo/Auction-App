@@ -44,17 +44,46 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.7rem;
-      text-align: center;
       margin: 0 20px;
     }
-    .footer {
-      flex: 20%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: white;
-      margin: 0 20px;
+  }
+}
+.payment-modal {
+  .modalContainer {
+    min-height: 600px;
+    height: auto;
+  }
+}
+
+.are-you-sure {
+  .modalContainer {
+    height: 350px;
+    .body {
+      display: block;
+      .title {
+        font-size: 24px;
+        background-color: $white;
+        padding: 1em 0;
+        margin: 0 0 1em;
+        width: 100%;
+      }
+      .property {
+        margin-bottom: 10px;
+        font-size: 18px;
+      }
+      .value {
+        color: $purple;
+        font-size: 18px;
+        font-weight: $Lato-Bold;
+      }
+      .footer {
+        margin: 20px 0;
+        display: flex;
+        background-color: white;
+        align-items: center;
+        justify-content: space-between;
+        height: auto;
+      }
     }
   }
 }

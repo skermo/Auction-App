@@ -112,3 +112,27 @@ export const newItemStepThreeValidationSchema = yup.object().shape({
     .min(5, "Invalid phone number")
     .max(20, "Invalid phone number"),
 });
+
+export const shippingAndPaymentValidationSchema = yup.object().shape({
+  cardHolderName: yup
+    .string()
+    .required("Card Holder Name is required")
+    .min(2, "Card Holder Name must have at least 2 characters")
+    .max(50, "Card Holder Name can't be longer than 50 characters"),
+  address: yup
+    .string()
+    .required("Address is required")
+    .min(2, "Address must have at least 2 characters")
+    .max(50, "Address can't be longer than 50 characters"),
+  city: yup
+    .string()
+    .required("City is required")
+    .min(2, "City must have at least 2 characters")
+    .max(50, "City can't be longer than 50 characters"),
+  zip: yup
+    .string()
+    .required("Zip is required")
+    .min(5, "Zip must have 5 numbers")
+    .max(5, "Zip must have 5 numbers"),
+  country: yup.string().required("Country is required"),
+});

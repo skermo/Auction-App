@@ -2,10 +2,7 @@ package com.internship.auctionapp.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -32,11 +29,7 @@ public class Shipment {
     private String city;
 
     @NotNull
-    private int zip;
-
-    @NotNull
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    private String zip;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "item_id")

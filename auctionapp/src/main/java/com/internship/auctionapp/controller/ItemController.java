@@ -4,9 +4,11 @@ import com.internship.auctionapp.dto.ItemDto;
 import com.internship.auctionapp.request.ItemRequest;
 import com.internship.auctionapp.request.PaymentRequest;
 import com.internship.auctionapp.response.ItemResponse;
+import com.internship.auctionapp.response.PaymentResponse;
 import com.internship.auctionapp.service.ItemService;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -90,11 +92,5 @@ public class ItemController {
         return itemService.addNewItem(item, files, id);
     }
 
-    @PostMapping
-    @PreAuthorize("hasAnyAuthority(T(com.internship.auctionapp.enums.UserRole).USER, " +
-            "T(com.internship.auctionapp.enums.UserRole).ADMIN)")
-    public void buyItem (@RequestBody PaymentRequest paymentRequest){
-
-    }
 }
 

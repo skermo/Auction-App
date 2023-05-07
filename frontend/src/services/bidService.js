@@ -16,6 +16,12 @@ async function isHighestBidder(itemId, userId) {
   return result.data || [];
 }
 
+async function getBidByUserAndItem(itemId, userId) {
+  const result = await axios.get(`${BASE_URL}/bids/${userId}/${itemId}`);
+  return result.data || [];
+}
+
 export const bidService = {
   isHighestBidder,
+  getBidByUserAndItem,
 };

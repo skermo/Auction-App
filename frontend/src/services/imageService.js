@@ -6,6 +6,12 @@ async function getImagesByItemId(itemId) {
   return result.data || [];
 }
 
+async function getImageByImageId(imageId) {
+  const result = await axios.get(`${BASE_URL}/images/${imageId}`);
+  return result.data || [];
+}
+
 export const imageService = {
   getImagesByItemId,
+  getImageByImageId,
 };

@@ -50,7 +50,13 @@ public class BidServiceImpl implements BidService {
     @Override
     public boolean isHighestBidder(UUID itemId, UUID userId) {
         Bid bid = bidRepository.findBiggestBidByItemId(itemId);
-        return bid.getUser().getId().equals(userId);
+        if(bid != null) return bid.getUser().getId().equals(userId);
+        return false;
+    }
+
+    @Override
+    public BidDto findBidByUserAndItem(UUID userId, UUID itemId) {
+        return mapToDto(bidRepository.findByUserIdAndItemId(userId, itemId));
     }
 
     private BidDto mapToDto(Bid bid) {
