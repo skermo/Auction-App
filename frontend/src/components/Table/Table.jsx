@@ -42,7 +42,7 @@ const Table = ({ items, type }) => {
                     <p>You have not sold any items.</p>
                   ) : (
                     <p>You have not placed any bids</p>
-                  )}{" "}
+                  )}
                 </>
               )}
               <div>

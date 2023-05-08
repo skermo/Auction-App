@@ -2,6 +2,9 @@ import axios from "axios";
 
 export const BASE_URL = "http://localhost:8080/api";
 
+export const BASE_S3_URL =
+  "https://auction-app-atlantbh.s3.eu-central-1.amazonaws.com";
+
 const headerConfig = (token, contentType = false) => {
   if (token && contentType) {
     return {

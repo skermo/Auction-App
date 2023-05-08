@@ -4,6 +4,7 @@ import { PaymentInputsWrapper, usePaymentInputs } from "react-payment-inputs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuth from "../../hooks/useAuth";
+import { paymentService } from "../../services/paymentService";
 import { COUNTRY_LIST } from "../../utils/countryList";
 import { shippingAndPaymentValidationSchema } from "../../utils/formValidation";
 import Button from "../Button/Button";
@@ -28,7 +29,7 @@ const Payment = ({ item, isBought }) => {
       data.userId = auth.user.id;
       data.itemId = item.id;
       data.amount = item.highestBid;
-      //await paymentService.payForItem(auth.accessToken, data);
+      await paymentService.payForItem(auth.accessToken, data);
       toast.success("Payment successful!", {
         position: "top-center",
         autoClose: 5000,

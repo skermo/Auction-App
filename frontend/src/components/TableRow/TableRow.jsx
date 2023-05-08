@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BASE_S3_URL } from "../../config";
 import useAuth from "../../hooks/useAuth";
 import { bidService } from "../../services/bidService";
 import { imageService } from "../../services/imageService";
@@ -38,12 +39,7 @@ const TableRow = ({ item, type }) => {
     >
       <td className="width-10">
         <img
-          src={
-            "https://auction-app-atlantbh.s3.eu-central-1.amazonaws.com/" +
-            item.sellerId +
-            "/" +
-            images[0]?.url
-          }
+          src={`${BASE_S3_URL}/${item.sellerId}/${images[0]?.url}`}
           alt="item"
         />
       </td>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BASE_S3_URL } from "../../config";
 import { ArrowRight } from "../../resources/icons";
 import { imageService } from "../../services/imageService";
 import { utils } from "../../utils/utils";
@@ -38,12 +39,7 @@ const HighlightedProduct = ({ item }) => {
       </div>
       <div>
         <img
-          src={
-            "https://auction-app-atlantbh.s3.eu-central-1.amazonaws.com/" +
-            item.sellerId +
-            "/" +
-            images[0]?.url
-          }
+          src={`${BASE_S3_URL}/${item.sellerId}/${images[0]?.url}`}
           alt="item"
         />
       </div>
