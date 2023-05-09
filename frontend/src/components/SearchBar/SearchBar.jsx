@@ -13,10 +13,17 @@ const SearchBar = () => {
 
   const name = searchParams.get("name") || "";
   const category = searchParams.get("category") || "";
+  const sortBy = searchParams.get("sortBy") || "";
+  const sortDir = searchParams.get("sortDir") || "";
 
   const [searchTerm, setSearchTerm] = useState(name);
 
-  const params = { name: searchTerm, category: category };
+  const params = {
+    name: searchTerm,
+    category: category,
+    sortBy: sortBy,
+    sortDir: sortDir,
+  };
   const navigate = useNavigate();
 
   const handleChange = (event) => {

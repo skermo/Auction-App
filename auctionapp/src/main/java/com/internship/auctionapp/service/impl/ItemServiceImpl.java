@@ -102,8 +102,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemResponse searchItems(String name, String category, int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+    public ItemResponse searchItems(String name, String category, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Item> items = itemRepository.searchItems(name, category, pageable);
         String didYouMean = "";
         if (items.isEmpty() && !StringUtils.isEmpty(name)) {

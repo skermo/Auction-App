@@ -44,16 +44,22 @@
         padding-bottom: 15px;
       }
     }
-    .products {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-start;
-      padding-left: 7em;
-      .button {
-        margin: auto;
-        padding-bottom: 30px;
-        display: inline-block;
+    .sort-products {
+      .sort {
+        margin-left: calc(250px + 7em);
+        margin-bottom: 50px;
+      }
+      .products {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-start;
+        padding-left: 7em;
+        .button {
+          margin: auto;
+          padding-bottom: 30px;
+          display: inline-block;
+        }
       }
     }
   }

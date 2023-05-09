@@ -25,9 +25,9 @@ async function getItemById(id) {
   return result.data || [];
 }
 
-async function getSearchedItems(name, category, pageNo) {
+async function getSearchedItems(name, category, pageNo, sortBy, sortDir) {
   const result = await axios.get(
-    `${BASE_URL}/items/search?name=${name}&category=${category}&pageNo=${pageNo}&pageSize=3`
+    `${BASE_URL}/items/search?name=${name}&category=${category}&pageNo=${pageNo}&pageSize=3&sortBy=${sortBy}&sortDir=${sortDir}`
   );
   return result.data || [];
 }

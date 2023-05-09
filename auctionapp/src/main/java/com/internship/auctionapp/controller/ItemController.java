@@ -63,8 +63,10 @@ public class ItemController {
             @RequestParam("name") String name,
             @RequestParam("category") String category,
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "2", required = false) int pageSize) {
-        return itemService.searchItems(name, category, pageNo, pageSize);
+            @RequestParam(value = "pageSize", defaultValue = "2", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "name", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
+        return itemService.searchItems(name, category, pageNo, pageSize, sortBy, sortDir);
     }
 
 

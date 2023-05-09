@@ -1,4 +1,8 @@
 export const customStyle1 = {
+  container: () => ({
+    position: "static",
+    boxSizing: "border-box",
+  }),
   control: (base, state) => ({
     ...base,
     width: "262px",

@@ -21,7 +21,7 @@ public interface ItemService {
     ItemDto getFirstAvailableItem();
     Page<ItemDto> getAllAvailableItems(int pageNo, int pageSize, String sortBy, String sortDir);
     ItemDto getItemById (UUID id);
-    ItemResponse searchItems (String name, String category, int pageNo, int pageSize);
+    ItemResponse searchItems (String name, String category, int pageNo, int pageSize, String sortBy, String sortDir);
     List<ItemDto> getActiveSellerItems(UUID sellerId);
     List<ItemDto> getSoldSellerItems(UUID sellerId);
     List<ItemDto> getBiddedOnItemsByUser(UUID bidderId);
