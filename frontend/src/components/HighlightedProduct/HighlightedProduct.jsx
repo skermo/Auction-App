@@ -19,7 +19,7 @@ const HighlightedProduct = ({ item }) => {
   const price = utils.parseNum(item.startPrice);
 
   useEffect(() => {
-    if (item.id != null) {
+    if (item.id) {
       imageService.getImagesByItemId(item.id).then((res) => setImages(res));
     }
   }, [item]);
@@ -38,10 +38,12 @@ const HighlightedProduct = ({ item }) => {
         />
       </div>
       <div>
-        <img
-          src={`${BASE_S3_URL}/${item.sellerId}/${images[0]?.url}`}
-          alt="item"
-        />
+        {item.sellerId && (
+          <img
+            src={`${BASE_S3_URL}/${item.sellerId}/${images[0]?.url}`}
+            alt="item"
+          />
+        )}
       </div>
     </div>
   );

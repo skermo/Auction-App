@@ -2,7 +2,6 @@
 
 .grid-item {
   display: inline-block;
-  width: 262px;
   letter-spacing: 0.84px;
   text-align: left;
   align-self: start;
@@ -62,4 +61,15 @@
 
 .portrait {
   flex-basis: 33.3333333%;
+}
+
+.recommendation {
+  .image-container {
+    width: 350px;
+    height: 400px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }

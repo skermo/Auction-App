@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -181,6 +182,65 @@ public class ItemServiceImpl implements ItemService {
             throw new BadRequestException("Could not save item");
         }
         return mapToDto(item);
+    }
+
+    @Override
+    public List<ItemDto> getRecommendedItems(UUID userId) {
+        List<Item> interestedIn = itemRepository.findItemsUserIsInterestedIn(userId);
+
+        if(interestedIn.size() == 0){
+            return null;
+        }
+
+        Map<UUID, Integer> recommendedCategories = new HashMap<>();
+        List<Double> listOfPrices = new ArrayList<>();
+        for (Item item : interestedIn) {
+            if (!recommendedCategories.containsKey(item.getCategory().getId())) {
+                recommendedCategories
+                        .put(item.getCategory().getId(), 1);
+            }else{
+                recommendedCategories
+                        .computeIfPresent(item.getCategory().getId(), (k, v) -> v + 1);
+            }
+            listOfPrices.add(item.getStartPrice());
+        }
+
+        Map<UUID, Integer> sortedCategories =
+                recommendedCategories.entrySet().stream()
+                        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+        List<Item> finalItems = new ArrayList<>();
+
+        for(UUID id: sortedCategories.keySet()){
+            List<Item> itemsByCategory = itemRepository.findRecommendedItemsByCategory(userId, id);
+            finalItems.addAll(itemsByCategory);
+            if(finalItems.size() >= 3){
+                return finalItems.stream()
+                        .limit(3)
+                        .map(this::mapToDto)
+                        .collect(Collectors.toList());
+            }
+
+        }
+        double avgPrice = 0;
+        double sum = 0;
+        for (Double listOfPrice : listOfPrices) {
+            sum = sum + listOfPrice;
+        }
+        avgPrice = sum / listOfPrices.size();
+
+        List<Item> recommendedPrices = itemRepository.findRecommendedItemsByPrice(userId, avgPrice);
+        finalItems.addAll(recommendedPrices);
+
+        if(finalItems.size() >= 3){
+            return finalItems.stream()
+                    .limit(3)
+                    .map(this::mapToDto)
+                    .collect(Collectors.toList());
+        }
+
+        return null;
     }
 
     private void updateUserInfo(ItemRequest itemRequest, UUID id) {

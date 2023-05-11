@@ -94,5 +94,11 @@ public class ItemController {
         return itemService.addNewItem(item, files, id);
     }
 
+    @GetMapping("/recommendations/{id}")
+    @PreAuthorize("#id == authentication.principal.id")
+    public List<ItemDto> getRecommendedItems(@PathVariable("id") UUID id){
+        return itemService.getRecommendedItems(id);
+    }
+
 }
 

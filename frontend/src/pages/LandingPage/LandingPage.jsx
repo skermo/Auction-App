@@ -5,6 +5,7 @@ import GridItem from "../../components/GridItem/GridItem";
 import HighlightedProduct from "../../components/HighlightedProduct/HighlightedProduct";
 import Loader from "../../components/Loader/Loader";
 import Tabs from "../../components/Tabs/Tabs";
+import useAuth from "../../hooks/useAuth";
 import { SHOP } from "../../routes/routes";
 import { categoryService } from "../../services/categoryService";
 import { itemService } from "../../services/itemService";
@@ -19,15 +20,22 @@ const LandingPage = () => {
   const [pageLastChance, setPageLastChance] = useState(0);
   const [lastPageNewArrivals, setLastPageNewArrivals] = useState(false);
   const [lastPageLastChance, setLastPageLastChance] = useState(false);
+  const [recommendedItems, setRecommendedItems] = useState([]);
+
+  const navigate = useNavigate();
+  const { auth } = useAuth();
 
   useEffect(() => {
     categoryService.getAllCategories().then((res) => setCategories(res));
     itemService.getFirstItem().then((res) => setItem(res));
+    if (Object.keys(auth).length !== 0) {
+      itemService
+        .getRecommendedItems(auth?.user?.id, auth?.accessToken)
+        .then((res) => setRecommendedItems(res));
+    }
     fetchNewArrivalsData();
     fetchLastChanceData();
-  }, []);
-
-  const navigate = useNavigate();
+  }, [auth]);
 
   const fetchNewArrivalsData = () => {
     itemService.getNewArrivals(pageNewArrivals).then((res) => {
@@ -65,6 +73,20 @@ const LandingPage = () => {
         </ul>
         {item && <HighlightedProduct item={item} />}
       </div>
+      {recommendedItems.length > 0 && (
+        <div className="recommendations">
+          <div className="recommended-text">Recommended Products</div>
+          <div className="recommended-items">
+            {recommendedItems.map((value, key) => (
+              <GridItem
+                item={value}
+                key={value.id}
+                className="recommendation"
+              />
+            ))}
+          </div>
+        </div>
+      )}
       <div>
         <Tabs labels={["New Arrivals", "Last Chance"]}>
           <div>

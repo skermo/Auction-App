@@ -57,6 +57,13 @@ async function addNewItem(sellerId, token, data) {
     });
 }
 
+async function getRecommendedItems(userId, token) {
+  const result = await ApiRequest(token).get(
+    `/items/recommendations/${userId}`
+  );
+  return result.data || [];
+}
+
 export const itemService = {
   getFirstItem,
   getNewArrivals,
@@ -67,4 +74,5 @@ export const itemService = {
   getSoldItemsBySellerId,
   getBiddedOnItemsBySellerId,
   addNewItem,
+  getRecommendedItems,
 };

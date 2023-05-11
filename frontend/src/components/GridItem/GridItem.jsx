@@ -17,16 +17,20 @@ const GridItem = ({ item, className }) => {
   };
 
   useEffect(() => {
-    imageService.getImagesByItemId(item.id).then((res) => setImages(res));
+    if (item) {
+      imageService.getImagesByItemId(item.id).then((res) => setImages(res));
+    }
   }, [item]);
 
   return (
     <div className={classNames("grid-item", className)}>
       <div className={classNames("image-container", className)}>
-        <img
-          src={`${BASE_S3_URL}/${item.sellerId}/${images[0]?.url}`}
-          alt="item"
-        />
+        {item && (
+          <img
+            src={`${BASE_S3_URL}/${item.sellerId}/${images[0]?.url}`}
+            alt="item"
+          />
+        )}
         <div className="overlay" onClick={onClick}></div>
       </div>
       <h4>{item.name}</h4>
