@@ -23,33 +23,37 @@ const Shop = () => {
   let sortBy = searchParams.get("sortBy");
   let sortDir = searchParams.get("sortDir");
 
-  let sortValue;
-
-  switch (sortBy) {
-    case "startDate":
-      sortValue = "new";
-      break;
-    case "endDate":
-      sortValue = "old";
-      break;
-    case "startPrice":
-      if (sortDir === "asc") {
-        sortValue = "low";
-      } else {
-        sortValue = "high";
-      }
-      break;
-    default:
-      sortValue = "default";
-      break;
-  }
-
   const sortOptions = [
-    { value: "default", label: "Default Sorting" },
-    { value: "new", label: "Time left: New to Old" },
-    { value: "old", label: "Time left: Old to New" },
-    { value: "low", label: "Price: Low to High" },
-    { value: "high", label: "Price: High to Low" },
+    {
+      value: "default",
+      label: "Default Sorting",
+      sortBy: "name",
+      sortDir: "asc",
+    },
+    {
+      value: "new",
+      label: "Time left: New to Old",
+      sortBy: "startDate",
+      sortDir: "desc",
+    },
+    {
+      value: "old",
+      label: "Time left: Old to New",
+      sortBy: "endDate",
+      sortDir: "desc",
+    },
+    {
+      value: "low",
+      label: "Price: Low to High",
+      sortBy: "startPrice",
+      sortDir: "asc",
+    },
+    {
+      value: "high",
+      label: "Price: High to Low",
+      sortBy: "startPrice",
+      sortDir: "desc",
+    },
   ];
 
   const [items, setItems] = useState([]);
@@ -97,53 +101,6 @@ const Shop = () => {
       });
     }
     setPage(1);
-  };
-
-  const sortItems = (sortBy) => {
-    if (Array.isArray(sortOptions) && sortOptions) {
-      switch (sortBy) {
-        case "old":
-          setSearchParams({
-            name: name,
-            category: category,
-            sortBy: "endDate",
-            sortDir: "desc",
-          });
-          break;
-        case "new":
-          setSearchParams({
-            name: name,
-            category: category,
-            sortBy: "startDate",
-            sortDir: "desc",
-          });
-          break;
-        case "low":
-          setSearchParams({
-            name: name,
-            category: category,
-            sortBy: "startPrice",
-            sortDir: "asc",
-          });
-          break;
-        case "high":
-          setSearchParams({
-            name: name,
-            category: category,
-            sortBy: "startPrice",
-            sortDir: "desc",
-          });
-          break;
-        default:
-          setSearchParams({
-            name: name,
-            category: category,
-            sortBy: "name",
-            sortDir: "asc",
-          });
-          break;
-      }
-    }
   };
 
   const fetchData = () => {
@@ -226,7 +183,10 @@ const Shop = () => {
               <Select
                 value={
                   Array.isArray(sortOptions) && sortOptions
-                    ? sortOptions.find((option) => option.value === sortValue)
+                    ? sortOptions.find(
+                        (option) =>
+                          option.sortBy === sortBy && option.sortDir === sortDir
+                      )
                     : ""
                 }
                 options={sortOptions}
@@ -236,7 +196,12 @@ const Shop = () => {
                   IndicatorSeparator: () => null,
                 }}
                 onChange={(option) => {
-                  sortItems(option.value);
+                  setSearchParams({
+                    name: name,
+                    category: category,
+                    sortBy: option.sortBy,
+                    sortDir: option.sortDir,
+                  });
                 }}
               />
             </div>

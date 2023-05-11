@@ -24,7 +24,7 @@ const BottomNavbar = ({ hideSearch }) => {
               <li onClick={() => navigate("/")}>HOME</li>
               <li
                 onClick={() =>
-                  navigate("/shop?name=&category=&sortBy=&sortDir=")
+                  navigate("/shop?name=&category=&sortBy=name&sortDir=asc")
                 }
               >
                 SHOP
