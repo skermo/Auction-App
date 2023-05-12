@@ -23,7 +23,10 @@ public class UserDto {
 
     private UUID id;
     private String email;
+
+    @JsonIgnore
     private String password;
+
     private String firstName;
     private String lastName;
     private String profilePhotoUrl;

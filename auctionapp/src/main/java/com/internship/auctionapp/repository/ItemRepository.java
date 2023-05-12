@@ -43,6 +43,7 @@ public interface ItemRepository extends JpaRepository<Item, UUID> {
             "i.seller.id != :userId AND i.category.id = :categoryId AND " +
             "i.id NOT IN (SELECT b.item.id FROM Bid b WHERE b.user.id = :userId) ")
     List<Item> findRecommendedItemsByCategory(UUID userId, UUID categoryId);
+
     @Query("SELECT i FROM Item i " +
             "WHERE i.endDate >= NOW() AND i.startDate <= NOW() AND " +
             "i.seller.id != :userId AND (i.startPrice BETWEEN :price - 50 AND :price + 50) AND " +
