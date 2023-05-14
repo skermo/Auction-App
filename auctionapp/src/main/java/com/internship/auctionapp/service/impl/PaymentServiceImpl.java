@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,15 +82,15 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
-    private void updateUserAddress(User user, PaymentRequest paymentRequest){
+    private void updateUserAddress(User user, PaymentRequest paymentRequest) {
         user.setAddress(paymentRequest.getAddress());
         user.setCity(paymentRequest.getCity());
         user.setZip(paymentRequest.getZip());
         user.setCountry(paymentRequest.getCountry());
-        try{
+        try {
             userRepository.save(user);
             LOGGER.info("User address updated!");
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             LOGGER.error("Unable to update address of user " + user.getId());
             throw new ConflictException("Unable to update user address");
         }
@@ -149,15 +149,15 @@ public class PaymentServiceImpl implements PaymentService {
         userRepository
                 .findById(paymentRequest.getUserId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
-        if (paymentRequest.getExpirationYear() < LocalDateTime.now().getYear()
-                || (paymentRequest.getExpirationYear() == LocalDateTime.now().getYear()
-                && paymentRequest.getExpirationMonth() <= LocalDateTime.now().getMonthValue())) {
+        if (paymentRequest.getExpirationYear() < ZonedDateTime.now().getYear()
+                || (paymentRequest.getExpirationYear() == ZonedDateTime.now().getYear()
+                && paymentRequest.getExpirationMonth() <= ZonedDateTime.now().getMonthValue())) {
             throw new BadRequestException("Card has expired");
         }
         if (shipmentRepository.existsByItemId(paymentRequest.getItemId())) {
             throw new BadRequestException("Item is already sold");
         }
-        if (item.getEndDate().isAfter(LocalDateTime.now())) {
+        if (item.getEndDate().isAfter(ZonedDateTime.now())) {
             throw new BadRequestException("Auction is still live");
         }
         Bid bid = bidRepository.findBiggestBidByItemId(paymentRequest.getItemId());

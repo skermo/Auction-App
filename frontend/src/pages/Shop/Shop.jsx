@@ -7,7 +7,7 @@ import {
 import Select from "react-select";
 import Button from "../../components/Button/Button";
 import Checkbox from "../../components/Checkbox/Checkbox";
-import { customStyle1 } from "../../components/CustomSelect/selectStyles";
+import { customStyle4 } from "../../components/CustomSelect/selectStyles";
 import GridItem from "../../components/GridItem/GridItem";
 import { SHOP } from "../../routes/routes";
 import { categoryService } from "../../services/categoryService";
@@ -190,7 +190,7 @@ const Shop = () => {
                     : ""
                 }
                 options={sortOptions}
-                styles={customStyle1}
+                styles={customStyle4}
                 menuPosition="fixed"
                 components={{
                   IndicatorSeparator: () => null,

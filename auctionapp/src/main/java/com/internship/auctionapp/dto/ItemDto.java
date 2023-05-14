@@ -1,8 +1,11 @@
 package com.internship.auctionapp.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Setter
@@ -13,8 +16,8 @@ public class ItemDto {
     private UUID id;
     private String name;
     private double startPrice;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private ZonedDateTime startDate;
+    private ZonedDateTime endDate;
     private String description;
     private double highestBid;
     private int noBids;

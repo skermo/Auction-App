@@ -12,8 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Service
@@ -50,7 +49,7 @@ public class BidServiceImpl implements BidService {
     @Override
     public boolean isHighestBidder(UUID itemId, UUID userId) {
         Bid bid = bidRepository.findBiggestBidByItemId(itemId);
-        if(bid != null) return bid.getUser().getId().equals(userId);
+        if (bid != null) return bid.getUser().getId().equals(userId);
         return false;
     }
 
@@ -68,7 +67,7 @@ public class BidServiceImpl implements BidService {
     }
 
     private void checkBidValidity(BidDto bidDto, Item item) {
-        LocalDateTime now = java.time.LocalDateTime.now();
+        ZonedDateTime now = java.time.ZonedDateTime.now();
         if (bidDto.getAmount() < item.getStartPrice()) {
             throw new BadRequestException("Bid cannot be lower than item's start price.");
         }

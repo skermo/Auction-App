@@ -14,9 +14,9 @@ function hasDatePassed(inputDate) {
   } else return false;
 }
 
-function convertDate(firstDate, secondDate) {
-  const date1 = new Date(firstDate).getTime();
-  const date2 = new Date(secondDate).getTime();
+function convertDate(endDate) {
+  const date1 = new Date().getTime();
+  const date2 = new Date(endDate).getTime();
 
   const timeInMinutes = Math.floor(Math.abs(date2 - date1) / (1000 * 60));
   const timeInHours = Math.floor(timeInMinutes / 60);

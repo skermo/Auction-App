@@ -7,13 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
 public interface ItemRepository extends JpaRepository<Item, UUID> {
-    Item findFirstByEndDateGreaterThanEqualAndStartDateLessThanEqual(LocalDateTime endDate, LocalDateTime startDate);
+    Item findFirstByEndDateGreaterThanEqualAndStartDateLessThanEqual(ZonedDateTime endDate, ZonedDateTime startDate);
 
-    Page<Item> findByEndDateGreaterThanEqualAndStartDateLessThanEqual(LocalDateTime endDate, LocalDateTime startDate, Pageable pageable);
+    Page<Item> findByEndDateGreaterThanEqualAndStartDateLessThanEqual(ZonedDateTime endDate, ZonedDateTime startDate, Pageable pageable);
 
     @Query("SELECT i FROM Item i " +
             "WHERE i.endDate >= NOW() AND i.startDate <= NOW() " +
@@ -26,7 +27,7 @@ public interface ItemRepository extends JpaRepository<Item, UUID> {
             "WHERE i.endDate >= NOW() AND i.startDate <= NOW()")
     List<String> findAllNames();
 
-    List<Item> findByEndDateGreaterThanEqualAndStartDateLessThanEqualAndSeller_Id(LocalDateTime endDate, LocalDateTime startDate, UUID sellerId);
+    List<Item> findByEndDateGreaterThanEqualAndStartDateLessThanEqualAndSeller_Id(ZonedDateTime endDate, ZonedDateTime startDate, UUID sellerId);
 
     @Query("SELECT i FROM Item i " +
             "INNER JOIN Shipment s ON i.id = s.item.id " +

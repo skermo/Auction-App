@@ -7,10 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Getter
@@ -28,10 +26,10 @@ public class ItemRequest {
     private double startPrice;
 
     @NotEmpty(message = "Start Date cannot be empty")
-    private LocalDateTime startDate;
+    private ZonedDateTime startDate;
 
     @NotEmpty(message = "End Date cannot be empty")
-    private LocalDateTime endDate;
+    private ZonedDateTime endDate;
 
     @Size(min = 2, message = "Description must contain at least 2 characters")
     @NotEmpty(message = "Description cannot be empty")

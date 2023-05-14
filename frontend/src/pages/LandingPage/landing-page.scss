@@ -51,6 +51,10 @@
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
+      .grid-item{
+        width: 30%;
+        height: 400px;
+      }
     }
   }
   .new-arrivals {
@@ -64,4 +68,7 @@
   align-items: center;
   justify-content: space-between;
   margin: 30px 10em 50px;
+  .grid-item{
+    width: 21%;
+  }
 }

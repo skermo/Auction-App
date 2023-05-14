@@ -55,7 +55,6 @@ const AddItem = () => {
           setErrMsg("Adding Item Failed");
         }
       }
-
       return;
     }
     setCurrentStep((prev) => prev + 1);

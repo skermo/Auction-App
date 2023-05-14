@@ -1,11 +1,10 @@
 package com.internship.auctionapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,11 +31,11 @@ public class Item {
 
     @NotNull
     @Column(name = "start_date")
-    private LocalDateTime startDate;
+    private ZonedDateTime startDate;
 
     @NotNull
     @Column(name = "end_date")
-    private LocalDateTime endDate;
+    private ZonedDateTime endDate;
 
     @NotNull
     private String description;

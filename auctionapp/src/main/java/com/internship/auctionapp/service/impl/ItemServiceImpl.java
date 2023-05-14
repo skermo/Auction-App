@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -74,8 +74,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto getFirstAvailableItem() {
-        LocalDateTime localDateTime = java.time.LocalDateTime.now();
-        Item item = itemRepository.findFirstByEndDateGreaterThanEqualAndStartDateLessThanEqual(localDateTime, localDateTime);
+        ZonedDateTime now = java.time.ZonedDateTime.now();
+        Item item = itemRepository.findFirstByEndDateGreaterThanEqualAndStartDateLessThanEqual(now, now);
         return mapToDto(item);
     }
 
@@ -85,8 +85,8 @@ public class ItemServiceImpl implements ItemService {
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-        LocalDateTime localDateTime = java.time.LocalDateTime.now();
-        Page<Item> items = itemRepository.findByEndDateGreaterThanEqualAndStartDateLessThanEqual(localDateTime, localDateTime, pageable);
+        ZonedDateTime now = java.time.ZonedDateTime.now();
+        Page<Item> items = itemRepository.findByEndDateGreaterThanEqualAndStartDateLessThanEqual(now, now, pageable);
         return items.map(this::mapToDto);
     }
 
@@ -116,11 +116,11 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getActiveSellerItems(UUID sellerId) {
-        LocalDateTime localDateTime = java.time.LocalDateTime.now();
+        ZonedDateTime now = java.time.ZonedDateTime.now();
         List<Item> items = itemRepository
                 .findByEndDateGreaterThanEqualAndStartDateLessThanEqualAndSeller_Id(
-                        localDateTime,
-                        localDateTime,
+                        now,
+                        now,
                         sellerId
                 );
         return items.stream()
@@ -154,6 +154,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto addNewItem(ItemRequest itemRequest, List<MultipartFile> files, UUID id) {
+        System.out.printf("datum pocinje " + itemRequest.getEndDate());
         checkItemRequestValidity(itemRequest, id);
         Item item = mapItemRequestToItem(itemRequest, id);
 
@@ -318,10 +319,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void checkItemRequestValidity(ItemRequest itemRequest, UUID id) {
-        if (itemRequest.getStartDate().isBefore(LocalDateTime.now())) {
+        if (itemRequest.getStartDate().isBefore(ZonedDateTime.now())) {
             throw new BadRequestException("Start Date cannot be in the past");
         }
-        if (itemRequest.getEndDate().isBefore(LocalDateTime.now())) {
+        if (itemRequest.getEndDate().isBefore(ZonedDateTime.now())) {
             throw new BadRequestException("End Date cannot be in the past");
         }
         if (itemRequest.getEndDate().isBefore(itemRequest.getStartDate())) {
