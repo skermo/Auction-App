@@ -16,7 +16,7 @@ const TableRow = ({ item, type }) => {
   const { auth } = useAuth();
   const price = utils.parseNum(item.startPrice);
   const highestBid = utils.parseNum(item.highestBid);
-  const timeLeft = utils.convertDate(item.startDate, item.endDate);
+  const timeLeft = utils.convertDate(item.endDate);
   const hasEndDatePassed = utils.hasDatePassed(item.endDate);
 
   useEffect(() => {
