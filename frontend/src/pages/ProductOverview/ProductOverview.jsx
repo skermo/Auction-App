@@ -99,8 +99,14 @@ const ProductOverview = () => {
         <PopUp closePopUp={setOpenPopUpBid} className="are-you-sure">
           <h3 className="title">Are you sure?</h3>
           <div>
-            <div className="property">You're about to bid on: </div>
-            <div className="value">{item.name}</div>
+            <div className="text-value">
+              <div className="property">You're about to place a bid of: </div>
+              <div className="value">{formValues.amount}$</div>
+            </div>
+            <div className="text-value">
+              <div className="property">On: </div>
+              <div className="value">{item.name}</div>
+            </div>
             <div className="footer">
               <Button
                 text="CANCEL"

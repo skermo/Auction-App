@@ -67,17 +67,24 @@
         margin: 0 0 1em;
         width: 100%;
       }
-      .property {
-        margin-bottom: 10px;
-        font-size: 18px;
-      }
-      .value {
-        color: $purple;
-        font-size: 18px;
-        font-weight: $Lato-Bold;
+      .text-value{
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        .property {
+          margin-bottom: 10px;
+          font-size: 18px;
+        }
+        .value {
+          text-align: left;
+          margin-left: 15px;
+          color: $purple;
+          font-size: 18px;
+          font-weight: $Lato-Bold;
+        }
       }
       .footer {
-        margin: 20px 0;
+        margin: 50px 0;
         display: flex;
         background-color: white;
         align-items: center;

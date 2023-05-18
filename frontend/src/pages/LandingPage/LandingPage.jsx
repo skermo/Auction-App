@@ -56,7 +56,12 @@ const LandingPage = () => {
   const searchByCategory = (categoryName) => {
     navigate({
       pathname: SHOP,
-      search: `?${createSearchParams({ name: "", category: categoryName })}`,
+      search: `?${createSearchParams({
+        name: "",
+        category: categoryName,
+        sortBy: "name",
+        sortDir: "asc",
+      })}`,
     });
   };
 

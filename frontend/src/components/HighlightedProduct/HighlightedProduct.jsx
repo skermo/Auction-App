@@ -38,7 +38,7 @@ const HighlightedProduct = ({ item }) => {
         />
       </div>
       <div>
-        {item.sellerId && (
+        {item.sellerId && images && (
           <img
             src={`${BASE_S3_URL}/${item.sellerId}/${images[0]?.url}`}
             alt="item"

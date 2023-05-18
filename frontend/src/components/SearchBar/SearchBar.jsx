@@ -19,7 +19,7 @@ const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState(name);
 
   const params = {
-    name: searchTerm,
+    name: searchTerm.trim(),
     category: category,
     sortBy: sortBy,
     sortDir: sortDir,
@@ -31,7 +31,7 @@ const SearchBar = () => {
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && searchTerm.trim().length) {
       navigate({
         pathname: SHOP,
         search: `?${createSearchParams(params)}`,

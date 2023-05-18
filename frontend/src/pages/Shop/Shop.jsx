@@ -150,6 +150,8 @@ const Shop = () => {
                   search: `?${createSearchParams({
                     name: "",
                     category: "",
+                    sortBy: "name",
+                    sortDir: "asc",
                   })}`,
                 });
               }}

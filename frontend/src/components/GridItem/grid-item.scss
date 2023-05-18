@@ -29,11 +29,9 @@
       background-color: $purple;
     }
   }
-
   .image-container:hover .overlay {
     opacity: 0.5;
   }
-
   .portrait {
     width: 262px;
     height: 350px;
@@ -59,7 +57,6 @@
     font-weight: $Lato-Bold;
   }
 }
-
 .portrait {
   flex-basis: 33.3333333%;
 }
