@@ -19,8 +19,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
-import java.time.LocalDateTime;
-import java.time.Month;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -137,13 +139,32 @@ class BidServiceTest {
 
     }
 
-    private User getUser(){
-        return User.builder()
-                .id(UUID.randomUUID())
-                .build();
+    @Test
+    void test_saveNewBidWithLondonTimezone_creates_new_bid(){
+
+        BidDto bidDto = getValidBidDto();
+
+        Item item = getValidItemLondonOneHourAhead();
+
+        Mockito.when(itemRepository.findById(bidDto.getItemId())).thenReturn(Optional.of(item));
+        Mockito.when(bidRepository.existsByUserIdAndItemId(Mockito.any(), Mockito.any())).thenReturn(false);
+        bidService.saveNewBid(bidDto);
+        Mockito.verify(bidRepository, Mockito.times(1)).save(ArgumentMatchers.any());
+
     }
 
-    private BidDto getValidBidDto(){
+    @Test
+    void test_saveNewBidWithRigaTimezone_throws_exception_if_end_date_passed(){
+
+        BidDto bidDto = getValidBidDto();
+
+        Item item = getItemRigaTimeNow();
+
+        Mockito.when(itemRepository.findById(bidDto.getItemId())).thenReturn(Optional.ofNullable(item));
+        assertThrows(BadRequestException.class, () -> bidService.saveNewBid(bidDto));
+    }
+
+    private BidDto getValidBidDto() {
         return BidDto.builder()
                 .id(UUID.randomUUID())
                 .itemId(UUID.randomUUID())
@@ -152,7 +173,7 @@ class BidServiceTest {
                 .build();
     }
 
-    private Item getValidItem(){
+    private Item getValidItem() {
         return Item.builder()
                 .id(UUID.randomUUID())
                 .startPrice(3)
@@ -162,12 +183,48 @@ class BidServiceTest {
                 .build();
     }
 
-    private LocalDateTime getValidDate(){
-        return LocalDateTime.of(2024, Month.FEBRUARY, 3, 6, 30, 40, 50000);
+    private ZonedDateTime getValidDate() {
+        return ZonedDateTime.of(
+                2024, 12, 3, 12, 20, 59,
+                90000, ZoneId.systemDefault());
     }
 
-    private LocalDateTime getInvalidDate(){
-        return LocalDateTime.of(2020, Month.FEBRUARY, 3, 6, 30, 40, 50000);
+    private ZonedDateTime getInvalidDate() {
+        return ZonedDateTime.of(
+                2020, 12, 3, 12, 20, 59,
+                90000, ZoneId.systemDefault());
     }
 
+    private Item getValidItemLondonOneHourAhead(){
+        return Item.builder()
+                .id(UUID.randomUUID())
+                .startPrice(3)
+                .highestBid(6)
+                .endDate(getLondonTimeOneHourAhead())
+                .seller(new User())
+                .build();
+    }
+
+    private Item getItemRigaTimeNow(){
+        return Item.builder()
+                .id(UUID.randomUUID())
+                .startPrice(3)
+                .highestBid(6)
+                .endDate(getRigaTimeNow())
+                .seller(new User())
+                .build();
+    }
+
+    private Instant getInstantOneHourAhead(){
+        Instant instant = Instant.now();
+        return instant.plus(1, ChronoUnit.HOURS);
+    }
+
+    private ZonedDateTime getLondonTimeOneHourAhead(){
+        return ZonedDateTime.ofInstant(getInstantOneHourAhead(), ZoneId.of("Europe/London"));
+    }
+
+    private ZonedDateTime getRigaTimeNow(){
+        return ZonedDateTime.ofInstant(Instant.now(), ZoneId.of("Europe/Riga"));
+    }
 }
