@@ -25,7 +25,7 @@ const GridItem = ({ item, className }) => {
   return (
     <div className={classNames("grid-item", className)}>
       <div className={classNames("image-container", className)}>
-        {item && (
+        {item?.sellerId && item?.id && (
           <img
             src={`${BASE_S3_URL}/${item.sellerId}/${images[0]?.url}`}
             alt="item"

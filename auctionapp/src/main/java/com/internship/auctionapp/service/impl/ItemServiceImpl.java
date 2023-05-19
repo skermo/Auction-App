@@ -154,7 +154,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto addNewItem(ItemRequest itemRequest, List<MultipartFile> files, UUID id) {
-        System.out.printf("datum pocinje " + itemRequest.getEndDate());
         checkItemRequestValidity(itemRequest, id);
         Item item = mapItemRequestToItem(itemRequest, id);
 
