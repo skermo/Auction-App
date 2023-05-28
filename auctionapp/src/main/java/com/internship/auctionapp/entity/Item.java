@@ -70,4 +70,7 @@ public class Item {
 
     @OneToOne(mappedBy = "item")
     private Shipment shipment;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
 }

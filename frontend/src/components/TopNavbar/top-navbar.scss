@@ -16,13 +16,16 @@
   .welcome-text {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     letter-spacing: 0.49px;
     color: white;
     margin-right: 15em;
+    width: 10%;
     span {
       color: $lightestGrey;
-      padding: 0 0 0 50px;
+    }
+    .notification-icon{
+      cursor: pointer;
     }
   }
   .login-registration {

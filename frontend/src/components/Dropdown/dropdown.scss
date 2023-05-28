@@ -1,0 +1,44 @@
+@import "src/styles/variables.scss";
+
+.dropdown{
+    .dropdown-header{
+        display: inline-block;
+        text-align: center;
+        padding: 8px 10px;
+        text-decoration: none;
+        margin: 5px;
+        position: relative;
+        .circle{
+            border-radius: 50%;
+            height: 30%;
+            width: 30%;
+            background: $purple;
+            position: absolute;
+            left: 50%;
+            bottom: 50%;
+        }
+    }
+    .dropdown-body{
+        display: block;
+        border: 1px solid $lightestGrey;
+        background-color: white;
+        position: absolute;
+        width: 280px;
+        right: calc(15em - 35px);
+        overflow-y:auto;
+        max-height: 300px;
+        margin: 0;
+        box-shadow: 2px 2px 0 0 $lightestGrey;
+        .no-notifications{
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: $purple;
+            font-weight: $Lato-Bold;
+        }
+    }
+    .dropdown-row:nth-child(1) {
+        border: none;
+      }
+}

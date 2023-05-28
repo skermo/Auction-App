@@ -2,17 +2,15 @@ package com.internship.auctionapp.controller;
 
 import com.internship.auctionapp.dto.ItemDto;
 import com.internship.auctionapp.request.ItemRequest;
-import com.internship.auctionapp.request.PaymentRequest;
 import com.internship.auctionapp.response.ItemResponse;
-import com.internship.auctionapp.response.PaymentResponse;
 import com.internship.auctionapp.service.ItemService;
-import com.stripe.exception.StripeException;
-import com.stripe.model.Charge;
+import com.internship.auctionapp.service.SseEmitterService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,9 +21,11 @@ import java.util.UUID;
 public class ItemController {
 
     private final ItemService itemService;
+    private final SseEmitterService sseEmitterService;
 
-    public ItemController(ItemService itemService) {
+    public ItemController(ItemService itemService, SseEmitterService sseEmitterService) {
         this.itemService = itemService;
+        this.sseEmitterService = sseEmitterService;
     }
 
     @GetMapping
@@ -96,8 +96,15 @@ public class ItemController {
 
     @GetMapping("/recommendations/{id}")
     @PreAuthorize("#id == authentication.principal.id")
-    public List<ItemDto> getRecommendedItems(@PathVariable("id") UUID id){
+    public List<ItemDto> getRecommendedItems(@PathVariable("id") UUID id) {
         return itemService.getRecommendedItems(id);
+    }
+
+    @GetMapping("/add-connection")
+    public SseEmitter addSseEmitter() {
+        SseEmitter sseEmitter = new SseEmitter(-1L);
+        sseEmitterService.addSseEmitter(sseEmitter);
+        return sseEmitter;
     }
 
 }

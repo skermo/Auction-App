@@ -2,11 +2,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import {
+  BellIcon,
   FacebookIcon,
   InstagramIcon,
   TwitterIcon,
 } from "../../resources/icons";
 import { LOGIN, REGISTER } from "../../routes/routes";
+import Dropdown from "../Dropdown/Dropdown";
 import Icon from "../Icon/Icon";
 import "./top-navbar.scss";
 
@@ -25,6 +27,9 @@ const TopNavbar = () => {
         {auth?.user ? (
           <div className="welcome-text">
             <div>Hi, {auth.user.firstName}</div>
+            <div className="notification-icon">
+              <Dropdown label={<BellIcon />} />
+            </div>
             <span
               onClick={() => {
                 logoutUser();

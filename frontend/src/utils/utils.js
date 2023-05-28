@@ -14,6 +14,15 @@ function hasDatePassed(inputDate) {
   } else return false;
 }
 
+function shortenName(name) {
+  if (name) {
+    if (name.length < 24) {
+      return name;
+    }
+    return name.substring(0, 20) + "...";
+  }
+}
+
 function convertDate(endDate) {
   const date1 = new Date().getTime();
   const date2 = new Date(endDate).getTime();
@@ -55,4 +64,5 @@ export const utils = {
   addFloats,
   hasDatePassed,
   convertDate,
+  shortenName,
 };

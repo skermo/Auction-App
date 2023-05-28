@@ -1,7 +1,9 @@
 import classNames from "classnames";
 import { Form, Formik } from "formik";
+import { EventSourcePolyfill } from "ng-event-source";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
 import Button from "../../components/Button/Button";
 import Gallery from "../../components/Gallery/Gallery";
@@ -9,6 +11,7 @@ import InputField from "../../components/InputField/InputField";
 import Payment from "../../components/Payment/Payment";
 import PopUp from "../../components/PopUp/PopUp";
 import Tabs from "../../components/Tabs/Tabs";
+import { BASE_URL } from "../../config";
 import useAuth from "../../hooks/useAuth";
 import { ArrowRight } from "../../resources/icons";
 import { addNewBid, bidService } from "../../services/bidService";
@@ -18,18 +21,55 @@ import { utils } from "../../utils/utils";
 import "./product-overview.scss";
 
 const ProductOverview = () => {
+  const { id } = useParams();
+  const { auth } = useAuth();
+  const location = useLocation();
+
   const [item, setItem] = useState([]);
   const [notificationMsg, setNotificationMsg] = useState("");
   const [notificationClassName, setNotificatonClassName] = useState("");
   const [successfulBid, setSuccessfulBid] = useState(false);
   const [isUserHighestBidder, setIsUserHighestBidder] = useState(false);
-  const [openPopUpPayment, setOpenPopUpPayment] = useState(false);
+  const [highestBid, setHighestBid] = useState();
+  const [numberOfBids, setNumberOfBids] = useState();
+  const [openPopUpPayment, setOpenPopUpPayment] = useState(
+    location.state || false
+  );
   const [openPopUpBid, setOpenPopUpBid] = useState(false);
   const [isBought, setIsBought] = useState(false);
   const [formValues, setFormValues] = useState([]);
 
-  const { id } = useParams();
-  const { auth } = useAuth();
+  useEffect(() => {
+    if (item.name && !utils.hasDatePassed(item.endDate)) {
+      let eventSource = new EventSourcePolyfill(
+        `${BASE_URL}/items/add-connection`,
+        {
+          heartbeatTimeout: 60000 * 15,
+        }
+      );
+      eventSource.onerror = () => {
+        eventSource.close();
+      };
+      eventSource.addEventListener(item?.id, handleItemUpdate);
+      return () => eventSource.close();
+    }
+  }, [item]);
+
+  const handleItemUpdate = (e) => {
+    const data = JSON.parse(e.data);
+    setHighestBid(utils.parseNum(data.amount));
+    setNumberOfBids((current) => current + 1);
+    toast.info("New bid on current product!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
 
   useEffect(() => {
     if (Object.keys(auth).length !== 0) {
@@ -43,6 +83,8 @@ const ProductOverview = () => {
     setSuccessfulBid(false);
     itemService.getItemById(id).then((res) => {
       setItem(res);
+      setHighestBid(utils.parseNum(res.highestBid));
+      setNumberOfBids(res.noBids);
       if (res.buyerId) {
         setIsBought(true);
       }
@@ -50,7 +92,6 @@ const ProductOverview = () => {
   }, [id, successfulBid]);
 
   const price = utils.parseNum(item.startPrice);
-  const highestBid = utils.parseNum(item.highestBid);
   const timeLeft = utils.convertDate(item.endDate);
   const newBid = utils.addFloats(highestBid, 1);
   const hasEndDatePassed = utils.hasDatePassed(item.endDate);
@@ -90,6 +131,7 @@ const ProductOverview = () => {
 
   return (
     <div className="overview-page">
+      <ToastContainer />
       {openPopUpPayment && (
         <PopUp closePopUp={setOpenPopUpPayment} className="payment-modal">
           <Payment item={item} isBought={setIsBought} />
@@ -147,7 +189,7 @@ const ProductOverview = () => {
               Highest bid: <span>${highestBid}</span>
             </p>
             <p>
-              Number of bids: <span>{item.noBids}</span>
+              Number of bids: <span>{numberOfBids}</span>
             </p>
             {hasEndDatePassed ? (
               <p>

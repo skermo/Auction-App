@@ -50,4 +50,6 @@ public interface ItemRepository extends JpaRepository<Item, UUID> {
             "i.seller.id != :userId AND (i.startPrice BETWEEN :price - 50 AND :price + 50) AND " +
             "i.id NOT IN (SELECT b.item.id FROM Bid b WHERE b.user.id = :userId) ")
     List<Item> findRecommendedItemsByPrice(UUID userId, double price);
+
+    List<Item> findByEndDateGreaterThanEqualAndEndDateLessThanAndHighestBidNotNull(ZonedDateTime endDateBefore, ZonedDateTime endDateAfter);
 }

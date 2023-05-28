@@ -1,0 +1,43 @@
+@import "src/styles/variables.scss";
+
+.dropdown-row{
+    color: $darkGrey;
+    text-align: left;
+    padding: 10px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    border-top: 1px solid $lightestGrey;
+    .row{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        height: 60px;
+        img{
+            width: 55px;
+            height: 55px;
+            border: 1px solid $lightestGrey;
+        }
+        .text{
+            padding-left: 5px;
+            .line{
+                padding-bottom: 2px;
+            }
+            .item-name{
+                font-weight: $Lato-Bold;
+            }
+                .link{
+                    color: $purple;
+                    cursor: pointer;
+                    font-weight: $Lato-Bold;
+                }
+                .time{
+                    font-size: 10px;
+                    color: $lightGrey;
+                }
+        }
+    }
+}
+
+.dropdown-row:hover {
+    background-color: $lightestGrey;
+  }
