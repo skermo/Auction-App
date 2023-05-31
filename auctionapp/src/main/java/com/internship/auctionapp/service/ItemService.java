@@ -27,5 +27,6 @@ public interface ItemService {
     List<ItemDto> getBiddedOnItemsByUser(UUID bidderId);
     ItemDto addNewItem(ItemRequest itemRequest, List<MultipartFile> files,  UUID id);
     List<ItemDto> getRecommendedItems(UUID userId);
+    void addNewItemCSV(MultipartFile file, UUID userId);
 
 }

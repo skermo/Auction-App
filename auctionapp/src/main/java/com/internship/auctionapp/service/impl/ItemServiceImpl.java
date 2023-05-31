@@ -3,17 +3,19 @@ package com.internship.auctionapp.service.impl;
 import com.internship.auctionapp.aws.FileStore;
 import com.internship.auctionapp.aws.bucket.BucketName;
 import com.internship.auctionapp.dto.ItemDto;
-import com.internship.auctionapp.entity.Bid;
-import com.internship.auctionapp.entity.Image;
-import com.internship.auctionapp.entity.Item;
-import com.internship.auctionapp.entity.User;
+import com.internship.auctionapp.entity.*;
 import com.internship.auctionapp.exception.BadRequestException;
+import com.internship.auctionapp.exception.NotFoundException;
+import com.internship.auctionapp.helpers.ImageToUpload;
 import com.internship.auctionapp.repository.*;
 import com.internship.auctionapp.request.ItemRequest;
 import com.internship.auctionapp.response.ItemResponse;
 import com.internship.auctionapp.service.ItemService;
 import com.internship.auctionapp.service.PaymentService;
 import com.internship.auctionapp.util.StringComparison;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.entity.ContentType;
 import org.modelmapper.ModelMapper;
@@ -26,7 +28,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -215,6 +225,148 @@ public class ItemServiceImpl implements ItemService {
         }
 
         return new ArrayList<>();
+    }
+
+    @Override
+    public void addNewItemCSV(MultipartFile file, UUID userId) {
+        if (!hasCSVFormat(file)) throw new BadRequestException("File not a csv.");
+
+        Iterable<CSVRecord> csvRecords = fileToCsvRecords(file);
+        List<Item> items = csvToItems(csvRecords, userId);
+        for (int i = 0; i < items.size(); i++) {
+            System.out.println(items.get(i).getName());
+        }
+    }
+
+    private Iterable<CSVRecord> fileToCsvRecords(MultipartFile file) {
+        try {
+            BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
+            CSVParser csvParser = new CSVParser(fileReader,
+                    CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());
+            return csvParser.getRecords();
+        } catch (IOException e) {
+            throw new BadRequestException("Unable to parse CSV file: " + e.getMessage());
+        }
+    }
+
+    private boolean hasCSVFormat(MultipartFile file) {
+        return "text/csv".equals(file.getContentType());
+    }
+
+    private List<Item> csvToItems(Iterable<CSVRecord> csvRecords, UUID userId) {
+        User seller = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+
+        List<Item> items = new ArrayList<>();
+
+        for (CSVRecord csvRecord : csvRecords) {
+            Item item = Item.builder()
+                    .id(UUID.fromString(csvRecord.get("id")))
+                    .name(csvRecord.get("name"))
+                    .startPrice(Double.parseDouble(csvRecord.get("startPrice")))
+                    .startDate(ZonedDateTime.parse(csvRecord.get("startDate")))
+                    .endDate(ZonedDateTime.parse(csvRecord.get("endDate")))
+                    .description(csvRecord.get("description"))
+                    .noBids(0)
+                    .seller(seller)
+                    .build();
+
+            checkItemValidity(item);
+
+            item.setCategory(findCategoryIdByName(csvRecord.get("category")));
+            item.setSubcategory(findSubcategoryByNameAndCategoryId(
+                    item.getCategory().getId(),
+                    csvRecord.get("subcategory")
+            ));
+
+            List<ImageToUpload> inputStreams = checkImagesValidity(csvRecord.get("images"), userId);
+            List<String> imageNames = uploadImageByUrl(inputStreams);
+            List<Image> images = new ArrayList<>();
+            for (String imageName : imageNames) {
+                Image image = new Image();
+                image.setUrl(imageName);
+                image.setItem(item);
+                images.add(image);
+            }
+            item.setImages(images);
+            items.add(item);
+        }
+        return items;
+    }
+
+    private Category findCategoryIdByName(String categoryName) {
+        List<Category> categories = categoryRepository.findAll();
+        for (Category category : categories) {
+            if (category.getName().equalsIgnoreCase(categoryName)) return category;
+        }
+        throw new BadRequestException("Invalid category name");
+    }
+
+    private Subcategory findSubcategoryByNameAndCategoryId(UUID categoryId, String subcategoryName) {
+        List<Subcategory> subcategories = subcategoryRepository.findAllByCategoryId(categoryId);
+        for (Subcategory subcategory : subcategories) {
+            if (subcategory.getName().equalsIgnoreCase(subcategoryName)) return subcategory;
+        }
+        throw new BadRequestException("Invalid subcategory name");
+    }
+
+    private List<ImageToUpload> checkImagesValidity(String images, UUID userId) {
+        String[] splitImages = images.trim().split("\\s+");
+        if (splitImages.length < 3) throw new BadRequestException("Must upload at least three images per product");
+        List<ImageToUpload> imageToUploads = new ArrayList<>();
+        for (String image : splitImages) {
+            InputStream inputStream;
+            try {
+                ImageIO.read(new URL(image));
+                inputStream = new URL(image).openStream();
+            } catch (Exception e) {
+                throw new BadRequestException("Invalid image URL:" + e);
+            }
+            String format = null;
+            try (ImageInputStream imageInputStream = ImageIO.createImageInputStream(inputStream)) {
+                Iterator<ImageReader> readers = ImageIO.getImageReaders(imageInputStream);
+                if (readers.hasNext()) {
+                    ImageReader reader = readers.next();
+                    format = reader.getFormatName();
+                    reader.setInput(imageInputStream);
+                    if (!(format.equalsIgnoreCase("JPEG") || format.equalsIgnoreCase("PNG"))) {
+                        throw new BadRequestException("Images must be either JPEG or PNG: ");
+                    }
+                }
+                ImageToUpload imageToUpload = new ImageToUpload(
+                        inputStream, String.format("%s/%s", BucketName.AUCTION_APP_IMAGES.getBucketName(), userId),
+                        String.format("%s-%s", userId, UUID.randomUUID()), format);
+                imageToUploads.add(imageToUpload);
+            } catch (IOException e) {
+                throw new BadRequestException("Unable to get image: " + e);
+            }
+        }
+        return imageToUploads;
+    }
+
+    private List<String> uploadImageByUrl(List<ImageToUpload> inputStreams) {
+        List<String> imageNames = new ArrayList<>();
+        for (ImageToUpload inputStream : inputStreams) {
+            Map<String, String> metadata = new HashMap<>();
+            metadata.put("Content-Type", inputStream.getContentType());
+            fileStore.save(
+                    inputStream.getPath(), inputStream.getFileName(),
+                    Optional.of(metadata), inputStream.getInputStream()
+            );
+            imageNames.add(inputStream.getFileName());
+        }
+        return imageNames;
+    }
+
+    private void checkItemValidity(Item item){
+        if (item.getStartDate().isBefore(ZonedDateTime.now())) {
+            throw new BadRequestException("Start Date cannot be in the past");
+        }
+        if (item.getEndDate().isBefore(ZonedDateTime.now())) {
+            throw new BadRequestException("End Date cannot be in the past");
+        }
+        if (item.getEndDate().isBefore(item.getStartDate())) {
+            throw new BadRequestException("End Date cannot be before Start Date");
+        }
     }
 
     private List<Item> getItemsRecommendedByPrice(UUID userId, double avgPrice) {

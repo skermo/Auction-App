@@ -35,9 +35,18 @@ const MyAccount = () => {
         <AddItem />
       ) : (
         <div>
-          <div className="add-item-button">
+          <div className="upload-buttons">
             <Button
               text="ADD ITEM"
+              type="primary"
+              Icon={PlusIcon}
+              className="padding-max"
+              onClick={() => {
+                navigate(`/my-account/${id}/add-item`);
+              }}
+            />
+            <Button
+              text="UPLOAD CSV"
               type="primary"
               Icon={PlusIcon}
               className="padding-max"

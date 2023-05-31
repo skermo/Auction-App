@@ -107,5 +107,9 @@ public class ItemController {
         return sseEmitter;
     }
 
+    @PostMapping("/csv-upload/{id}")
+    public void uploadCSV(@PathVariable("id") UUID id, @RequestParam("file") MultipartFile file) {
+        itemService.addNewItemCSV(file, id);
+    }
 }
 
