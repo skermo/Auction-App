@@ -6,8 +6,5 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public interface SseEmitterService {
     void addSseEmitter(SseEmitter sseEmitter);
-
-    void publishNotification(NotificationDto notificationDto);
-
-    void publishBidUpdate(BidDto bidDto);
+    <T> void notify(T element, String eventName);
 }

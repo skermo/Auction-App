@@ -44,6 +44,7 @@ public class BidServiceImpl implements BidService {
         Bid currentHighestBid = bidRepository.findBiggestBidByItemId(item.getId());
         if (bidRepository.existsByUserIdAndItemId(bidDto.getUserId(), bidDto.getItemId())) {
             if (!currentHighestBid.getUser().getId().equals(bidDto.getUserId())) {
+
                 notifyPreviousHighestBidder(item, currentHighestBid);
             }
             bid = bidRepository
@@ -52,14 +53,20 @@ public class BidServiceImpl implements BidService {
                             bidDto.getItemId());
             bid.setAmount(bidDto.getAmount());
             bidRepository.save(bid);
-            sseEmitterService.publishBidUpdate(mapToDto(bid));
+            sseEmitterService.notify(
+                    mapToDto(bid),
+                    bid.getItem().getId().toString()
+            );
             return new ResponseEntity<>(mapToDto(bid), HttpStatus.OK);
         } else {
             if (item.getHighestBid() != 0) {
                 notifyPreviousHighestBidder(item, currentHighestBid);
             }
             bid = bidRepository.save(mapToEntity(bidDto));
-            sseEmitterService.publishBidUpdate(mapToDto(bid));
+            sseEmitterService.notify(
+                    mapToDto(bid),
+                    bid.getItem().getId().toString()
+            );
             return new ResponseEntity<>(mapToDto(bid), HttpStatus.CREATED);
         }
     }
@@ -73,8 +80,9 @@ public class BidServiceImpl implements BidService {
                 .dateTime(ZonedDateTime.now())
                 .build();
         notificationRepository.save(notification);
-        sseEmitterService.publishNotification(
-                mapper.map(notification, NotificationDto.class)
+        sseEmitterService.notify(
+                mapper.map(notification, NotificationDto.class),
+                notification.getUser().getId().toString()
         );
     }
 

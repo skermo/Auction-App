@@ -51,8 +51,9 @@ public class SchedulerServiceImpl implements SchedulerService {
                     .dateTime(ZonedDateTime.now())
                     .build();
             notificationRepository.save(notification);
-            sseEmitterService.publishNotification(
-                    mapper.map(notification, NotificationDto.class)
+            sseEmitterService.notify(
+                    mapper.map(notification, NotificationDto.class),
+                    notification.getUser().getId().toString()
             );
         }
     }

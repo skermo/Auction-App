@@ -58,8 +58,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     private List<NotificationDto> getUndeliveredNotifications(UUID userID) {
-        var notifications = notificationRepository.findAllByUserId(userID);
-        return notifications.stream()
+        return notificationRepository.findAllByUserId(userID).stream()
                 .map(this::mapToDto)
                 .toList();
     }
