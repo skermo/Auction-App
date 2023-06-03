@@ -1,13 +1,9 @@
 package com.internship.auctionapp.service;
 
-import com.internship.auctionapp.dto.BidDto;
-import com.internship.auctionapp.dto.NotificationDto;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public interface SseEmitterService {
     void addSseEmitter(SseEmitter sseEmitter);
 
-    void publishNotification(NotificationDto notificationDto);
-
-    void publishBidUpdate(BidDto bidDto);
+    <T> void notify(T element, String eventName);
 }

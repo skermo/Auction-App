@@ -4,17 +4,17 @@
     color: $darkGrey;
     text-align: left;
     padding: 10px;
-    font-size: 13px;
+    font-size: 14px;
     letter-spacing: 0.5px;
     border-top: 1px solid $lightestGrey;
     .row{
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        height: 60px;
+        height: 70px;
         img{
-            width: 55px;
-            height: 55px;
+            width: 65px;
+            height: 65px;
             border: 1px solid $lightestGrey;
         }
         .text{
@@ -39,5 +39,5 @@
 }
 
 .dropdown-row:hover {
-    background-color: $lightestGrey;
+    background-color: rgba($color: $lightestGrey, $alpha: 0.3);
   }

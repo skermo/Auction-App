@@ -1,11 +1,8 @@
 package com.internship.auctionapp.controller;
 
-import com.internship.auctionapp.dto.ItemDto;
-import com.internship.auctionapp.request.ItemRequest;
-import com.internship.auctionapp.response.ItemResponse;
-import com.internship.auctionapp.response.ValidateCSVResponse;
-import com.internship.auctionapp.service.ItemService;
-import com.internship.auctionapp.service.SseEmitterService;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,8 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.List;
-import java.util.UUID;
+import com.internship.auctionapp.dto.ItemDto;
+import com.internship.auctionapp.request.ItemRequest;
+import com.internship.auctionapp.response.ItemResponse;
+import com.internship.auctionapp.response.ValidateCSVResponse;
+import com.internship.auctionapp.service.ItemService;
+import com.internship.auctionapp.service.SseEmitterService;
 
 @RestController
 @CrossOrigin
@@ -34,8 +35,7 @@ public class ItemController {
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
-    ) {
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
         return itemService.getAllItems(pageNo, pageSize, sortBy, sortDir);
     }
 
@@ -49,8 +49,7 @@ public class ItemController {
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
-    ) {
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
         return itemService.getAllAvailableItems(pageNo, pageSize, sortBy, sortDir);
     }
 
@@ -69,7 +68,6 @@ public class ItemController {
             @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
         return itemService.searchItems(name, category, pageNo, pageSize, sortBy, sortDir);
     }
-
 
     @GetMapping("/seller/active/{id}")
     @PreAuthorize("#id == authentication.principal.id")
@@ -91,7 +89,8 @@ public class ItemController {
 
     @PostMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("#id == authentication.principal.id")
-    public ItemDto addNewItem(@PathVariable("id") UUID id, @RequestPart("item") ItemRequest item, @RequestPart("files") List<MultipartFile> files) {
+    public ItemDto addNewItem(@PathVariable("id") UUID id, @RequestPart("item") ItemRequest item,
+            @RequestPart("files") List<MultipartFile> files) {
         return itemService.addNewItem(item, files, id);
     }
 
@@ -113,4 +112,3 @@ public class ItemController {
         return itemService.addNewItemCSV(file, id);
     }
 }
-

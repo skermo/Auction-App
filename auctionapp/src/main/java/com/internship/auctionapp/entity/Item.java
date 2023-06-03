@@ -1,14 +1,15 @@
 package com.internship.auctionapp.entity;
 
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Locale.Category;
+import java.util.UUID;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -80,5 +81,4 @@ public class Item {
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications;
-
 }

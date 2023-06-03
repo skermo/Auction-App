@@ -1,10 +1,10 @@
-import { EventSourcePolyfill } from "ng-event-source";
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import { BASE_URL } from "../../config";
+import { ToastContainer } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
+import useToast from "../../hooks/useToast";
+import { eventSourceService } from "../../services/eventSourceService";
 import { itemService } from "../../services/itemService";
 import { notificationService } from "../../services/notificationService";
 import { utils } from "../../utils/utils";
@@ -19,6 +19,7 @@ const Dropdown = ({ label }) => {
 
   const { auth } = useAuth();
   const navigate = useNavigate();
+  const { infoToast, warnToast } = useToast();
 
   useEffect(() => {
     if (Object.keys(auth).length !== 0) {
@@ -29,12 +30,9 @@ const Dropdown = ({ label }) => {
 
   useEffect(() => {
     if (Object.keys(auth).length !== 0) {
-      let eventSource = new EventSourcePolyfill(
-        `${BASE_URL}/notifications/add-connection/${auth?.user?.id}`,
-        {
-          headers: { Authorization: `Bearer ${auth?.accessToken}` },
-          heartbeatTimeout: 60000 * 15,
-        }
+      let eventSource = eventSourceService.newNotificationsEventSourcePolyfill(
+        auth?.user?.id,
+        auth?.accessToken
       );
       eventSource.onerror = () => {
         eventSource.close();
@@ -47,41 +45,21 @@ const Dropdown = ({ label }) => {
   const showToast = (notification) => {
     itemService.getItemById(notification.itemId).then((res) => {
       if (notification.type === "OUTBID") {
-        toast.warn(
+        warnToast(
           <div>
             You have been outbid on: <br /> {utils.shortenName(res.name)}
           </div>,
-          {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            onClick: () => {
-              navigate(`/items/${notification.itemId}`);
-            },
+          () => {
+            navigate(`/items/${notification.itemId}`);
           }
         );
       } else {
-        toast.info(
+        infoToast(
           <div>
             You have won the auction on: <br /> {utils.shortenName(res.name)}
           </div>,
-          {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            onClick: () => {
-              navigate(`/items/${notification.itemId}`);
-            },
+          () => {
+            navigate(`/items/${notification.itemId}`, { state: true });
           }
         );
       }
@@ -132,7 +110,7 @@ const Dropdown = ({ label }) => {
     setNotifications((current) =>
       current.filter((value) => value.id !== notification.id)
     );
-    if (notifications.length < 5) {
+    if (notifications.length < 9 && !lastPageNotifications) {
       fetchNotifications();
     }
   };
@@ -146,7 +124,7 @@ const Dropdown = ({ label }) => {
       </div>
       {isOpen && (
         <div id="scrollableDiv" style={{ overflow: "auto" }}>
-          {notifications.length < 4 ? (
+          {notifications.length < 8 ? (
             notifications.length > 0 ? (
               <div className="dropdown-body">
                 {notifications.map((value, key) => {
@@ -173,7 +151,7 @@ const Dropdown = ({ label }) => {
               hasMore={!lastPageNotifications}
               scrollableTarget="scrollableDiv"
               className="dropdown-body"
-              height={300}
+              height={600}
             >
               {notifications.map((value, key) => {
                 return (

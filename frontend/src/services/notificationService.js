@@ -2,7 +2,7 @@ import { ApiRequest } from "../config";
 
 async function getUnreadNotifications(userId, token, pageNo) {
   const result = await ApiRequest(token).get(
-    `/notifications/${userId}?pageNo=${pageNo}&pageSize=4`
+    `/notifications/${userId}?pageNo=${pageNo}&pageSize=8`
   );
   return result.data || [];
 }

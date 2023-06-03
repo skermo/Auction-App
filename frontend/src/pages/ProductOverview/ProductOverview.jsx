@@ -1,9 +1,8 @@
 import classNames from "classnames";
 import { Form, Formik } from "formik";
-import { EventSourcePolyfill } from "ng-event-source";
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import Breadcrumbs from "../../components/Breadcrumbs/Breadcrumbs";
 import Button from "../../components/Button/Button";
 import Gallery from "../../components/Gallery/Gallery";
@@ -11,10 +10,11 @@ import InputField from "../../components/InputField/InputField";
 import Payment from "../../components/Payment/Payment";
 import PopUp from "../../components/PopUp/PopUp";
 import Tabs from "../../components/Tabs/Tabs";
-import { BASE_URL } from "../../config";
 import useAuth from "../../hooks/useAuth";
+import useToast from "../../hooks/useToast";
 import { ArrowRight } from "../../resources/icons";
 import { addNewBid, bidService } from "../../services/bidService";
+import { eventSourceService } from "../../services/eventSourceService";
 import { itemService } from "../../services/itemService";
 import { newBidValidationSchema } from "../../utils/formValidation";
 import { utils } from "../../utils/utils";
@@ -23,6 +23,7 @@ import "./product-overview.scss";
 const ProductOverview = () => {
   const { id } = useParams();
   const { auth } = useAuth();
+  const { infoToast } = useToast();
   const location = useLocation();
 
   const [item, setItem] = useState([]);
@@ -41,12 +42,7 @@ const ProductOverview = () => {
 
   useEffect(() => {
     if (item.name && !utils.hasDatePassed(item.endDate)) {
-      let eventSource = new EventSourcePolyfill(
-        `${BASE_URL}/items/add-connection`,
-        {
-          heartbeatTimeout: 60000 * 15,
-        }
-      );
+      let eventSource = eventSourceService.newItemUpdateEventSourcePolyfill();
       eventSource.onerror = () => {
         eventSource.close();
       };
@@ -59,16 +55,9 @@ const ProductOverview = () => {
     const data = JSON.parse(e.data);
     setHighestBid(utils.parseNum(data.amount));
     setNumberOfBids((current) => current + 1);
-    toast.info("New bid on current product!", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
+    if (data.userId !== auth?.user?.id) {
+      infoToast("New bid on current product!");
+    }
   };
 
   useEffect(() => {
@@ -93,7 +82,8 @@ const ProductOverview = () => {
 
   const price = utils.parseNum(item.startPrice);
   const timeLeft = utils.convertDate(item.endDate);
-  const newBid = utils.addFloats(highestBid, 1);
+  const newBid =
+    highestBid && highestBid > 0 ? utils.addFloats(highestBid, 1) : price;
   const hasEndDatePassed = utils.hasDatePassed(item.endDate);
 
   const submitBid = async (value) => {
@@ -104,7 +94,7 @@ const ProductOverview = () => {
         amount: value.amount,
       };
       await addNewBid(bid, auth?.accessToken);
-      if (value.amount > highestBid) {
+      if (value.amount > newBid - 1) {
         setNotificationMsg("You are the highest bidder!");
         setNotificatonClassName("valid-amount");
         setSuccessfulBid(true);
@@ -114,7 +104,7 @@ const ProductOverview = () => {
       if (!error?.response) {
         setNotificationMsg("No Server Response");
       } else if (error.response?.status === 400) {
-        if (value.amount <= highestBid) {
+        if (value.amount <= newBid - 1) {
           setNotificationMsg("There are higher bids than yours.");
           setNotificatonClassName("invalid-amount");
         }
