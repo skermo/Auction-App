@@ -1,0 +1,67 @@
+@import "src/styles/variables.scss";
+
+.upload-csv-page{
+    .headers{
+        width: 100%;
+        text-align: left;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        ul{
+            color: $darkGrey;
+            width: 100%;
+            li{
+                margin: 5px 0;
+                strong{
+                    font-weight: $Lato-Bold;
+                    color: $purple;
+                }
+            }
+        }
+    }
+    .csv-example{
+        overflow-x: scroll;
+        text-align: left;
+    }
+    table{
+        margin: 15px 0 0;
+        white-space:nowrap;
+        width: 100%;
+        border: none;
+        .header{
+            th{
+                border: 1px solid $lightestGrey;
+                text-align: center;
+                padding: 0 15px;
+            }
+            th:first-child {
+                padding-left: 0;
+              }
+        }
+        tbody{
+            td{
+                padding: 10px 15px;
+                text-align: center;
+                border: 1px solid $lightestGrey;
+            }
+            td:first-child {
+                padding: 10px 15px;
+              }
+        }
+
+    }
+    .csv-errors{
+        text-align: left;
+        li{
+            margin: 5px 0;
+            strong{
+                color: $red;
+                font-weight: $Lato-Bold;
+            }
+        }
+        .label-error{
+            color: $red;
+            margin: 20px 0 5px;
+        }
+    }
+}

@@ -34,7 +34,7 @@
       margin-right: 8px;
       padding: 4px;
       .photo {
-        img {
+        .img {
           width: 100px;
           height: 100px;
           padding: 4px;
@@ -49,6 +49,15 @@
         padding: 2px;
         border-radius: 20%;
         cursor: pointer;
+      }
+      .csv{
+        .img{
+          //filter: invert(51%) sepia(81%) saturate(3586%) hue-rotate(228deg) brightness(92%) contrast(84%);
+          background-color: rgba($color: $purple, $alpha: 0.7);
+        }
+        .file-name{
+          margin: 0;
+        }
       }
     }
   }

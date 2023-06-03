@@ -1,6 +1,7 @@
+import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { XIcon } from "../../resources/icons";
+import { FileIcon, XIcon } from "../../resources/icons";
 import "./drag-n-drop.scss";
 
 function nameLengthValidator(file) {
@@ -14,7 +15,7 @@ function nameLengthValidator(file) {
   return null;
 }
 
-const DragNDrop = ({ field, form }) => {
+const DragNDrop = ({ field, form, type }) => {
   const [files, setFiles] = useState(
     (form.values.photos &&
       form.values.photos?.map((file) =>
@@ -24,6 +25,19 @@ const DragNDrop = ({ field, form }) => {
       )) ||
       []
   );
+
+  const getMaxFiles = () => {
+    if (type === "csv") return 1;
+    return 10;
+  };
+
+  const getFileTypes = () => {
+    if (type === "csv") return { "text/csv": [".csv"] };
+    return {
+      "image/jpeg": [],
+      "image/png": [],
+    };
+  };
 
   function handleFieldValue(files) {
     form.setFieldValue(field.name, files);
@@ -39,12 +53,10 @@ const DragNDrop = ({ field, form }) => {
 
   const { getRootProps, getInputProps } = useDropzone({
     validator: nameLengthValidator,
-    maxFiles: 10,
+
+    maxFiles: getMaxFiles(),
     maxSize: 300000 * 1024,
-    accept: {
-      "image/jpeg": [],
-      "image/png": [],
-    },
+    accept: getFileTypes(),
     onDrop: (acceptedFiles) => {
       let mappedFiles = acceptedFiles.map((file) =>
         Object.assign(file, {
@@ -62,11 +74,19 @@ const DragNDrop = ({ field, form }) => {
     <section className="drag-n-drop">
       <div {...getRootProps({ className: "dropzone" })}>
         <input {...getInputProps()} />
-        <div className="text">
-          <div className="heading heading-purple">Upload Photos</div>
-          <div className="heading">or just drag and drop</div>
-          <p>(At least 3 photos)</p>
-        </div>
+        {type === "csv" ? (
+          <div className="text">
+            <div className="heading heading-purple">Upload CSV</div>
+            <div className="heading">or just drag and drop</div>
+            <p>(Only 1 CSV)</p>
+          </div>
+        ) : (
+          <div className="text">
+            <div className="heading heading-purple">Upload Photos</div>
+            <div className="heading">or just drag and drop</div>
+            <p>(At least 3 photos)</p>
+          </div>
+        )}
       </div>
       <aside className="photos-container">
         {files.map((file) => (
@@ -78,14 +98,27 @@ const DragNDrop = ({ field, form }) => {
                   deletePhoto(file.name);
                 }}
               />
-              <div className="photo">
-                <img
-                  src={file.preview}
-                  alt="file"
-                  onLoad={() => {
-                    URL.revokeObjectURL(file.preview);
-                  }}
-                />
+              <div className={classNames("photo", type)}>
+                {type === "csv" ? (
+                  <>
+                    <FileIcon
+                      className="img"
+                      onLoad={() => {
+                        URL.revokeObjectURL(file.preview);
+                      }}
+                    />
+                    <p className="file-name">{file.name}</p>
+                  </>
+                ) : (
+                  <img
+                    src={file.preview}
+                    alt="file"
+                    className="img"
+                    onLoad={() => {
+                      URL.revokeObjectURL(file.preview);
+                    }}
+                  />
+                )}
               </div>
             </div>
           </div>

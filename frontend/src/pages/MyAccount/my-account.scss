@@ -4,8 +4,12 @@
     align-items: center;
     justify-content: space-between;
     margin-right: 10em;
-    width: 500px;
+    width: 350px;
     float: right;
     margin-top: 50px;
+    .upload-button{
+      overflow: hidden;
+      height: 58px;
+    }
   }
 }

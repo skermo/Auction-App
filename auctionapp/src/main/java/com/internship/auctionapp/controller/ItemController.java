@@ -3,6 +3,7 @@ package com.internship.auctionapp.controller;
 import com.internship.auctionapp.dto.ItemDto;
 import com.internship.auctionapp.request.ItemRequest;
 import com.internship.auctionapp.response.ItemResponse;
+import com.internship.auctionapp.response.ValidateCSVResponse;
 import com.internship.auctionapp.service.ItemService;
 import com.internship.auctionapp.service.SseEmitterService;
 import org.springframework.data.domain.Page;
@@ -108,8 +109,8 @@ public class ItemController {
     }
 
     @PostMapping("/csv-upload/{id}")
-    public void uploadCSV(@PathVariable("id") UUID id, @RequestParam("file") MultipartFile file) {
-        itemService.addNewItemCSV(file, id);
+    public List<ValidateCSVResponse> uploadCSV(@PathVariable("id") UUID id, @RequestParam("file") MultipartFile file) {
+        return itemService.addNewItemCSV(file, id);
     }
 }
 
