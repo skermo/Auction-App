@@ -13,20 +13,28 @@ const UploadCsv = () => {
   const navigate = useNavigate();
 
   const [errors, setErrors] = useState([]);
+  const [errMsg, setErrMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (value) => {
+    setLoading(true);
     const formData = new FormData();
     value.file.forEach((file) => {
       formData.append("file", file);
     });
-    await itemService
-      .uploadCsv(auth?.user?.id, auth?.accessToken, formData)
-      .then((res) => {
-        if (res.length === 0) {
-          navigate(`/my-account/${auth.user.id}/seller`, { state: "csv" });
-        }
-        setErrors(res);
-      });
+    try {
+      await itemService
+        .uploadCsv(auth?.user?.id, auth?.accessToken, formData)
+        .then((res) => {
+          if (res.length === 0) {
+            navigate(`/my-account/${auth.user.id}/seller`, { state: "csv" });
+          }
+          setErrors(res);
+        });
+    } catch (error) {
+      setErrMsg("Upload Failed");
+    }
+    setLoading(false);
   };
 
   return (
@@ -114,6 +122,11 @@ const UploadCsv = () => {
                 </tbody>
               </table>
             </div>
+            {errMsg && (
+              <div className="csv-errors">
+                <label className="label-error">{errMsg}</label>
+              </div>
+            )}
             {errors.length > 0 && (
               <div className="csv-errors">
                 <label className="label-error">
@@ -138,12 +151,22 @@ const UploadCsv = () => {
               </div>
             )}
             <Field name="file" id="file" component={DragNDrop} type="csv" />
-            <Button
-              model="submit"
-              text="SUBMIT"
-              type="primary"
-              className="btn-full-width"
-            />
+            {loading ? (
+              <Button
+                text="UPLOADING..."
+                type="primary"
+                model="button"
+                className="btn-full-width"
+                disabled={true}
+              />
+            ) : (
+              <Button
+                model="submit"
+                text="SUBMIT"
+                type="primary"
+                className="btn-full-width"
+              />
+            )}
           </Form>
         </Formik>
       </FormContainer>

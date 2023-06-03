@@ -7,6 +7,7 @@ import Button from "../../components/Button/Button";
 import Seller from "../../components/Seller/Seller";
 import Tabs from "../../components/Tabs/Tabs";
 import UploadCsv from "../../components/UploadCSV/UploadCsv";
+import useToast from "../../hooks/useToast";
 import { FileIcon, PlusIcon } from "../../resources/icons";
 import coin from "../../resources/icons/coin.svg";
 import hamburgerTab from "../../resources/icons/hamburgerTab.svg";
@@ -18,6 +19,7 @@ const MyAccount = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
+  const { successToast } = useToast();
 
   const tabLabels = ["Seller", "Bids"];
 
@@ -30,9 +32,8 @@ const MyAccount = () => {
   }, [tab]);
 
   useEffect(() => {
-    console.log(location.state);
     if (location.state === "csv") {
-      console.log("toast");
+      successToast("Successfully uploaded CSV!");
     }
   }, [location.state]);
 

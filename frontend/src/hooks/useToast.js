@@ -32,7 +32,23 @@ const useToast = () => {
     });
   };
 
-  return { infoToast, warnToast };
+  const successToast = (label, onClick) => {
+    toast.success(label, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      onClick: () => {
+        onClick();
+      },
+    });
+  };
+
+  return { infoToast, warnToast, successToast };
 };
 
 export default useToast;

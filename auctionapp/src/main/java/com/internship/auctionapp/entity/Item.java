@@ -2,7 +2,6 @@ package com.internship.auctionapp.entity;
 
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Locale.Category;
 import java.util.UUID;
 
 import jakarta.persistence.*;

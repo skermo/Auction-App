@@ -5,6 +5,7 @@ import com.internship.auctionapp.aws.bucket.BucketName;
 import com.internship.auctionapp.dto.ItemDto;
 import com.internship.auctionapp.entity.*;
 import com.internship.auctionapp.exception.BadRequestException;
+import com.internship.auctionapp.exception.ConflictException;
 import com.internship.auctionapp.exception.NotFoundException;
 import com.internship.auctionapp.helpers.ImageToUpload;
 import com.internship.auctionapp.repository.*;
@@ -225,8 +226,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ValidateCSVResponse> addNewItemCSV(MultipartFile file, UUID userId) {
         List<ValidateCSVResponse> responses = new ArrayList<>();
-        return responses;
-       /* if (!hasCSVFormat(file)){
+        if (!hasCSVFormat(file)){
             throw new BadRequestException("File not a csv.");
         }
 
@@ -235,7 +235,7 @@ public class ItemServiceImpl implements ItemService {
             return responses;
         }
         itemRepository.saveAll(items);
-        return responses;*/
+        return responses;
     }
 
     private boolean validateCSVHeader(String header, List<ValidateCSVResponse> responses, List<String> expectedHeaders) {
@@ -269,19 +269,6 @@ public class ItemServiceImpl implements ItemService {
         }
     }
 
-    private Iterable<CSVRecord> fileToCsvRecords(MultipartFile file, StringBuffer header) {
-        try {
-            BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
-            header.append(fileReader.readLine());
-            CSVParser csvParser = new CSVParser(fileReader,
-                    CSVFormat.DEFAULT.withTrim());
-            System.out.println("da li radi " + csvParser.getRecords().stream().toList());
-            return csvParser.getRecords();
-        } catch (IOException e) {
-            throw new BadRequestException("Unable to parse CSV file: " + e.getMessage());
-        }
-    }
-
     private boolean hasCSVFormat(MultipartFile file) {
         return "text/csv".equals(file.getContentType());
     }
@@ -301,7 +288,7 @@ public class ItemServiceImpl implements ItemService {
             header = getHeaderCSV(file.getInputStream());
         } catch (IOException e) {
             responses.add(new ValidateCSVResponse(0, "", "Unable to parse CSV file: " + e.getMessage()));
-            LOGGER.error("Unable to parse CSV file: "+e.getMessage());
+            LOGGER.error("Unable to parse CSV file: " + e.getMessage());
             return null;
         }
 
@@ -384,7 +371,7 @@ public class ItemServiceImpl implements ItemService {
             }
             i++;
             List<ImageToUpload> inputStreams = checkImagesValidity(csvRecord.get("images"), userId, responses, i);
-            if(responses.size() == 0){
+            if (responses.size() == 0) {
                 List<String> imageNames = uploadImageByUrl(inputStreams);
                 List<Image> images = new ArrayList<>();
                 for (String imageName : imageNames) {
@@ -441,7 +428,7 @@ public class ItemServiceImpl implements ItemService {
                 LOGGER.error("Error at field images in line " + line + ": Invalid URL " + image);
             }
             String format = null;
-            if(inputStream != null){
+            if (inputStream != null) {
                 try (ImageInputStream imageInputStream = ImageIO.createImageInputStream(inputStream)) {
                     Iterator<ImageReader> readers = ImageIO.getImageReaders(imageInputStream);
                     if (readers.hasNext()) {
@@ -479,9 +466,8 @@ public class ItemServiceImpl implements ItemService {
             }
             return imageNames;
         } catch (Exception e) {
-            LOGGER.error("Unabe to upload image: " + e.getMessage());
+            throw new ConflictException("Unable to upload images");
         }
-        return null;
     }
 
     private List<Item> getItemsRecommendedByPrice(UUID userId, double avgPrice) {
