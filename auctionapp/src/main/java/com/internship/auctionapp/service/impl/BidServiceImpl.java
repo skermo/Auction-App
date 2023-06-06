@@ -1,5 +1,13 @@
 package com.internship.auctionapp.service.impl;
 
+import java.time.ZonedDateTime;
+import java.util.UUID;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
 import com.internship.auctionapp.dto.BidDto;
 import com.internship.auctionapp.dto.NotificationDto;
 import com.internship.auctionapp.entity.Bid;
@@ -12,13 +20,6 @@ import com.internship.auctionapp.repository.ItemRepository;
 import com.internship.auctionapp.repository.NotificationRepository;
 import com.internship.auctionapp.service.BidService;
 import com.internship.auctionapp.service.SseEmitterService;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
-import java.time.ZonedDateTime;
-import java.util.UUID;
 
 @Service
 public class BidServiceImpl implements BidService {
@@ -28,7 +29,8 @@ public class BidServiceImpl implements BidService {
     private final NotificationRepository notificationRepository;
     private final SseEmitterService sseEmitterService;
 
-    public BidServiceImpl(BidRepository bidRepository, ModelMapper mapper, ItemRepository itemRepository, NotificationRepository notificationRepository, SseEmitterService sseEmitterService) {
+    public BidServiceImpl(BidRepository bidRepository, ModelMapper mapper, ItemRepository itemRepository,
+            NotificationRepository notificationRepository, SseEmitterService sseEmitterService) {
         this.bidRepository = bidRepository;
         this.mapper = mapper;
         this.itemRepository = itemRepository;
@@ -55,8 +57,7 @@ public class BidServiceImpl implements BidService {
             bidRepository.save(bid);
             sseEmitterService.notify(
                     mapToDto(bid),
-                    bid.getItem().getId().toString()
-            );
+                    bid.getItem().getId().toString());
             return new ResponseEntity<>(mapToDto(bid), HttpStatus.OK);
         } else {
             if (item.getHighestBid() != 0) {
@@ -65,8 +66,7 @@ public class BidServiceImpl implements BidService {
             bid = bidRepository.save(mapToEntity(bidDto));
             sseEmitterService.notify(
                     mapToDto(bid),
-                    bid.getItem().getId().toString()
-            );
+                    bid.getItem().getId().toString());
             return new ResponseEntity<>(mapToDto(bid), HttpStatus.CREATED);
         }
     }
@@ -82,14 +82,14 @@ public class BidServiceImpl implements BidService {
         notificationRepository.save(notification);
         sseEmitterService.notify(
                 mapper.map(notification, NotificationDto.class),
-                notification.getUser().getId().toString()
-        );
+                notification.getUser().getId().toString());
     }
 
     @Override
     public boolean isHighestBidder(UUID itemId, UUID userId) {
         Bid bid = bidRepository.findBiggestBidByItemId(itemId);
-        if (bid != null) return bid.getUser().getId().equals(userId);
+        if (bid != null)
+            return bid.getUser().getId().equals(userId);
         return false;
     }
 

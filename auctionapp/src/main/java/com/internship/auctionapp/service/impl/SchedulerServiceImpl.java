@@ -1,5 +1,13 @@
 package com.internship.auctionapp.service.impl;
 
+import java.time.ZonedDateTime;
+import java.util.List;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
 import com.internship.auctionapp.dto.NotificationDto;
 import com.internship.auctionapp.entity.Bid;
 import com.internship.auctionapp.entity.Item;
@@ -10,13 +18,6 @@ import com.internship.auctionapp.repository.ItemRepository;
 import com.internship.auctionapp.repository.NotificationRepository;
 import com.internship.auctionapp.service.SchedulerService;
 import com.internship.auctionapp.service.SseEmitterService;
-import org.modelmapper.ModelMapper;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-
-import java.time.ZonedDateTime;
-import java.util.List;
 
 @Service
 @EnableScheduling
@@ -28,7 +29,8 @@ public class SchedulerServiceImpl implements SchedulerService {
     private final SseEmitterService sseEmitterService;
     private final ModelMapper mapper;
 
-    public SchedulerServiceImpl(ItemRepository itemRepository, NotificationRepository notificationRepository, BidRepository bidRepository, SseEmitterService sseEmitterService, ModelMapper mapper) {
+    public SchedulerServiceImpl(ItemRepository itemRepository, NotificationRepository notificationRepository,
+            BidRepository bidRepository, SseEmitterService sseEmitterService, ModelMapper mapper) {
         this.itemRepository = itemRepository;
         this.notificationRepository = notificationRepository;
         this.bidRepository = bidRepository;
@@ -53,8 +55,7 @@ public class SchedulerServiceImpl implements SchedulerService {
             notificationRepository.save(notification);
             sseEmitterService.notify(
                     mapper.map(notification, NotificationDto.class),
-                    notification.getUser().getId().toString()
-            );
+                    notification.getUser().getId().toString());
         }
     }
 }

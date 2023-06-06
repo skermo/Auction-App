@@ -1,12 +1,14 @@
 package com.internship.auctionapp.entity;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
-
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 @Getter
 @Setter
@@ -23,9 +25,12 @@ public class Item {
     private UUID id;
 
     @NotNull
+    @Size(min = 2, message = "Name must contain at least 2 characters")
+    @Size(max = 255, message = "Name cannot contain more than 255 characters")
     private String name;
 
     @NotNull
+    @Positive(message = "Start Price must be positive")
     @Column(name = "start_price")
     private double startPrice;
 
@@ -38,6 +43,8 @@ public class Item {
     private ZonedDateTime endDate;
 
     @NotNull
+    @Size(min = 2, message = "Description must contain at least 2 characters")
+    @Size(max = 1000, message = "Description cannot contain more than 1000 characters")
     private String description;
 
     @Column(name = "highest_bid")

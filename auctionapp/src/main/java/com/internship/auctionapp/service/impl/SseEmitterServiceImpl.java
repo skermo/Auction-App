@@ -1,14 +1,13 @@
 package com.internship.auctionapp.service.impl;
 
-import com.internship.auctionapp.dto.BidDto;
-import com.internship.auctionapp.dto.NotificationDto;
-import com.internship.auctionapp.service.SseEmitterService;
-import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import com.internship.auctionapp.service.SseEmitterService;
 
 @Service
 public class SseEmitterServiceImpl implements SseEmitterService {
@@ -30,8 +29,7 @@ public class SseEmitterServiceImpl implements SseEmitterService {
                 sseEmitter.send(
                         SseEmitter.event()
                                 .name(eventName)
-                                .data(element)
-                );
+                                .data(element));
             } catch (Exception e) {
                 deadSseEmitters.add(sseEmitter);
             }

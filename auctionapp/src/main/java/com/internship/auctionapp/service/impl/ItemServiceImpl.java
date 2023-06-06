@@ -3,20 +3,24 @@ package com.internship.auctionapp.service.impl;
 import com.internship.auctionapp.aws.FileStore;
 import com.internship.auctionapp.aws.bucket.BucketName;
 import com.internship.auctionapp.dto.ItemDto;
-import com.internship.auctionapp.entity.Bid;
-import com.internship.auctionapp.entity.Image;
-import com.internship.auctionapp.entity.Item;
-import com.internship.auctionapp.entity.User;
+import com.internship.auctionapp.entity.*;
 import com.internship.auctionapp.exception.BadRequestException;
+import com.internship.auctionapp.exception.ConflictException;
+import com.internship.auctionapp.exception.NotFoundException;
+import com.internship.auctionapp.helpers.ImageToUpload;
 import com.internship.auctionapp.repository.*;
 import com.internship.auctionapp.request.ItemRequest;
 import com.internship.auctionapp.response.ItemResponse;
+import com.internship.auctionapp.response.ValidateCSVResponse;
 import com.internship.auctionapp.service.ItemService;
-import com.internship.auctionapp.service.PaymentService;
 import com.internship.auctionapp.util.StringComparison;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.entity.ContentType;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.util.Iterables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -26,7 +30,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,22 +52,16 @@ public class ItemServiceImpl implements ItemService {
     private final CategoryRepository categoryRepository;
     private final SubcategoryRepository subcategoryRepository;
     private final UserRepository userRepository;
-    private final ImageRepository imageRepository;
-    private final ShipmentRepository shipmentRepository;
-    private final PaymentService paymentService;
     private final ModelMapper mapper;
     private final FileStore fileStore;
 
-    public ItemServiceImpl(ItemRepository itemRepository, ModelMapper mapper, BidRepository bidRepository, CategoryRepository categoryRepository, SubcategoryRepository subcategoryRepository, UserRepository userRepository, ImageRepository imageRepository, ShipmentRepository shipmentRepository, PaymentService paymentService, FileStore fileStore) {
+    public ItemServiceImpl(ItemRepository itemRepository, ModelMapper mapper, BidRepository bidRepository, CategoryRepository categoryRepository, SubcategoryRepository subcategoryRepository, UserRepository userRepository, FileStore fileStore) {
         this.itemRepository = itemRepository;
         this.mapper = mapper;
         this.bidRepository = bidRepository;
         this.categoryRepository = categoryRepository;
         this.subcategoryRepository = subcategoryRepository;
         this.userRepository = userRepository;
-        this.imageRepository = imageRepository;
-        this.shipmentRepository = shipmentRepository;
-        this.paymentService = paymentService;
         this.fileStore = fileStore;
     }
 
@@ -181,7 +187,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> getRecommendedItems(UUID userId) {
         List<Item> interestedIn = itemRepository.findItemsUserIsInterestedIn(userId);
-        List<Item> finalItems = new ArrayList<>();
+        List<Item> finalItems;
 
         if (interestedIn.size() == 0) {
             return new ArrayList<>();
@@ -215,6 +221,253 @@ public class ItemServiceImpl implements ItemService {
         }
 
         return new ArrayList<>();
+    }
+
+    @Override
+    public List<ValidateCSVResponse> addNewItemCSV(MultipartFile file, UUID userId) {
+        List<ValidateCSVResponse> responses = new ArrayList<>();
+        if (!hasCSVFormat(file)) {
+            throw new BadRequestException("File not a csv.");
+        }
+
+        List<Item> items = csvToItems(file, userId, responses);
+        if (items == null) {
+            return responses;
+        }
+        itemRepository.saveAll(items);
+        return responses;
+    }
+
+    private boolean validateCSVHeader(String header, List<ValidateCSVResponse> responses, List<String> expectedHeaders) {
+        boolean hasErrors = false;
+        try {
+            if (Objects.isNull(header)) {
+                responses.add(new ValidateCSVResponse(0, "", "The file has no headers."));
+                LOGGER.info("The CSV file has no headers");
+                return false;
+            }
+            List<String> headersInFileList;
+            String[] headersInFileArray;
+            if (header.contains(",")) {
+                headersInFileArray = StringUtils.split(header, ",");
+                headersInFileList = Arrays.asList(headersInFileArray);
+            } else {
+                responses.add(new ValidateCSVResponse(0, "", "The file does not contain header values separated with comma."));
+                LOGGER.info("The file does not contain header values separated with comma");
+                return false;
+            }
+            for (String expectedHeader : expectedHeaders) {
+                if (!headersInFileList.contains(expectedHeader)) {
+                    responses.add(new ValidateCSVResponse(0, expectedHeader, "Header " + expectedHeader + " is not present."));
+                    hasErrors = true;
+                    LOGGER.info("Header " + expectedHeader + " is not present");
+                }
+            }
+            return !hasErrors;
+        } catch (Exception e) {
+            throw new BadRequestException("Could not validate CSV headers: " + e);
+        }
+    }
+
+    private boolean hasCSVFormat(MultipartFile file) {
+        return "text/csv".equals(file.getContentType());
+    }
+
+
+    private List<Item> csvToItems(MultipartFile file, UUID userId, List<ValidateCSVResponse> responses) {
+        String header;
+        Iterable<CSVRecord> csvRecords;
+        try {
+            BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
+            CSVParser csvParser = new CSVParser(fileReader,
+                    CSVFormat.DEFAULT
+                            .withFirstRecordAsHeader()
+                            .withIgnoreHeaderCase()
+                            .withTrim());
+            csvRecords = csvParser.getRecords();
+            header = getHeaderCSV(file.getInputStream());
+        } catch (IOException e) {
+            responses.add(new ValidateCSVResponse(0, "", "Unable to parse CSV file: " + e.getMessage()));
+            LOGGER.info("Unable to parse CSV file: " + e.getMessage());
+            return null;
+        }
+
+        List<String> expectedHeader = Arrays
+                .asList("name", "startPrice", "startDate", "endDate", "description", "category", "subcategory", "images");
+        boolean headerErrors = validateCSVHeader(header, responses, expectedHeader);
+        if (!headerErrors) {
+            return null;
+        }
+
+        User seller = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+
+        if (Iterables.getLength(csvRecords) == 0) {
+            responses.add(new ValidateCSVResponse(0, "", "CSV is empty"));
+            LOGGER.info("CSV is empty");
+            return null;
+        }
+
+        List<Item> items = new ArrayList<>();
+        int i = 1;
+        for (CSVRecord csvRecord : csvRecords) {
+            Item item = new Item();
+            try {
+                item.setName(csvRecord.get("name"));
+            } catch (Exception e) {
+                responses.add(new ValidateCSVResponse(i, "name", e.getMessage()));
+                LOGGER.info("Error at field name in line " + i + ": " + e.getMessage());
+            }
+            try {
+                item.setStartPrice(Double.parseDouble(csvRecord.get("startPrice")));
+            } catch (Exception e) {
+                responses.add(new ValidateCSVResponse(i, "startPrice", e.getMessage()));
+                LOGGER.info("Error at field startPrice in line " + i + ": " + e.getMessage());
+            }
+            try {
+                item.setStartDate(ZonedDateTime.parse(csvRecord.get("startDate")));
+                if (item.getStartDate().isBefore(ZonedDateTime.now())) {
+                    responses.add(new ValidateCSVResponse(i, "startDate", "Start Date cannot be before today."));
+                    LOGGER.info("Field startDate in line " + i + " cannot be before today.");
+                }
+            } catch (Exception e) {
+                responses.add(new ValidateCSVResponse(i, "startDate", e.getMessage()));
+                LOGGER.info("Error at field startDate in line " + i + ": " + e.getMessage());
+            }
+            try {
+                item.setEndDate(ZonedDateTime.parse(csvRecord.get("endDate")));
+                if (item.getEndDate().isBefore(ZonedDateTime.now())) {
+                    responses.add(new ValidateCSVResponse(i, "endDate", "End Date cannot be before today."));
+                    LOGGER.info("Field endDate in line " + i + " cannot be before today.");
+                }
+                if (item.getEndDate().isBefore(item.getStartDate())) {
+                    responses.add(new ValidateCSVResponse(i, "endDate", "End Date cannot be before Start Date."));
+                    LOGGER.info("Field endDate in line " + i + " cannot be before startDate.");
+                }
+            } catch (Exception e) {
+                responses.add(new ValidateCSVResponse(i, "endDate", e.getMessage()));
+                LOGGER.info("Error at field endDate in line " + i + ": " + e.getMessage());
+            }
+            try {
+                item.setDescription(csvRecord.get("description"));
+            } catch (Exception e) {
+                responses.add(new ValidateCSVResponse(i, "description", e.getMessage()));
+                LOGGER.info("Error at field name in description " + i + ": " + e.getMessage());
+            }
+            item.setNoBids(0);
+            item.setSeller(seller);
+            try {
+                item.setCategory(findCategoryIdByName(csvRecord.get("category")));
+            } catch (Exception e) {
+                responses.add(new ValidateCSVResponse(i, "category", e.getMessage()));
+                LOGGER.info("Error at field category in line " + i + ": " + e.getMessage());
+            }
+            try {
+                item.setSubcategory(findSubcategoryByNameAndCategoryId(
+                        item.getCategory().getId(),
+                        csvRecord.get("subcategory")));
+            } catch (Exception e) {
+                responses.add(new ValidateCSVResponse(i, "subcategory", e.getMessage()));
+                LOGGER.info("Error at field subcategory in line " + i + ": " + e.getMessage());
+            }
+            i++;
+            List<ImageToUpload> inputStreams = checkImagesValidity(csvRecord.get("images"), userId, responses, i);
+            if (responses.size() == 0) {
+                List<String> imageNames = uploadImageByUrl(inputStreams);
+                List<Image> images = new ArrayList<>();
+                for (String imageName : imageNames) {
+                    Image image = new Image();
+                    image.setUrl(imageName);
+                    image.setItem(item);
+                    images.add(image);
+                }
+                item.setImages(images);
+            }
+            items.add(item);
+        }
+        return items;
+    }
+
+    private String getHeaderCSV(InputStream inputStream) {
+        try {
+            return new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)).readLine();
+        } catch (IOException e) {
+            throw new BadRequestException("Unable to parse CSV");
+        }
+    }
+
+    private Category findCategoryIdByName(String categoryName) {
+        List<Category> categories = categoryRepository.findAll();
+        for (Category category : categories) {
+            if (category.getName().equalsIgnoreCase(categoryName)) return category;
+        }
+        throw new BadRequestException("Invalid category name");
+    }
+
+    private Subcategory findSubcategoryByNameAndCategoryId(UUID categoryId, String subcategoryName) {
+        List<Subcategory> subcategories = subcategoryRepository.findAllByCategoryId(categoryId);
+        for (Subcategory subcategory : subcategories) {
+            if (subcategory.getName().equalsIgnoreCase(subcategoryName)) return subcategory;
+        }
+        throw new BadRequestException("Invalid subcategory name");
+    }
+
+    private List<ImageToUpload> checkImagesValidity(String images, UUID userId, List<ValidateCSVResponse> responses, int line) {
+        String[] splitImages = images.trim().split("\\s+");
+        if (splitImages.length < 3 || splitImages.length > 10) {
+            responses.add(new ValidateCSVResponse(line, "images", "Must upload between 3 and 10 images per product"));
+            LOGGER.info("Error at field images in line " + line + ": Must upload between 3 and 10 images.");
+        }
+        List<ImageToUpload> imagesToUpload = new ArrayList<>();
+        for (String image : splitImages) {
+            InputStream inputStream = null;
+            try {
+                ImageIO.read(new URL(image));
+                inputStream = new URL(image).openStream();
+            } catch (Exception e) {
+                responses.add(new ValidateCSVResponse(line, "images", "Invalid image url: " + image));
+                LOGGER.info("Error at field images in line " + line + ": Invalid URL " + image);
+            }
+            String format = null;
+            if (inputStream != null) {
+                try (ImageInputStream imageInputStream = ImageIO.createImageInputStream(inputStream)) {
+                    Iterator<ImageReader> readers = ImageIO.getImageReaders(imageInputStream);
+                    if (readers.hasNext()) {
+                        ImageReader reader = readers.next();
+                        format = reader.getFormatName();
+                        reader.setInput(imageInputStream);
+                        if (!(format.equalsIgnoreCase("JPEG") || format.equalsIgnoreCase("PNG"))) {
+                            responses.add(new ValidateCSVResponse(line, "images", "Image must be JPEG or PNG:  " + image));
+                            LOGGER.info("Error at field images in line " + line + ": Image must be JPEG or PNG " + image);
+                        }
+                    }
+                    ImageToUpload imageToUpload = new ImageToUpload(
+                            inputStream, String.format("%s/%s", BucketName.AUCTION_APP_IMAGES.getBucketName(), userId),
+                            String.format("%s-%s", userId, UUID.randomUUID()), format);
+                    imagesToUpload.add(imageToUpload);
+                } catch (IOException e) {
+                    throw new BadRequestException("Unable to get image: " + e);
+                }
+            }
+        }
+        return imagesToUpload;
+    }
+
+    private List<String> uploadImageByUrl(List<ImageToUpload> inputStreams) {
+        try {
+            List<String> imageNames = new ArrayList<>();
+            for (ImageToUpload inputStream : inputStreams) {
+                Map<String, String> metadata = new HashMap<>();
+                metadata.put("Content-Type", inputStream.getContentType());
+                fileStore.save(
+                        inputStream.getPath(), inputStream.getFileName(),
+                        Optional.of(metadata), inputStream.getInputStream()
+                );
+                imageNames.add(inputStream.getFileName());
+            }
+            return imageNames;
+        } catch (Exception e) {
+            throw new ConflictException("Unable to upload images");
+        }
     }
 
     private List<Item> getItemsRecommendedByPrice(UUID userId, double avgPrice) {

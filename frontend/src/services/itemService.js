@@ -50,7 +50,7 @@ async function getBiddedOnItemsBySellerId(sellerId, token) {
 }
 
 async function addNewItem(sellerId, token, data) {
-  return ApiRequest(token, true)
+  return ApiRequest(token, "undefined")
     .post(`/items/${sellerId}`, data)
     .then((response) => {
       return response.data;
@@ -64,6 +64,14 @@ async function getRecommendedItems(userId, token) {
   return result.data || [];
 }
 
+async function uploadCsv(sellerId, token, data) {
+  return ApiRequest(token, "multipart")
+    .post(`/items/csv-upload/${sellerId}`, data)
+    .then((response) => {
+      return response.data;
+    });
+}
+
 export const itemService = {
   getFirstItem,
   getNewArrivals,
@@ -75,4 +83,5 @@ export const itemService = {
   getBiddedOnItemsBySellerId,
   addNewItem,
   getRecommendedItems,
+  uploadCsv,
 };

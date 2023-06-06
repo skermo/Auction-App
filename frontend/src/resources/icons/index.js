@@ -4,6 +4,7 @@ export { ReactComponent as ArrowRight } from "./arrowRight.svg";
 export { ReactComponent as BellIcon } from "./bell.svg";
 export { ReactComponent as CalendarIcon } from "./calendar.svg";
 export { ReactComponent as FacebookIcon } from "./fbIcon.svg";
+export { ReactComponent as FileIcon } from "./file.svg";
 export { ReactComponent as InstagramIcon } from "./igIcon.svg";
 export { ReactComponent as PlusIcon } from "./plus.svg";
 export { ReactComponent as SearchIcon } from "./searchIcon.svg";

@@ -1,16 +1,10 @@
 package com.internship.auctionapp.service;
 
 import com.internship.auctionapp.dto.ItemDto;
-import com.internship.auctionapp.entity.Item;
 import com.internship.auctionapp.request.ItemRequest;
-import com.internship.auctionapp.request.PaymentRequest;
 import com.internship.auctionapp.response.ItemResponse;
-import com.internship.auctionapp.response.PaymentResponse;
-import com.stripe.exception.StripeException;
-import com.stripe.model.Charge;
+import com.internship.auctionapp.response.ValidateCSVResponse;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -27,5 +21,6 @@ public interface ItemService {
     List<ItemDto> getBiddedOnItemsByUser(UUID bidderId);
     ItemDto addNewItem(ItemRequest itemRequest, List<MultipartFile> files,  UUID id);
     List<ItemDto> getRecommendedItems(UUID userId);
+    List<ValidateCSVResponse> addNewItemCSV(MultipartFile file, UUID userId);
 
 }

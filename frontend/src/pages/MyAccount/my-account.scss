@@ -1,7 +1,15 @@
 .my-account {
-  .add-item-button {
-    float: right;
+  .upload-buttons{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-right: 10em;
-    margin-top: 30px;
+    width: 350px;
+    float: right;
+    margin-top: 50px;
+    .upload-button{
+      overflow: hidden;
+      height: 58px;
+    }
   }
 }

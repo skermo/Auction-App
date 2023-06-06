@@ -34,6 +34,10 @@ const routes = [
             path: "add-item",
             breadcrumb: "Add Item",
           },
+          {
+            path: "upload-csv",
+            breadcrumb: "Upload CSV",
+          },
         ],
         breadcrumb: null,
       },
