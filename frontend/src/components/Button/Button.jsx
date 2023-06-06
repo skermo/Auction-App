@@ -3,13 +3,23 @@ import PropTypes from "prop-types";
 import React from "react";
 import "./button.scss";
 
-const Button = ({ type, text, Icon, onClick, className, model, disabled }) => {
+const Button = ({
+  type,
+  text,
+  Icon,
+  onClick,
+  className,
+  model,
+  disabled,
+  title,
+}) => {
   return (
     <button
       className={classNames("btn", `btn-${type}`, className)}
       onClick={onClick}
       type={model}
       disabled={disabled}
+      title={title}
     >
       <div className="btn-text">{text}</div>
       {Icon && <Icon className="btn-icon" />}

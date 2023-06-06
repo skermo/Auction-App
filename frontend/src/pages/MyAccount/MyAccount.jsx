@@ -37,6 +37,7 @@ const MyAccount = () => {
     } else if (location.state === "item") {
       successToast("Successfully added item!");
     }
+    window.history.replaceState({}, MyAccount);
   }, [location.state]);
 
   const tabIcons = [hamburgerTab, coin];
@@ -69,6 +70,7 @@ const MyAccount = () => {
                 onClick={() => {
                   navigate(`/my-account/${id}/upload-csv`);
                 }}
+                title="Add items using CSV"
               />
             </div>
           </div>

@@ -15,7 +15,7 @@ function nameLengthValidator(file) {
   return null;
 }
 
-const DragNDrop = ({ field, form, type }) => {
+const DragNDrop = ({ field, form, type, setIsFilePresent, setErrMsg }) => {
   const [files, setFiles] = useState(
     (form.values.photos &&
       form.values.photos?.map((file) =>
@@ -49,6 +49,8 @@ const DragNDrop = ({ field, form, type }) => {
 
   const deletePhoto = (photoName) => {
     setFiles((current) => current.filter((file) => file.name !== photoName));
+    setIsFilePresent(false);
+    setErrMsg("");
   };
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -67,6 +69,8 @@ const DragNDrop = ({ field, form, type }) => {
         (file) => !files.find((f) => f.name === file.name)
       );
       setFiles((current) => [...current, ...mappedFiles]);
+      setIsFilePresent(true);
+      setErrMsg("");
     },
   });
 
