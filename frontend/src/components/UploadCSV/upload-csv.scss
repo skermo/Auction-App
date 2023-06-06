@@ -51,6 +51,7 @@
 
     }
     .csv-errors{
+        margin-bottom: 30px;
         text-align: left;
         li{
             margin: 5px 0;
@@ -62,6 +63,14 @@
         .label-error{
             color: $red;
             margin: 20px 0 5px;
+        }
+    }
+    .buttons{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .cancel-btn{
+            margin-right: 50px;
         }
     }
 }

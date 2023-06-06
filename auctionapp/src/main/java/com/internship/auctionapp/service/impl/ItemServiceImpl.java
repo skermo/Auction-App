@@ -226,12 +226,12 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ValidateCSVResponse> addNewItemCSV(MultipartFile file, UUID userId) {
         List<ValidateCSVResponse> responses = new ArrayList<>();
-        if (!hasCSVFormat(file)){
+        if (!hasCSVFormat(file)) {
             throw new BadRequestException("File not a csv.");
         }
 
         List<Item> items = csvToItems(file, userId, responses);
-        if(items == null){
+        if (items == null) {
             return responses;
         }
         itemRepository.saveAll(items);
@@ -239,11 +239,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private boolean validateCSVHeader(String header, List<ValidateCSVResponse> responses, List<String> expectedHeaders) {
-        boolean hasNoerrors = true;
+        boolean hasErrors = false;
         try {
             if (Objects.isNull(header)) {
                 responses.add(new ValidateCSVResponse(0, "", "The file has no headers."));
-                LOGGER.error("The CSV file has no headers");
+                LOGGER.info("The CSV file has no headers");
                 return false;
             }
             List<String> headersInFileList;
@@ -252,18 +252,18 @@ public class ItemServiceImpl implements ItemService {
                 headersInFileArray = StringUtils.split(header, ",");
                 headersInFileList = Arrays.asList(headersInFileArray);
             } else {
-                responses.add(new ValidateCSVResponse(0, "", "The file has only one header."));
-                LOGGER.error("The file has only one header");
+                responses.add(new ValidateCSVResponse(0, "", "The file does not contain header values separated with comma."));
+                LOGGER.info("The file does not contain header values separated with comma");
                 return false;
             }
             for (String expectedHeader : expectedHeaders) {
                 if (!headersInFileList.contains(expectedHeader)) {
                     responses.add(new ValidateCSVResponse(0, expectedHeader, "Header " + expectedHeader + " is not present."));
-                    hasNoerrors = false;
-                    LOGGER.error("Header " + expectedHeader + " is not present");
+                    hasErrors = true;
+                    LOGGER.info("Header " + expectedHeader + " is not present");
                 }
             }
-            return hasNoerrors;
+            return !hasErrors;
         } catch (Exception e) {
             throw new BadRequestException("Could not validate CSV headers: " + e);
         }
@@ -288,7 +288,7 @@ public class ItemServiceImpl implements ItemService {
             header = getHeaderCSV(file.getInputStream());
         } catch (IOException e) {
             responses.add(new ValidateCSVResponse(0, "", "Unable to parse CSV file: " + e.getMessage()));
-            LOGGER.error("Unable to parse CSV file: " + e.getMessage());
+            LOGGER.info("Unable to parse CSV file: " + e.getMessage());
             return null;
         }
 
@@ -303,7 +303,7 @@ public class ItemServiceImpl implements ItemService {
 
         if (Iterables.getLength(csvRecords) == 0) {
             responses.add(new ValidateCSVResponse(0, "", "CSV is empty"));
-            LOGGER.error("CSV is empty");
+            LOGGER.info("CSV is empty");
             return null;
         }
 
@@ -315,43 +315,43 @@ public class ItemServiceImpl implements ItemService {
                 item.setName(csvRecord.get("name"));
             } catch (Exception e) {
                 responses.add(new ValidateCSVResponse(i, "name", e.getMessage()));
-                LOGGER.error("Error at field name in line " + i + ": " + e.getMessage());
+                LOGGER.info("Error at field name in line " + i + ": " + e.getMessage());
             }
             try {
                 item.setStartPrice(Double.parseDouble(csvRecord.get("startPrice")));
             } catch (Exception e) {
                 responses.add(new ValidateCSVResponse(i, "startPrice", e.getMessage()));
-                LOGGER.error("Error at field startPrice in line " + i + ": " + e.getMessage());
+                LOGGER.info("Error at field startPrice in line " + i + ": " + e.getMessage());
             }
             try {
                 item.setStartDate(ZonedDateTime.parse(csvRecord.get("startDate")));
                 if (item.getStartDate().isBefore(ZonedDateTime.now())) {
                     responses.add(new ValidateCSVResponse(i, "startDate", "Start Date cannot be before today."));
-                    LOGGER.error("Field startDate in line " + i + " cannot be before today.");
+                    LOGGER.info("Field startDate in line " + i + " cannot be before today.");
                 }
             } catch (Exception e) {
                 responses.add(new ValidateCSVResponse(i, "startDate", e.getMessage()));
-                LOGGER.error("Error at field startDate in line " + i + ": " + e.getMessage());
+                LOGGER.info("Error at field startDate in line " + i + ": " + e.getMessage());
             }
             try {
                 item.setEndDate(ZonedDateTime.parse(csvRecord.get("endDate")));
                 if (item.getEndDate().isBefore(ZonedDateTime.now())) {
                     responses.add(new ValidateCSVResponse(i, "endDate", "End Date cannot be before today."));
-                    LOGGER.error("Field endDate in line " + i + " cannot be before today.");
+                    LOGGER.info("Field endDate in line " + i + " cannot be before today.");
                 }
                 if (item.getEndDate().isBefore(item.getStartDate())) {
                     responses.add(new ValidateCSVResponse(i, "endDate", "End Date cannot be before Start Date."));
-                    LOGGER.error("Field endDate in line " + i + " cannot be before startDate.");
+                    LOGGER.info("Field endDate in line " + i + " cannot be before startDate.");
                 }
             } catch (Exception e) {
                 responses.add(new ValidateCSVResponse(i, "endDate", e.getMessage()));
-                LOGGER.error("Error at field endDate in line " + i + ": " + e.getMessage());
+                LOGGER.info("Error at field endDate in line " + i + ": " + e.getMessage());
             }
             try {
                 item.setDescription(csvRecord.get("description"));
             } catch (Exception e) {
                 responses.add(new ValidateCSVResponse(i, "description", e.getMessage()));
-                LOGGER.error("Error at field name in description " + i + ": " + e.getMessage());
+                LOGGER.info("Error at field name in description " + i + ": " + e.getMessage());
             }
             item.setNoBids(0);
             item.setSeller(seller);
@@ -359,7 +359,7 @@ public class ItemServiceImpl implements ItemService {
                 item.setCategory(findCategoryIdByName(csvRecord.get("category")));
             } catch (Exception e) {
                 responses.add(new ValidateCSVResponse(i, "category", e.getMessage()));
-                LOGGER.error("Error at field category in line " + i + ": " + e.getMessage());
+                LOGGER.info("Error at field category in line " + i + ": " + e.getMessage());
             }
             try {
                 item.setSubcategory(findSubcategoryByNameAndCategoryId(
@@ -367,7 +367,7 @@ public class ItemServiceImpl implements ItemService {
                         csvRecord.get("subcategory")));
             } catch (Exception e) {
                 responses.add(new ValidateCSVResponse(i, "subcategory", e.getMessage()));
-                LOGGER.error("Error at field subcategory in line " + i + ": " + e.getMessage());
+                LOGGER.info("Error at field subcategory in line " + i + ": " + e.getMessage());
             }
             i++;
             List<ImageToUpload> inputStreams = checkImagesValidity(csvRecord.get("images"), userId, responses, i);
@@ -415,7 +415,7 @@ public class ItemServiceImpl implements ItemService {
         String[] splitImages = images.trim().split("\\s+");
         if (splitImages.length < 3 || splitImages.length > 10) {
             responses.add(new ValidateCSVResponse(line, "images", "Must upload between 3 and 10 images per product"));
-            LOGGER.error("Error at field images in line " + line + ": Must upload between 3 and 10 images.");
+            LOGGER.info("Error at field images in line " + line + ": Must upload between 3 and 10 images.");
         }
         List<ImageToUpload> imagesToUpload = new ArrayList<>();
         for (String image : splitImages) {
@@ -425,7 +425,7 @@ public class ItemServiceImpl implements ItemService {
                 inputStream = new URL(image).openStream();
             } catch (Exception e) {
                 responses.add(new ValidateCSVResponse(line, "images", "Invalid image url: " + image));
-                LOGGER.error("Error at field images in line " + line + ": Invalid URL " + image);
+                LOGGER.info("Error at field images in line " + line + ": Invalid URL " + image);
             }
             String format = null;
             if (inputStream != null) {
@@ -437,7 +437,7 @@ public class ItemServiceImpl implements ItemService {
                         reader.setInput(imageInputStream);
                         if (!(format.equalsIgnoreCase("JPEG") || format.equalsIgnoreCase("PNG"))) {
                             responses.add(new ValidateCSVResponse(line, "images", "Image must be JPEG or PNG:  " + image));
-                            LOGGER.error("Error at field images in line " + line + ": Image must be JPEG or PNG " + image);
+                            LOGGER.info("Error at field images in line " + line + ": Image must be JPEG or PNG " + image);
                         }
                     }
                     ImageToUpload imageToUpload = new ImageToUpload(

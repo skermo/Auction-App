@@ -15,6 +15,7 @@ const UploadCsv = () => {
   const [errors, setErrors] = useState([]);
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isFilePresent, setIsFilePresent] = useState(false);
 
   const handleSubmit = async (value) => {
     setLoading(true);
@@ -40,7 +41,7 @@ const UploadCsv = () => {
   return (
     <div className="upload-csv-page">
       <FormContainer>
-        <h3>Upload CSV</h3>
+        <h3>Add items using CSV</h3>
         <Formik initialValues={{ file: "" }} onSubmit={handleSubmit}>
           <Form className="form">
             <label>Your CSV should have the following headers: </label>
@@ -122,12 +123,20 @@ const UploadCsv = () => {
                 </tbody>
               </table>
             </div>
+            <Field
+              name="file"
+              id="file"
+              component={DragNDrop}
+              type="csv"
+              setIsFilePresent={setIsFilePresent}
+              setErrMsg={setErrors}
+            />
             {errMsg && (
               <div className="csv-errors">
                 <label className="label-error">{errMsg}</label>
               </div>
             )}
-            {errors.length > 0 && (
+            {errors.length > 0 && isFilePresent && (
               <div className="csv-errors">
                 <label className="label-error">
                   Your CSV is invalid. <br /> Please correct the mistakes stated
@@ -150,23 +159,33 @@ const UploadCsv = () => {
                 </ol>
               </div>
             )}
-            <Field name="file" id="file" component={DragNDrop} type="csv" />
-            {loading ? (
-              <Button
-                text="UPLOADING..."
-                type="primary"
-                model="button"
-                className="btn-full-width"
-                disabled={true}
-              />
-            ) : (
-              <Button
-                model="submit"
-                text="SUBMIT"
-                type="primary"
-                className="btn-full-width"
-              />
-            )}
+            <div className="buttons">
+              <div className="cancel-btn">
+                <Button
+                  text="CANCEL"
+                  model="button"
+                  type="tertiary"
+                  className="text-dark"
+                  onClick={() => navigate(`/my-account/${auth.user.id}/seller`)}
+                />
+              </div>
+              {loading ? (
+                <Button
+                  text="UPLOADING..."
+                  type="primary"
+                  model="button"
+                  className="btn-full-width"
+                  disabled={true}
+                />
+              ) : (
+                <Button
+                  model="submit"
+                  text="SUBMIT"
+                  type="primary"
+                  className="btn-full-width"
+                />
+              )}
+            </div>
           </Form>
         </Formik>
       </FormContainer>
