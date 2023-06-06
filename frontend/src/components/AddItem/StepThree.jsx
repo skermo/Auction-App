@@ -10,7 +10,7 @@ import { customStyle2 } from "../CustomSelect/selectStyles";
 import FormContainer from "../FormContainer/FormContainer";
 import InputField from "../InputField/InputField";
 
-const StepThree = ({ data, next, prev }) => {
+const StepThree = ({ data, next, prev, loading }) => {
   const navigate = useNavigate();
   const { auth } = useAuth();
 
@@ -80,25 +80,35 @@ const StepThree = ({ data, next, prev }) => {
               autoComplete="off"
             />
             <ErrorMessage name="phoneNumber" component="span" />
-            <div className="buttons">
+            {loading ? (
               <Button
-                text="CANCEL"
+                text="ADDING ITEM..."
+                type="primary"
                 model="button"
-                type="tertiary"
-                className="text-dark"
-                onClick={() => navigate(`/my-account/${auth.user.id}/seller`)}
+                className="btn-full-width"
+                disabled={true}
               />
-              <div className="buttons-right">
+            ) : (
+              <div className="buttons">
                 <Button
+                  text="CANCEL"
                   model="button"
-                  text="BACK"
-                  type="secondary"
+                  type="tertiary"
                   className="text-dark"
-                  onClick={() => prev(values)}
+                  onClick={() => navigate(`/my-account/${auth.user.id}/seller`)}
                 />
-                <Button text="SUBMIT" type="primary" model="submit" />
+                <div className="buttons-right">
+                  <Button
+                    model="button"
+                    text="BACK"
+                    type="secondary"
+                    className="text-dark"
+                    onClick={() => prev(values)}
+                  />
+                  <Button text="SUBMIT" type="primary" model="submit" />
+                </div>
               </div>
-            </div>
+            )}
           </Form>
         )}
       </Formik>

@@ -124,7 +124,11 @@ const ProductOverview = () => {
       <ToastContainer />
       {openPopUpPayment && (
         <PopUp closePopUp={setOpenPopUpPayment} className="payment-modal">
-          <Payment item={item} isBought={setIsBought} />
+          <Payment
+            item={item}
+            isBought={setIsBought}
+            isOpen={setOpenPopUpPayment}
+          />
         </PopUp>
       )}
       {openPopUpBid && (

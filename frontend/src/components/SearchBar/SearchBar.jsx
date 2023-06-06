@@ -4,7 +4,7 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import searchIcon from "../../resources/icons/searchIcon.svg";
+import { SearchIcon } from "../../resources/icons";
 import { SHOP } from "../../routes/routes";
 import "./search-bar.scss";
 
@@ -30,25 +30,36 @@ const SearchBar = () => {
     setSearchTerm(event.target.value);
   };
 
+  const navigateToShop = () => {
+    navigate({
+      pathname: SHOP,
+      search: `?${createSearchParams(params)}`,
+    });
+  };
+
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && searchTerm.trim().length) {
-      navigate({
-        pathname: SHOP,
-        search: `?${createSearchParams(params)}`,
-      });
+      navigateToShop();
     }
   };
 
   return (
-    <input
-      type="text"
-      placeholder="Search.."
-      className="search-bar"
-      style={{ backgroundImage: `url(${searchIcon})` }}
-      value={searchTerm}
-      onChange={handleChange}
-      onKeyDown={handleKeyDown}
-    />
+    <div className="search-bar-outer">
+      <input
+        type="text"
+        placeholder="Search.."
+        className="search-bar"
+        value={searchTerm}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+      />
+      <SearchIcon
+        className="icon"
+        onClick={() => {
+          searchTerm.trim().length && navigateToShop();
+        }}
+      />
+    </div>
   );
 };
 

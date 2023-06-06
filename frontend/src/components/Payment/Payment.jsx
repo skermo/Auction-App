@@ -1,9 +1,10 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import { PaymentInputsWrapper, usePaymentInputs } from "react-payment-inputs";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuth from "../../hooks/useAuth";
+import useToast from "../../hooks/useToast";
 import { paymentService } from "../../services/paymentService";
 import { COUNTRY_LIST } from "../../utils/countryList";
 import { shippingAndPaymentValidationSchema } from "../../utils/formValidation";
@@ -14,12 +15,12 @@ import FormContainer from "../FormContainer/FormContainer";
 import InputField from "../InputField/InputField";
 import "./payment.scss";
 
-const Payment = ({ item, isBought }) => {
+const Payment = ({ item, isBought, isOpen }) => {
   const [errMsg, setErrMsg] = useState("");
   const [loadingPayment, setLoadingPayment] = useState(false);
-  const [success, setSuccess] = useState(false);
 
   const { auth } = useAuth();
+  const { successToast } = useToast();
 
   const {
     meta,
@@ -39,18 +40,9 @@ const Payment = ({ item, isBought }) => {
       data.itemId = item.id;
       data.amount = item.highestBid;
       await paymentService.payForItem(auth.accessToken, data);
-      toast.success("Payment successful!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      successToast("Payment successful!");
       isBought(true);
-      setSuccess(true);
+      isOpen(false);
     } catch (error) {
       if (!error?.response) {
         setErrMsg("No Server Response");
@@ -196,7 +188,7 @@ const Payment = ({ item, isBought }) => {
               </div>
 
               <span>{errMsg}</span>
-              {loadingPayment && !success && (
+              {loadingPayment ? (
                 <Button
                   text="PROCESSING PAYMENT..."
                   type="primary"
@@ -204,17 +196,7 @@ const Payment = ({ item, isBought }) => {
                   className="btn-full-width"
                   disabled={true}
                 />
-              )}
-              {success && (
-                <Button
-                  text="PAYMENT SUCCESSFUL"
-                  type="success"
-                  model="button"
-                  className="btn-full-width"
-                  disabled={true}
-                />
-              )}
-              {!success && !loadingPayment && (
+              ) : (
                 <Button
                   text="PAY"
                   type="primary"

@@ -11,6 +11,7 @@ import "./add-item.scss";
 const AddItem = () => {
   const { auth } = useAuth();
   const [errMsg, setErrMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [data, setData] = useState({
     name: "",
@@ -34,6 +35,7 @@ const AddItem = () => {
     setData((prev) => ({ ...prev, ...newData }));
     if (final) {
       try {
+        setLoading(true);
         const formData = new FormData();
         newData.photos.forEach((photo) => {
           formData.append("files", photo);
@@ -45,7 +47,8 @@ const AddItem = () => {
         });
         formData.append("item", blob);
         await itemService.addNewItem(auth.user.id, auth.accessToken, formData);
-        navigate(`/my-account/${auth.user.id}/seller`, { showToast: true });
+        setLoading(false);
+        navigate(`/my-account/${auth.user.id}/seller`, { state: "item" });
       } catch (error) {
         if (!error?.response) {
           setErrMsg("No Server Response");
@@ -69,7 +72,12 @@ const AddItem = () => {
   const steps = [
     <StepOne data={data} next={handleNextStep} />,
     <StepTwo data={data} next={handleNextStep} prev={handlePrevStep} />,
-    <StepThree data={data} next={handleNextStep} prev={handlePrevStep} />,
+    <StepThree
+      data={data}
+      next={handleNextStep}
+      prev={handlePrevStep}
+      loading={loading}
+    />,
   ];
 
   return (
