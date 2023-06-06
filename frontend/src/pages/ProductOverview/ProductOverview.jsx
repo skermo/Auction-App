@@ -51,6 +51,10 @@ const ProductOverview = () => {
     }
   }, [item]);
 
+  useEffect(() => {
+    setOpenPopUpPayment(location.state || false);
+  }, []);
+
   const handleItemUpdate = (e) => {
     const data = JSON.parse(e.data);
     setHighestBid(utils.parseNum(data.amount));

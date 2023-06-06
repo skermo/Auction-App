@@ -37,7 +37,6 @@ const MyAccount = () => {
     } else if (location.state === "item") {
       successToast("Successfully added item!");
     }
-    window.history.replaceState({}, MyAccount);
   }, [location.state]);
 
   const tabIcons = [hamburgerTab, coin];

@@ -243,7 +243,7 @@ public class ItemServiceImpl implements ItemService {
         }
 
         List<Item> items = csvToItems(file, userId, responses);
-        if (items == null) {
+        if (items == null || responses.size() > 0) {
             return responses;
         }
         itemRepository.saveAll(items);

@@ -13,7 +13,7 @@ const Bids = ({ id }) => {
       .then((res) => setBids(res));
   }, [auth?.accessToken, id]);
 
-  return <Table items={bids} type="bids" />;
+  return <Table className="bid" items={bids} type="bids" />;
 };
 
 export default Bids;
