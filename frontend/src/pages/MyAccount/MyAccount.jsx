@@ -34,6 +34,8 @@ const MyAccount = () => {
   useEffect(() => {
     if (location.state === "csv") {
       successToast("Successfully uploaded CSV!");
+    } else if (location.state === "item") {
+      successToast("Successfully added item!");
     }
   }, [location.state]);
 

@@ -5,11 +5,11 @@ import Button from "../Button/Button";
 import TableRow from "../TableRow/TableRow";
 import "./table.scss";
 
-const Table = ({ items, type }) => {
+const Table = ({ items, type, className }) => {
   const navigate = useNavigate();
 
   return (
-    <table>
+    <table className={className}>
       <thead>
         <tr className="header">
           <th className="width-10">Item</th>

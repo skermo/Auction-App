@@ -51,6 +51,10 @@ const ProductOverview = () => {
     }
   }, [item]);
 
+  useEffect(() => {
+    setOpenPopUpPayment(location.state || false);
+  }, []);
+
   const handleItemUpdate = (e) => {
     const data = JSON.parse(e.data);
     setHighestBid(utils.parseNum(data.amount));
@@ -124,7 +128,11 @@ const ProductOverview = () => {
       <ToastContainer />
       {openPopUpPayment && (
         <PopUp closePopUp={setOpenPopUpPayment} className="payment-modal">
-          <Payment item={item} isBought={setIsBought} />
+          <Payment
+            item={item}
+            isBought={setIsBought}
+            isOpen={setOpenPopUpPayment}
+          />
         </PopUp>
       )}
       {openPopUpBid && (

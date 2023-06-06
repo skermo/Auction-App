@@ -1,19 +1,32 @@
 package com.internship.auctionapp.service.impl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+
 import com.internship.auctionapp.aws.FileStore;
-import com.internship.auctionapp.aws.bucket.BucketName;
-import com.internship.auctionapp.dto.ItemDto;
 import com.internship.auctionapp.entity.*;
-import com.internship.auctionapp.exception.BadRequestException;
-import com.internship.auctionapp.exception.ConflictException;
-import com.internship.auctionapp.exception.NotFoundException;
-import com.internship.auctionapp.helpers.ImageToUpload;
 import com.internship.auctionapp.repository.*;
-import com.internship.auctionapp.request.ItemRequest;
-import com.internship.auctionapp.response.ItemResponse;
-import com.internship.auctionapp.response.ValidateCSVResponse;
-import com.internship.auctionapp.service.ItemService;
-import com.internship.auctionapp.util.StringComparison;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -30,18 +43,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.time.ZonedDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.internship.auctionapp.aws.bucket.BucketName;
+import com.internship.auctionapp.dto.ItemDto;
+import com.internship.auctionapp.exception.BadRequestException;
+import com.internship.auctionapp.exception.ConflictException;
+import com.internship.auctionapp.exception.NotFoundException;
+import com.internship.auctionapp.helpers.ImageToUpload;
+import com.internship.auctionapp.request.ItemRequest;
+import com.internship.auctionapp.response.ItemResponse;
+import com.internship.auctionapp.response.ValidateCSVResponse;
+import com.internship.auctionapp.service.ItemService;
+import com.internship.auctionapp.util.StringComparison;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -231,7 +243,7 @@ public class ItemServiceImpl implements ItemService {
         }
 
         List<Item> items = csvToItems(file, userId, responses);
-        if (items == null) {
+        if (items == null || responses.size() > 0) {
             return responses;
         }
         itemRepository.saveAll(items);

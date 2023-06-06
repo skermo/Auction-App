@@ -1,25 +1,33 @@
 @import "src/styles/variables.scss";
 
-.search-bar {
-  width: 528px;
-  height: 30px;
-  border: 1px solid $lightestGrey;
-  box-sizing: content-box;
-  padding: 10px;
-  background-repeat: no-repeat;
-  background-size: 1.5em;
-  background-position: right 10px top 15px;
+.search-bar-outer{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   box-shadow: 2px 2px 0 0 $lightestGrey;
+  border: 1px solid $lightestGrey;
   color: $darkGrey;
+  padding: 10px;
   letter-spacing: 0.2px;
+  .search-bar {
+    border: none;
+    width: 528px;
+    height: 30px;
+    box-sizing: content-box;
+  }
+  
+  .search-bar::placeholder {
+    color: $lightGrey;
+  }
+  .search-bar:focus {
+    outline: none;
+  }
+  .icon{
+    cursor: pointer;
+  }
 }
-
-.search-bar::placeholder {
-  color: $lightGrey;
-  letter-spacing: 0.2px;
-}
-
-.search-bar:focus {
+.search-bar-outer:focus {
   box-shadow: 0 0 0 0;
+  border: 2px solid $darkGrey;
   outline-color: $darkGrey;
 }
