@@ -18,7 +18,7 @@ public class AmazonConfig {
                 System.getenv("aws_secret_key"));
         return AmazonS3ClientBuilder
                 .standard()
-                .withRegion("eu-central-1")
+                .withRegion("eu-north-1")
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
     }
