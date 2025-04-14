@@ -26,15 +26,19 @@
     <li>
       <a href="#tech-stack">Tech Stack</a>
     </li>
-        <li>
-      <a href="#development-process-and-features">Development process and features</a>
-                <ul>
-        <li><a href="#first-month">First month</a></li>
-                  <li><a href="#second-month">Second month</a></li>
-                  <li><a href="#third-month">Third month</a></li>
-      </ul>
+    <li>
+      <a href="#requirements">Requirements</a>
     </li>
-            <li>
+    <li>
+      <a href="#installation">Installation</a>
+    </li>
+    <li>
+      <a href="#usage">Usage</a>
+    </li>
+    <li>
+      <a href="#development-process-and-features">Development process and features</a>
+    </li>
+    <li>
       <a href="#contact">Contact</a>
     </li>
   </ol>
@@ -55,6 +59,57 @@ Auction app is an web application that serves as an online marketplace. It enabl
 - **Spring Boot**
 - **React.js**
 - **PostgreSQL**
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- REQUIREMENTS -->
+
+## Requirements
+
+- Java 17
+- Node 18
+- Postgres with database named `auctionapp`
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- INSTALLATION -->
+
+## Installation
+
+### Backend
+
+1. Navigate to the backend directory `cd auctionapp`
+2. Setup necessary enviroment variables (`db_url`, `db_username`, `db_password`, `jwt_secret` (should be hashed), `stripe_secret_key`, `aws_access_key`, `aws_secret_key`)
+3. Install Maven dependencies `./mvnw clean install`
+4. Run the application `./mvnw spring-boot:run`
+
+### Frontend
+
+1. Navigate to the frontend directory `cd frontend`
+2. Install npm packages `npm install`
+4. Run the application `npm start`
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- USAGE -->
+
+## Usage
+
+### Backend
+Backend is started at `http://localhost:8080` and for testing purposes, Swagger is available at `http://localhost:8080/swagger-ui/index.html`.
+
+### Frontend
+Frontend is started at `http://localhost:3000`.
+
+### Database
+For easier setup of the database, a docker-compose file is added. 
+Steps to start database with Docker:
+
+1. Download Docker
+2. Navigate to the backend directory `cd auctionapp`
+3. Run `docker compose up`
+
+NOTE: After starting the backend, all of the neccessary database migrations will automatically be executed and test data will be seeded.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
