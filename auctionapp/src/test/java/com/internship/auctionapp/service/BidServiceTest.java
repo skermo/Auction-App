@@ -7,6 +7,7 @@ import com.internship.auctionapp.entity.User;
 import com.internship.auctionapp.exception.BadRequestException;
 import com.internship.auctionapp.repository.BidRepository;
 import com.internship.auctionapp.repository.ItemRepository;
+import com.internship.auctionapp.repository.NotificationRepository;
 import com.internship.auctionapp.service.impl.BidServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.modelmapper.ModelMapper;
 
 import java.time.Instant;
@@ -29,6 +32,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class BidServiceTest {
 
     @Mock
@@ -37,6 +41,10 @@ class BidServiceTest {
     ModelMapper mapper = new ModelMapper();
     @Mock
     private BidRepository bidRepository;
+    @Mock
+    private SseEmitterService sseEmitterService;
+    @Mock
+    private NotificationRepository notificationRepository;
     @InjectMocks
     private BidServiceImpl bidService;
 
@@ -120,6 +128,8 @@ class BidServiceTest {
         Mockito.when(itemRepository.findById(bidDto.getItemId())).thenReturn(Optional.of(item));
         Mockito.when(bidRepository.existsByUserIdAndItemId(Mockito.any(), Mockito.any())).thenReturn(true);
         Mockito.when(bidRepository.findByUserIdAndItemId(Mockito.any(), Mockito.any())).thenReturn(bid);
+        Mockito.doNothing().when(sseEmitterService).notify(Mockito.any(), Mockito.any());
+        Mockito.when(bidRepository.findBiggestBidByItemId(Mockito.any())).thenReturn(bid);
         bidService.saveNewBid(bidDto);
         Mockito.verify(bidRepository, Mockito.times(1)).save(ArgumentMatchers.any(Bid.class));
 
@@ -129,32 +139,47 @@ class BidServiceTest {
     void test_saveNewBid_creates_new_bid() {
 
         BidDto bidDto = getValidBidDto();
-
         Item item = getValidItem();
-
+        Bid bid = Bid.builder()
+                .id(bidDto.getId())
+                .item(Item.builder().id(bidDto.getItemId()).build())
+                .user(User.builder().id(bidDto.getUserId()).build())
+                .amount(bidDto.getAmount())
+                .build();
         Mockito.when(itemRepository.findById(bidDto.getItemId())).thenReturn(Optional.of(item));
         Mockito.when(bidRepository.existsByUserIdAndItemId(Mockito.any(), Mockito.any())).thenReturn(false);
+        Mockito.doNothing().when(sseEmitterService).notify(Mockito.any(), Mockito.any());
+        Mockito.when(bidRepository.findBiggestBidByItemId(Mockito.any())).thenReturn(bid);
+        Mockito.when(notificationRepository.save(Mockito.any())).thenAnswer(invocation -> invocation.getArgument(0));
+        Mockito.when(bidRepository.save(Mockito.any())).thenReturn(bid);
         bidService.saveNewBid(bidDto);
         Mockito.verify(bidRepository, Mockito.times(1)).save(ArgumentMatchers.any());
-
     }
 
     @Test
-    void test_saveNewBidWithLondonTimezone_creates_new_bid(){
+    void test_saveNewBidWithLondonTimezone_creates_new_bid() {
 
         BidDto bidDto = getValidBidDto();
-
         Item item = getValidItemLondonOneHourAhead();
+        Bid bid = Bid.builder()
+                .id(bidDto.getId())
+                .item(Item.builder().id(bidDto.getItemId()).build())
+                .user(User.builder().id(bidDto.getUserId()).build())
+                .amount(bidDto.getAmount())
+                .build();
 
         Mockito.when(itemRepository.findById(bidDto.getItemId())).thenReturn(Optional.of(item));
         Mockito.when(bidRepository.existsByUserIdAndItemId(Mockito.any(), Mockito.any())).thenReturn(false);
+        Mockito.lenient().when(bidRepository.save(Mockito.any())).thenReturn(bid);
+
         bidService.saveNewBid(bidDto);
+
         Mockito.verify(bidRepository, Mockito.times(1)).save(ArgumentMatchers.any());
 
     }
 
     @Test
-    void test_saveNewBidWithRigaTimezone_throws_exception_if_end_date_passed(){
+    void test_saveNewBidWithRigaTimezone_throws_exception_if_end_date_passed() {
 
         BidDto bidDto = getValidBidDto();
 
@@ -184,9 +209,7 @@ class BidServiceTest {
     }
 
     private ZonedDateTime getValidDate() {
-        return ZonedDateTime.of(
-                2024, 12, 3, 12, 20, 59,
-                90000, ZoneId.systemDefault());
+        return ZonedDateTime.now().plusYears(1);
     }
 
     private ZonedDateTime getInvalidDate() {
@@ -195,7 +218,7 @@ class BidServiceTest {
                 90000, ZoneId.systemDefault());
     }
 
-    private Item getValidItemLondonOneHourAhead(){
+    private Item getValidItemLondonOneHourAhead() {
         return Item.builder()
                 .id(UUID.randomUUID())
                 .startPrice(3)
@@ -205,7 +228,7 @@ class BidServiceTest {
                 .build();
     }
 
-    private Item getItemRigaTimeNow(){
+    private Item getItemRigaTimeNow() {
         return Item.builder()
                 .id(UUID.randomUUID())
                 .startPrice(3)
@@ -215,16 +238,16 @@ class BidServiceTest {
                 .build();
     }
 
-    private Instant getInstantOneHourAhead(){
+    private Instant getInstantOneHourAhead() {
         Instant instant = Instant.now();
         return instant.plus(1, ChronoUnit.HOURS);
     }
 
-    private ZonedDateTime getLondonTimeOneHourAhead(){
+    private ZonedDateTime getLondonTimeOneHourAhead() {
         return ZonedDateTime.ofInstant(getInstantOneHourAhead(), ZoneId.of("Europe/London"));
     }
 
-    private ZonedDateTime getRigaTimeNow(){
+    private ZonedDateTime getRigaTimeNow() {
         return ZonedDateTime.ofInstant(Instant.now(), ZoneId.of("Europe/Riga"));
     }
 }

@@ -44,7 +44,7 @@ public class BidServiceImpl implements BidService {
         checkBidValidity(bidDto, item);
         Bid bid;
         Bid currentHighestBid = bidRepository.findBiggestBidByItemId(item.getId());
-        if (bidRepository.existsByUserIdAndItemId(bidDto.getUserId(), bidDto.getItemId())) {
+        if (currentHighestBid != null && bidRepository.existsByUserIdAndItemId(bidDto.getUserId(), bidDto.getItemId())) {
             if (!currentHighestBid.getUser().getId().equals(bidDto.getUserId())) {
 
                 notifyPreviousHighestBidder(item, currentHighestBid);
@@ -60,7 +60,7 @@ public class BidServiceImpl implements BidService {
                     bid.getItem().getId().toString());
             return new ResponseEntity<>(mapToDto(bid), HttpStatus.OK);
         } else {
-            if (item.getHighestBid() != 0) {
+            if (item.getHighestBid() != 0 && currentHighestBid != null) {
                 notifyPreviousHighestBidder(item, currentHighestBid);
             }
             bid = bidRepository.save(mapToEntity(bidDto));
