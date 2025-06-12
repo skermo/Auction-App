@@ -127,7 +127,7 @@ const Dropdown = ({ label }) => {
           {notifications.length < 8 ? (
             notifications.length > 0 ? (
               <div className="dropdown-body">
-                {notifications.map((value, key) => {
+                {notifications.map((value) => {
                   return (
                     <DropdownRow
                       key={value.id}
@@ -153,7 +153,7 @@ const Dropdown = ({ label }) => {
               className="dropdown-body"
               height={600}
             >
-              {notifications.map((value, key) => {
+              {notifications.map((value) => {
                 return (
                   <DropdownRow
                     key={value.id}

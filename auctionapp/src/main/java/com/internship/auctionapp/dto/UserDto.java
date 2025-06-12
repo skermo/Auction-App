@@ -1,17 +1,12 @@
 package com.internship.auctionapp.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.internship.auctionapp.entity.Bid;
-import com.internship.auctionapp.entity.Item;
 import com.internship.auctionapp.entity.Role;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 

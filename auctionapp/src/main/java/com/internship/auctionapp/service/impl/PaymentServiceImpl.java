@@ -150,8 +150,8 @@ public class PaymentServiceImpl implements PaymentService {
                 .findById(paymentRequest.getUserId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
         if (paymentRequest.getExpirationYear() < ZonedDateTime.now().getYear()
-                || (paymentRequest.getExpirationYear() == ZonedDateTime.now().getYear()
-                && paymentRequest.getExpirationMonth() <= ZonedDateTime.now().getMonthValue())) {
+                || paymentRequest.getExpirationYear() == ZonedDateTime.now().getYear()
+                && paymentRequest.getExpirationMonth() <= ZonedDateTime.now().getMonthValue()) {
             throw new BadRequestException("Card has expired");
         }
         if (shipmentRepository.existsByItemId(paymentRequest.getItemId())) {

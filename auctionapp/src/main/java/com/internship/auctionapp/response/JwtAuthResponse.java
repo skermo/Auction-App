@@ -1,7 +1,6 @@
 package com.internship.auctionapp.response;
 
 import com.internship.auctionapp.dto.UserDto;
-import com.internship.auctionapp.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

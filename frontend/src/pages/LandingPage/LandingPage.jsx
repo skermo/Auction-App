@@ -69,7 +69,7 @@ const LandingPage = () => {
     <div className="landing-page">
       <div className="top-part">
         <ul title="CATEGORIES" className="categories-list">
-          {categories.map((value, key) => (
+          {categories.map((value) => (
             <li key={value.id} onClick={() => searchByCategory(value.name)}>
               {value.name}
             </li>
@@ -82,7 +82,7 @@ const LandingPage = () => {
         <div className="recommendations">
           <div className="recommended-text">Recommended Products</div>
           <div className="recommended-items">
-            {recommendedItems.map((value, key) => (
+            {recommendedItems.map((value) => (
               <GridItem
                 item={value}
                 key={value.id}
@@ -101,7 +101,7 @@ const LandingPage = () => {
               hasMore={!lastPageNewArrivals}
               loader={<Loader />}
             >
-              {newArrivals.map((value, key) => {
+              {newArrivals.map((value) => {
                 return <GridItem key={value.id} item={value} />;
               })}
             </InfiniteScroll>
@@ -113,7 +113,7 @@ const LandingPage = () => {
               hasMore={!lastPageLastChance}
               loader={<Loader />}
             >
-              {lastChance.map((value, key) => {
+              {lastChance.map((value) => {
                 return <GridItem key={value.id} item={value} />;
               })}
             </InfiniteScroll>

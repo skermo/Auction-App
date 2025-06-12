@@ -164,7 +164,7 @@ const Shop = () => {
           <div className="forms">
             <form>
               <ul title="PRODUCT CATEGORIES">
-                {categories.map((value, key) => {
+                {categories.map((value) => {
                   return (
                     <li key={value.id}>
                       <Checkbox
@@ -208,7 +208,7 @@ const Shop = () => {
               />
             </div>
             <div className="products">
-              {items.map((value, key) => {
+              {items.map((value) => {
                 return (
                   <GridItem key={value.id} item={value} className="portrait" />
                 );

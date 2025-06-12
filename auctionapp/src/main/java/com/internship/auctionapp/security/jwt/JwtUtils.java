@@ -27,7 +27,7 @@ public class JwtUtils {
         final Date createdDate = new Date();
         final Date expirationDate = new Date(createdDate.getTime() + jwtExpirationMs);
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
+                .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
                 .signWith(key())

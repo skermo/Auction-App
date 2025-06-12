@@ -107,7 +107,7 @@ public class BidServiceImpl implements BidService {
     }
 
     private void checkBidValidity(BidDto bidDto, Item item) {
-        ZonedDateTime now = java.time.ZonedDateTime.now();
+        ZonedDateTime now = ZonedDateTime.now();
         if (bidDto.getAmount() < item.getStartPrice()) {
             throw new BadRequestException("Bid cannot be lower than item's start price.");
         }

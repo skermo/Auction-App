@@ -92,7 +92,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto getFirstAvailableItem() {
-        ZonedDateTime now = java.time.ZonedDateTime.now();
+        ZonedDateTime now = ZonedDateTime.now();
         Item item = itemRepository.findFirstByEndDateGreaterThanEqualAndStartDateLessThanEqual(now, now);
         return mapToDto(item);
     }
@@ -103,7 +103,7 @@ public class ItemServiceImpl implements ItemService {
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-        ZonedDateTime now = java.time.ZonedDateTime.now();
+        ZonedDateTime now = ZonedDateTime.now();
         Page<Item> items = itemRepository.findByEndDateGreaterThanEqualAndStartDateLessThanEqual(now, now, pageable);
         return items.map(this::mapToDto);
     }
@@ -134,7 +134,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getActiveSellerItems(UUID sellerId) {
-        ZonedDateTime now = java.time.ZonedDateTime.now();
+        ZonedDateTime now = ZonedDateTime.now();
         List<Item> items = itemRepository
                 .findByEndDateGreaterThanEqualAndStartDateLessThanEqualAndSeller_Id(
                         now,
@@ -175,7 +175,7 @@ public class ItemServiceImpl implements ItemService {
         checkItemRequestValidity(itemRequest, id);
         Item item = mapItemRequestToItem(itemRequest, id);
 
-        List<String> imageNames = uploadPhotos(id, item.getId(), files);
+        List<String> imageNames = uploadPhotos(id, files);
         List<Image> images = new ArrayList<>();
         try {
             for (String imageName : imageNames) {
@@ -550,7 +550,7 @@ public class ItemServiceImpl implements ItemService {
                 .build();
     }
 
-    private List<String> uploadPhotos(UUID sellerId, UUID itemId, List<MultipartFile> files) {
+    private List<String> uploadPhotos(UUID sellerId, List<MultipartFile> files) {
         checkFilesValidity(files);
         List<String> imageNames = new ArrayList<>();
         for (MultipartFile file : files) {
