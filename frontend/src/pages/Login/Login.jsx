@@ -48,7 +48,7 @@ const Login = () => {
           onSubmit={handleSubmit}
         >
           <Form className="form">
-            <label>Email</label>
+            <label htmlFor="email">Email</label>
             <InputField
               id="email"
               name="email"
@@ -56,7 +56,7 @@ const Login = () => {
               type="email"
             />
             <ErrorMessage name="email" component="span" />
-            <label>Password</label>
+            <label htmlFor="password">Password</label>
             <InputField
               id="password"
               name="password"
