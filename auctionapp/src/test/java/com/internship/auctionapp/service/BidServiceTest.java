@@ -298,7 +298,7 @@ class BidServiceTest {
                 .id(UUID.randomUUID())
                 .userId(userId)
                 .itemId(itemId)
-                .amount(15)
+                .amount(130)
                 .build();
 
         Mockito.when(itemRepository.findById(itemId)).thenReturn(Optional.of(item));

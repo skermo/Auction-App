@@ -4,6 +4,7 @@ import com.internship.auctionapp.request.LoginRequest;
 import com.internship.auctionapp.request.RegisterRequest;
 import com.internship.auctionapp.response.JwtAuthResponse;
 import com.internship.auctionapp.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<JwtAuthResponse> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<JwtAuthResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
         JwtAuthResponse jwtAuthResponse = authService.registration(registerRequest);
         return new ResponseEntity<>(jwtAuthResponse, HttpStatus.CREATED);
     }

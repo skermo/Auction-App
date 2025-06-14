@@ -11,5 +11,5 @@ spring:
   flyway:
     enabled: false
 app:
-  jwtSecret: "someSecretForTests"
-  jwtExpiration: 604800000
+  jwtSecret: skF44GrisMO0nmmYYe0T3XHqWS4s0NBEKixqCFKC0Dz
+  jwtExpiration: 3600000
