@@ -67,6 +67,17 @@
       "last 1 safari version"
     ]
   },
+"jest": {
+  "collectCoverageFrom": [
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "!src/**/*.test.js",
+    "!src/**/*.test.jsx",
+    "!src/serviceWorker.js",
+    "!src/index.js",
+    "!**/node_modules/**"
+  ]
+},
   "devDependencies": {
     "@babel/eslint-parser": "^7.27.5",
     "@babel/preset-react": "^7.27.1",
