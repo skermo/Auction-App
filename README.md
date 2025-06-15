@@ -148,6 +148,43 @@ NOTE: After starting the backend, all of the neccessary database migrations will
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- TESTING STRATEGY -->
+
+## Testing Strategy
+
+The project follows a layered testing approach to ensure quality, maintainability, and correctness of both frontend and backend components. The main testing types include:
+
+- Unit Testing: Focused on individual functions, methods, and classes in isolation.
+- Integration Testing: Ensured proper communication between modules, components, and services.
+- Static Testing: Detected issues early through linting and code analysis without executing the code.
+- Regression Testing: Performed after bug fixes to ensure no new issues were introduced.
+- Test Coverage Analysis: Assessed which parts of the codebase are covered by automated tests.
+
+ ### Frontend
+ Tools used:
+ - **Jest** and **React Testing Library** for unit and integration tests
+ - **ESLint** for static code analysis
+ - **@testing-library/jest-dom** for custom matchers
+
+Running the tests:
+- Run unit/integration tests with: `npm test`
+- Run static analysis with `npx eslint . --ext .js,.jsx`
+- Run test coverage report with `npm test -- --coverage --watchAll=false`
+
+ ### Backend
+ Tools used:
+ - **JUnit 5**, **Mockito** and **MockMvc* for unit and integration tests
+ - **PMD** for static code analysis
+ - **JaCoCo** for test coverage report
+
+Running the tests:
+- Run unit/integration tests with: `./mvnw test`
+- Run static analysis with `./mvnw pmd:check`
+- Run test coverage report with `./mvnw test` after which the coverage report will be located at `target/site/jacoco/index.html`
+ 
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 <!-- CONTACT -->
 
 ## Contact
