@@ -34,9 +34,10 @@ export const loginValidationSchema = yup.object().shape({
 
 export const newBidValidationSchema = yup.object().shape({
   amount: yup
-    .number()
+    .number("Bid must be a number")
+    .typeError("Bid must be a number")
     .max(100000000000000, "Bid can't be greater than 100000000000000")
-    .required(),
+    .positive("Bid must be a positive number")
 });
 
 export const newItemStepOneValidationSchema = yup.object().shape({

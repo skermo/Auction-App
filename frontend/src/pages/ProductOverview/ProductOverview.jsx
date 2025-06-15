@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { Form, Formik } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -229,6 +229,9 @@ const ProductOverview = () => {
                     model="submit"
                   />
                 </div>
+                <ErrorMessage name="amount">
+                  {(msg) => <div className="error-message">{msg}</div>}
+                </ErrorMessage>{" "}
               </Form>
             </Formik>
           )}
