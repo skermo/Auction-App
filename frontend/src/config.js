@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const BASE_URL = "http://localhost:8080/api";
+export const BASE_URL = "https://auction-app-backend-mo4f.onrender.com/api";
 
 export const BASE_S3_URL =
   "https://auction-app-atlantbh-semrakermo.s3.eu-north-1.amazonaws.com";
