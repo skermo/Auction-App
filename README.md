@@ -39,6 +39,12 @@
       <a href="#development-process-and-features">Development process and features</a>
     </li>
     <li>
+      <a href="#testing-strategy">Testing strategy</a>
+    </li>
+    <li>
+      <a href="#live-application">Live application</a>
+    </li>
+    <li>
       <a href="#contact">Contact</a>
     </li>
   </ol>
@@ -182,6 +188,15 @@ Running the tests:
 - Run static analysis with `./mvnw pmd:check`
 - Run test coverage report with `./mvnw test` after which the coverage report will be located at `target/site/jacoco/index.html`
  
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- LIVE APPLICATION -->
+
+## Live application
+The application can be accessed at https://auction-app-xppu.onrender.com. 
+
+NOTE: Because free tiers were used when deploying the application, the first time you access the website, it might be a bit slow, but after the initial load, it should be okay.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
