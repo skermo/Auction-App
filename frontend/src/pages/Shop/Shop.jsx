@@ -145,15 +145,7 @@ const Shop = () => {
               text="GO BACK"
               onClick={() => {
                 setCheckedCategory("");
-                navigate({
-                  pathname: SHOP,
-                  search: `?${createSearchParams({
-                    name: "",
-                    category: "",
-                    sortBy: "name",
-                    sortDir: "asc",
-                  })}`,
-                });
+                navigate(-1);
               }}
               className="btn-go-back"
             />
